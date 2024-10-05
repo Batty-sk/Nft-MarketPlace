@@ -8,9 +8,9 @@ const MenuItems = () => {
   return (
     <>
       {[
-        { item: "my-NFTs", path: "/" },
-        { item: "resell-NFTs", path: "/resell-NFT" },
-        { item: "details-NFTs", path: "/resell-NFT" },
+        { item: "My-NFTs", path: "/" },
+        { item: "Resell-NFTs", path: "/resell-NFT" },
+        { item: "Details-NFTs", path: "/resell-NFT" },
       ].map((item, i) => (
         <a href={item?.path} key={item?.item} className="no-underline p-2">
           {" "}
@@ -28,14 +28,14 @@ const NavBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 
   return (
-    <nav className="dark:bg-black dark:border-b  max-h-10 dark:border-gray-500 border-b border-black  bg-white flex justify-between items-center py-8 px-4">
+    <nav className="dark:bg-black dark:border-b  max-h-10 dark:border-zinc-900 border-b border-gray-200  flex justify-between items-center py-8 px-4">
       <div className="dark:text-white text-black font-poppins font-semibold">
         Logo
       </div>
       <div>
         <div className="font-poppins font-semibold flex items-center ">
           <div className="relative py-2 px-2 me-3 dark:bg-gray-700 bg-blue-400 flex justify-between items-center w-[80px] max-w-24 rounded-full h-9">
-            <LightMode color="warning" />
+            <LightMode style={{color:'yellow'}} />
             <DarkMode />
             <div
               className={`bg-white  absolute w-[45%] h-full transition-all top-0 ${

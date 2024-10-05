@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom"
-import { NavBar } from "./components"
+import { NavBar,Footer } from "./components"
 import "./index.css"
 const App = () => {
 
@@ -10,6 +10,7 @@ const App = () => {
         {
         // for dyanamic routes
         }
+        <Footer />
     </main>
   )
 }
