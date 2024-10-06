@@ -51,7 +51,7 @@ const NavBar = () => {
             </ul>
 
             <div>
-              <Button title="Connect" path="/connect" />
+              <Button title="Connect" path="/connect" handleOnClickOrChange={()=>0}/>
             </div>
           </div>
 
@@ -64,7 +64,7 @@ const NavBar = () => {
                 <MenuItems />
             </ul>
             
-            <Button title="Connect" path="/connect" />
+            <Button title="Connect" path="/connect" handleOnClickOrChange={()=>0}/>
   
         </div>:<></>}
 

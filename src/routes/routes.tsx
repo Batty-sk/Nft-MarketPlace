@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import App from "../App";
-import { Main } from "../components";
+import Home from "../pages/Home";
+import CreateNFT from "../pages/CreateNFT";
 
 export const Routes = createBrowserRouter([
     {
@@ -9,7 +10,11 @@ export const Routes = createBrowserRouter([
         children:
         [
             {path:'/',
-                element:<Main/>
+                element:<Home/>
+            },
+            {
+                path:'/create-nft',
+                element:<CreateNFT />
             }
         ]
     }

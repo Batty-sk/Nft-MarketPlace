@@ -1,7 +1,8 @@
 
 type Prop={
     title:string,
-    path:string
+    path:string,
+    handleOnClickOrChange:()=>void
 }
 
 const Button = ({title,path}:Prop) => {

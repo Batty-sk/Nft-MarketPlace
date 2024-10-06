@@ -6,7 +6,7 @@ const App = () => {
   return (
     <main>
       <NavBar />
-        <Outlet />  
+        <Outlet />    
         {
         // for dyanamic routes
         }
