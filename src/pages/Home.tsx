@@ -51,8 +51,8 @@ useEffect(()=>{
   };
 
   return (
-    <main className="p-4 dark:bg-black flex flex-col items-center">
-      <div className="flex justify-center pt-10  ">
+    <main className="p-10 dark:bg-black flex flex-col items-center">
+      <div className="flex justify-center  ">
         <Banner title="Dive into the NFT universe where art, technology, and ownership meet!" />
       </div>
 

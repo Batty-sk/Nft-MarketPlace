@@ -39,7 +39,7 @@ const Footer = () => {
             <input
               type="email"
               placeholder="Email"
-              className="w-full font-poppins rounded-md h-10 outline me-2"
+              className="w-full font-poppins rounded-md h-10 border-2 me-2"
             />
             <Button title="Send" path="/" handleOnClickOrChange={()=>(0)}/>
           </div>

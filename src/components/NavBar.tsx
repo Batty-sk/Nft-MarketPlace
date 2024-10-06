@@ -14,7 +14,7 @@ const MenuItems = () => {
       ].map((item, i) => (
         <a href={item?.path} key={item?.item} className="no-underline p-2">
           {" "}
-          <li className="text-[12px] dark:text-white text-black">
+          <li className="text-sm font-semibold dark:text-white text-black">
             {item?.item}
           </li>
         </a>
@@ -30,7 +30,7 @@ const NavBar = () => {
   return (
     <nav className="dark:bg-black dark:border-b  max-h-10 dark:border-zinc-900 border-b border-gray-200  flex justify-between items-center py-8 px-4">
       <div className="dark:text-white text-black font-poppins font-semibold">
-        Logo
+       <a href="/"> Logo </a>
       </div>
       <div>
         <div className="font-poppins font-semibold flex items-center ">
