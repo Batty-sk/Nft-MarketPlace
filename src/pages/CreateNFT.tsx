@@ -13,10 +13,10 @@ const CreateNFT = () => {
         </h1>
       </div>
 
-      <div className="flex flex-col justify-center items-center w-full   shadow-md shadow-gray-300  dark:shadow-pink-600 mt-10 py-14 px-8 rounded-lg dark:bg-zinc-900 bg-slate-100 ">
+      <div className="flex flex-col justify-center items-center w-full   shadow-md shadow-gray-300  dark:shadow-pink-600 mt-10 py-14 px-8 rounded-lg dark:bg-zinc-900 " style={{background:'lavender'}}>
         <div className="upload-image border-4 border-gray-500 border-dotted dark:border-white flex py-8 px-8 flex-col items-center rounded-lg">
             <p className="font-semibold font-poppins dark:text-white text-black">Upload: SVG, PNG, JPG </p>
-            <AddPhotoAlternateIcon  style={{fontSize:300}}/>
+            <AddPhotoAlternateIcon  style={{fontSize:250,color:''}}/>
             <p className="font-semibold font-poppins dark:text-white text-black">Drag & Drop Or <a href="" className="underline"> Browse A File From Your Computer </a></p>
         </div>
 
