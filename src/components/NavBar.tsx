@@ -16,12 +16,12 @@ const MenuItems = () => {
         { item: "Resell-NFTs", path: "/resell-NFT" },
         { item: "Details-NFTs", path: "/resell-NFT" },
       ].map((item, i) => (
-        <a href={item?.path} key={item?.item} className="no-underline p-2">
+        <Link to={item?.path} key={item?.item} className="no-underline p-2">
           {" "}
           <li className="text-sm font-semibold dark:text-white text-black">
             {item?.item}
           </li>
-        </a>
+        </Link>
       ))}
     </>
   );
@@ -36,7 +36,7 @@ const NavBar = () => {
   return (
     <nav className="dark:bg-black dark:border-b  max-h-10 dark:border-zinc-900 border-b border-gray-200  flex justify-between items-center py-8 px-4">
       <div className="dark:text-white text-black font-poppins font-semibold">
-       <a href="/"> Logo </a>
+       <Link to="/"> Logo </Link>
       </div>
       <div>
         <div className="font-poppins font-semibold flex items-center ">

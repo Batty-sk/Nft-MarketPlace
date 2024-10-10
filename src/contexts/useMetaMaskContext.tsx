@@ -2,7 +2,7 @@ import React, { createContext, ReactNode, useState } from "react";
 
 interface MetaMaskContextType {
   isConnected: boolean;
-  connectWallet: () => void;
+  connectWallet: (arg:boolean) => void;
 }
 
 export const MetaMaskContext = createContext<MetaMaskContextType >({isConnected:false,connectWallet:()=>{}});

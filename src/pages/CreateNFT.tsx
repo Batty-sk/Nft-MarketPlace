@@ -1,6 +1,7 @@
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import { useState } from "react";
 
+import { Link } from "react-router-dom";
 import { Input,Button } from "../components";
 
 
@@ -22,7 +23,7 @@ const CreateNFT = () => {
             <p className="font-semibold font-poppins dark:text-white text-black">Upload: SVG, PNG, JPG </p>
             <AddPhotoAlternateIcon  style={{fontSize:170,color:''}}/>
             <p className="font-semibold font-poppins dark:text-white text-black">Drag & Drop Or </p>
-            <p><a href="" className="underline font-semibold text-sm"> Browse A File From Your Computer </a></p>
+            <p><Link to="" className="underline font-semibold text-sm"> Browse A File From Your Computer </Link></p>
         </div>
         </div>
 
