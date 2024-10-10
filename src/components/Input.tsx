@@ -25,9 +25,9 @@ switch(inputType){
 
 }
   return (
-    <div className='font-poppins font-semibold font-semibold dark:text-white text-black '>
+    <div className='font-poppins  font-semibold dark:text-white text-black '>
         <p className='pb-2 pt-5 '>{title}</p>
-        <div className='bg-slate-100 shadow-md border'>
+        <div className='bg-slate-100 shadow-sm border'>
         {jsxElement}
         </div>
     </div>

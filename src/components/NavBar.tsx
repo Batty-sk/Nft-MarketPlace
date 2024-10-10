@@ -3,6 +3,10 @@ import { LightMode, DarkMode, Menu } from "@mui/icons-material";
 import Button from "./Button";
 import useToggleModes from "../customHooks/useToggleModes";
 import { useState } from "react";
+import { useContext } from "react";
+import { MetaMaskContext } from "../contexts/useMetaMaskContext";
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const MenuItems = () => {
   return (
@@ -26,6 +30,8 @@ const MenuItems = () => {
 const NavBar = () => {
   const [mode, setMode] = useToggleModes();
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+  const navigate=useNavigate()
+  const {isConnected,connectWallet}=useContext(MetaMaskContext)
 
   return (
     <nav className="dark:bg-black dark:border-b  max-h-10 dark:border-zinc-900 border-b border-gray-200  flex justify-between items-center py-8 px-4">
@@ -51,7 +57,10 @@ const NavBar = () => {
             </ul>
 
             <div>
-              <Button title="Connect" path="/connect" handleOnClickOrChange={()=>0}/>
+              {isConnected?<Button title="Create" path="" handleOnClickOrChange={()=>{navigate('/create-nft')}}/>:
+
+              <Button title="Connect" path="" handleOnClickOrChange={()=>{connectWallet(true)}}/>
+            }
             </div>
           </div>
 

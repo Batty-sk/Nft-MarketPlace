@@ -1,9 +1,11 @@
 import { Outlet } from "react-router-dom"
 import { NavBar,Footer } from "./components"
 import "./index.css"
+import { MetaMaskWrapper } from "./contexts/useMetaMaskContext"
 const App = () => {
 
   return (
+    <MetaMaskWrapper >
     <main>
       <NavBar />
         <Outlet />    
@@ -12,6 +14,8 @@ const App = () => {
         }
         <Footer />
     </main>
+    </MetaMaskWrapper >
+
   )
 }
 
