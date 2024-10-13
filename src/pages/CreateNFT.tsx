@@ -1,17 +1,48 @@
 import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import { useState } from "react";
-
 import { Link } from "react-router-dom";
+import { useDropzone } from "react-dropzone";
 import { Input, Button } from "../components";
 
-const CreateNFT = () => {
-  const [formFields, updateFormFields] = useState({
+interface PreviewFile extends File {
+  preview: string;
+}
+
+interface FormFields {
+  title: string;
+  price: number;
+  description: string;
+}
+
+const CreateNFT: React.FC = () => {
+  const [formFields, updateFormFields] = useState<FormFields>({
     title: "",
     price: 0.0,
     description: "",
   });
+
+  const [image, setImage] = useState<PreviewFile | null>(null); 
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    accept: {
+      "image/*": [".png", ".jpg", ".jpeg", ".svg"],
+    },
+    multiple: false,
+    onDrop: (acceptedFiles) => {
+      const uploadedFile = acceptedFiles[0];
+      if (uploadedFile) {
+        console.log('uploaded file',uploadedFile)
+        setImage(
+          Object.assign(uploadedFile, {
+            preview: URL.createObjectURL(uploadedFile),
+          })
+        );
+      }
+    },
+  });
+
   return (
-    <main className="p-10 dark:bg-black bg-white  w-full flex flex-col justify-center items-center mb-10">
+    <main className="p-10 dark:bg-black bg-white w-full flex flex-col justify-center items-center mb-10">
       <div className="flex flex-col justify-center items-center md:w-3/5 w-full">
         <div className="flex justify-start w-full">
           <h1 className="font-poppins dark:text-white text-black text-2xl font-semibold">
@@ -19,22 +50,49 @@ const CreateNFT = () => {
           </h1>
         </div>
 
-        <div className="flex flex-col justify-center items-center w-full py-16 px-8 ">
-          <div className="w-full  bg-[#eff7f6]  rounded-sm flex justify-center ">
-            <div className="upload-image w-full border-2 border-gray-500 border-dotted dark:border-white flex py-8 px-8 flex-col items-center rounded-lg">
-              <p className="font-semibold font-poppins dark:text-white text-black">
-                Upload: SVG, PNG, JPG{" "}
-              </p>
-              <AddPhotoAlternateIcon style={{ fontSize: 170, color: "" }} />
-              <p className="font-semibold font-poppins dark:text-white text-black">
-                Drag & Drop Or{" "}
-              </p>
-              <p>
-                <Link to="" className="underline font-semibold text-sm">
-                  {" "}
-                  Browse A File From Your Computer{" "}
-                </Link>
-              </p>
+        <div className="flex flex-col justify-center items-center w-full py-16 px-8">
+          <div className="w-full bg-[#eff7f6] rounded-md flex justify-center">
+            <div
+              {...getRootProps()}
+              className="upload-image w-full border-2 border-gray-500 border-dotted dark:border-white flex py-8 px-8 flex-col items-center"
+            >
+              <input {...getInputProps()} />
+              {isDragActive ? (
+                <p className="font-semibold font-poppins dark:text-white text-black">
+                  Drop the files here...
+                </p>
+              ) : (
+                <div className="text-center">
+                  {image ? (
+                    <>
+                      <img
+                        src={image.preview}
+                        alt="Preview"
+                        className="w-32 h-32 object-cover mb-4"
+                      />
+                      <p className="font-semibold font-poppins dark:text-white text-black">
+                        File Uploaded: {image.name}
+                      </p>
+                    </>
+                  ) : (
+                    <>
+                      <p className="font-semibold font-poppins dark:text-white text-black">
+                        Upload: SVG, PNG, JPG
+                      </p>
+                      <AddPhotoAlternateIcon style={{ fontSize: 170 }} />
+                      <p className="font-semibold font-poppins dark:text-white text-black">
+                        Drag & Drop Or{" "}
+                      </p>
+                      <p>
+                        <Link to="" className="underline font-semibold text-sm">
+                          {" "}
+                          Browse A File From Your Computer{" "}
+                        </Link>
+                      </p>
+                    </>
+                  )}
+                </div>
+              )}
             </div>
           </div>
 
@@ -42,7 +100,7 @@ const CreateNFT = () => {
             <Input
               title="Title"
               inputType="text"
-              handleOnChange={(e) => {
+              handleOnChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
                 updateFormFields((prev) => ({
                   ...prev,
                   title: e.target.value,
@@ -53,7 +111,7 @@ const CreateNFT = () => {
             <Input
               title="Description"
               inputType="textarea"
-              handleOnChange={(e) => {
+              handleOnChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
                 updateFormFields((prev) => ({
                   ...prev,
                   description: e.target.value,
@@ -63,11 +121,11 @@ const CreateNFT = () => {
             />
             <Input
               title="Price"
-              inputType="price"
-              handleOnChange={(e) => {
+              inputType="price" 
+              handleOnChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
                 updateFormFields((prev) => ({
                   ...prev,
-                  price: +e.target.value,
+                  price: parseFloat(e.target.value),
                 }));
               }}
               placeHolder="Price"
@@ -76,7 +134,9 @@ const CreateNFT = () => {
               <Button
                 title="Create"
                 path="/"
-                handleOnClickOrChange={() => {}}
+                handleOnClickOrChange={() => {
+                  console.log(formFields, image); 
+                }}
               />
             </div>
           </div>

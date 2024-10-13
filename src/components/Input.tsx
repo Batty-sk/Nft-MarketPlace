@@ -3,9 +3,9 @@ import React from 'react'
 type InputProps = {
 
     title:string,
-    inputType:string,
+    inputType: "text" | "textarea" | "price",
     placeHolder:string,
-    handleOnChange:(e:React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>)=>void,
+    handleOnChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
 
 }
 

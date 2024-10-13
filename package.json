@@ -19,6 +19,7 @@
     "react-dnd": "^16.0.1",
     "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "^18.3.1",
+    "react-dropzone": "^14.2.9",
     "react-masonry-css": "^1.0.16",
     "react-router-dom": "^6.26.2",
     "use-media": "^1.5.0"
