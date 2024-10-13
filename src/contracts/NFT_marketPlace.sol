@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
-import "../../node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "../../node_modules/@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 
-contract NFT_marketPlace is ERC721 {
+contract NFT_marketPlace is ERC721URIStorage {
     uint256 private _totalItems;
     uint256 private _tokenIdCounter;
     uint256 public commision = 0.0025 ether;
@@ -24,11 +24,18 @@ contract NFT_marketPlace is ERC721 {
         owner = msg.sender;
     }
 
-    function createNFT(uint256 price) public returns (uint256) {
+    function setCommision(uint256 val) public returns(bool){
+        require(msg.sender == owner, "Only owner can setTheCommision");
+        commision = val;
+        return true;
+    }
+
+    function createNFT(uint256 price,string memory tokenURI) public returns (uint256) {
         require(price > 0, "Price should be greater than 0");
 
         uint256 newTokenId = _tokenIdCounter;
         _safeMint(msg.sender, newTokenId);
+        _setTokenURI(newTokenId,tokenURI);
 
         NFT[newTokenId] = nftInfo({
             owner: msg.sender,

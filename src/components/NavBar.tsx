@@ -4,7 +4,7 @@ import Button from "./Button";
 import useToggleModes from "../customHooks/useToggleModes";
 import { useState } from "react";
 import { useContext } from "react";
-import { MetaMaskContext } from "../contexts/useMetaMaskContext";
+import { MetaMaskContext } from "../contexts/MetaMaskContext";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
