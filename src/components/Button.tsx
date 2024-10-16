@@ -5,14 +5,19 @@ type Prop={
     handleOnClickOrChange:()=>void
 }
 
-const Button = ({title,path}:Prop) => {
+const Button = ({title,path,handleOnClickOrChange}:Prop) => {
   return (
+    <>
+    {path?
     <button type="button" className="bg-gradient-to-r from-pink-700 to-pink-600 py-3 px-5 rounded-lg font-poppins">   
          <Link to={path} className="no-underline inline-block text-white">
             {title}
          </Link>
 
-    </button>
+    </button>: <button onClick={handleOnClickOrChange} type="button" className="bg-gradient-to-r from-pink-700 to-pink-600 py-3 px-5 rounded-lg font-poppins text-white">   
+            {title}
+    </button>}
+    </>
   )
 }
 

@@ -2,11 +2,16 @@ import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useDropzone } from "react-dropzone";
+import { useContext } from "react";
+import { ContractContext } from "../contexts/ContractContext";
 import { Input, Button } from "../components";
 
 interface PreviewFile extends File {
   preview: string;
 }
+
+var arr;
+console.log('arr',arr);
 
 interface FormFields {
   title: string;
@@ -15,13 +20,16 @@ interface FormFields {
 }
 
 const CreateNFT: React.FC = () => {
+  const {handleUploadImageToIpfs} = useContext(ContractContext)
+
+
   const [formFields, updateFormFields] = useState<FormFields>({
     title: "",
     price: 0.0,
     description: "",
   });
 
-  const [image, setImage] = useState<PreviewFile | null>(null); 
+  const [image, setImage] = useState<PreviewFile | any>(null); 
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     accept: {
@@ -133,9 +141,13 @@ const CreateNFT: React.FC = () => {
             <div className="flex mt-8">
               <Button
                 title="Create"
-                path="/"
+                path=""
                 handleOnClickOrChange={() => {
-                  console.log(formFields, image); 
+                  console.log('handling image uploadation...')
+                  handleUploadImageToIpfs(image,formFields.title,formFields.description,formFields.price)
+                  //yea
+                  
+                
                 }}
               />
             </div>

@@ -103,6 +103,27 @@ contract NFT_marketPlace is ERC721URIStorage {
 
         return marketNFTS;
     }
+    function getMyNFTS() public view returns (nftInfo[] memory) {
+        uint256 totalListed = 0;
+
+        for (uint256 i = 0; i < _tokenIdCounter; i++) {
+            if (!NFT[i].isListed && NFT[i].owner == msg.sender) {
+                totalListed++;
+            }
+        }
+
+        nftInfo[] memory MyListedNFTS = new nftInfo[](totalListed);
+        uint256 j = 0;
+
+        for (uint256 i = 0; i < _tokenIdCounter; i++) {
+            if (!NFT[i].isListed && NFT[i].owner == msg.sender) {
+                MyListedNFTS[j] = NFT[i];
+                j++;
+            }
+        }
+
+        return MyListedNFTS;
+    }
 
     function getMyListedNFTS() public view returns (nftInfo[] memory) {
         uint256 totalListed = 0;
@@ -125,4 +146,6 @@ contract NFT_marketPlace is ERC721URIStorage {
 
         return MyListedNFTS;
     }
+
+    
 }
