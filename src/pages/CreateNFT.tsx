@@ -49,6 +49,7 @@ const CreateNFT: React.FC = () => {
     },
   });
 
+
   return (
     <main className="p-10 dark:bg-black bg-white w-full flex flex-col justify-center items-center mb-10">
       <div className="flex flex-col justify-center items-center md:w-3/5 w-full">
@@ -146,7 +147,7 @@ const CreateNFT: React.FC = () => {
                   console.log('handling image uploadation...')
                   handleUploadImageToIpfs(image,formFields.title,formFields.description,formFields.price)
                   //yea
-                  
+
                 
                 }}
               />

@@ -17,6 +17,12 @@ type Props = {
 
 export const ContractContextWrapper = ({ children }: Props) => {
   console.log('pinata jwt',import.meta.env.VITE_PINATA_IPFS_JWT)
+
+
+  const getProvider =()=>{
+    
+  }
+
   async function uploadImageToIPFS(file: File) {
     const url = `https://uploads.pinata.cloud/v3/files`;
 
@@ -78,7 +84,13 @@ export const ContractContextWrapper = ({ children }: Props) => {
 
     const metaHash = await uploadMetadataToIPFS(metaData);
     console.log(`Metadata hash: ipfs://${metaHash}`);
+    await createNFT()
+    console.log('nft has been created successfully!');
   };
+
+  const createNFT = async()=>{
+    
+  }
 
   return (
     <ContractContext.Provider value={{ handleUploadImageToIpfs }}>
