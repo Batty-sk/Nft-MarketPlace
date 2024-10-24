@@ -10,10 +10,11 @@ contract NFT_marketPlace is ERC721URIStorage {
     event NFTCreatedOrListed(uint256 indexed tokenId, address indexed owner, uint256 listingPrice);
 
     struct nftInfo {
-        address owner;
-        address creatorAddress;
+        address owner; // the current nft holder.
+        address creatorAddress; // its basically the original owner who created this nft.
         bool isListed;
         uint256 listingPrice;
+        string tokenURI;
     }
 
     mapping(uint256 => nftInfo) public NFT;
@@ -41,7 +42,8 @@ contract NFT_marketPlace is ERC721URIStorage {
             owner: msg.sender,
             creatorAddress: msg.sender,
             isListed: true,
-            listingPrice: price
+            listingPrice: price,
+            tokenURI:tokenURI
         });
 
         _tokenIdCounter++;
