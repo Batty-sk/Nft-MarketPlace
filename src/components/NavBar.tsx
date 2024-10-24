@@ -1,4 +1,5 @@
 import { LightMode, DarkMode, Menu } from "@mui/icons-material";
+import React from "react";
 
 import Button from "./Button";
 import useToggleModes from "../customHooks/useToggleModes";

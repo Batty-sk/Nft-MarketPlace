@@ -2,6 +2,8 @@ import { FacebookOutlined } from "@mui/icons-material";
 import XIcon from "@mui/icons-material/X";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import Button from "./Button";
+import React from "react";
+
 
 type LinksBoxProp = {
   title: string;
