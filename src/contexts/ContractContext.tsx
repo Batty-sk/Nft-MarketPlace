@@ -1,8 +1,7 @@
 import React, { createContext, ReactNode } from "react";
 import { ethers } from "ethers";
-import { RPC_URL,PRIVATE_KEY,CONTRACT_ADDRESS } from "../constants";
+import { RPC_URL,PRIVATE_KEY,CONTRACT_ADDRESS,cleanNftsData} from "../constants";
 import contractAbi from '../../artifacts/contracts/NFT_marketPlace.sol/NFT_marketPlace.json'
-
 
 type ContextProps = {
   handleUploadImageToIpfs: (
@@ -77,11 +76,10 @@ export const ContractContextWrapper = ({ children }: Props) => {
     description: string,
     price: number
   ) => {
-    await getMarketNFTs()
-    //createNFT("ipfs://QmWsryVXAzExNhraRn3L5EWd6VHYDp7gcZ6Q1ufucbMmZ4")
-    /* const imgHash = await uploadImageToIPFS(image);
-
-    const metaData = {
+/*     await getMarketNFTs() */
+/*     const imgHash = await uploadImageToIPFS(image);
+ */    await createNFT(price,"ipfs://QmSYTRbY53pKLFX6RWbpTZ1PkwRpTi96tBZHUL7FuPQTmN")
+/*     const metaData = {
       name,
       description,
       price,
@@ -91,7 +89,10 @@ export const ContractContextWrapper = ({ children }: Props) => {
     const metaHash = await uploadMetadataToIPFS(metaData);
     console.log(`Metadata hash: ipfs://${metaHash}`);
     await createNFT(metaHash) // send the request to the smartcontract regarding creation of the nft.
-    console.log('nft has been created successfully!'); */
+    console.log('nft has been created successfully!');
+
+    console.log("listing out he nftities .....") */
+    await getMarketNFTs()
   };
 
   const getMarketNFTs = async ()=>{
@@ -101,14 +102,17 @@ export const ContractContextWrapper = ({ children }: Props) => {
     
     try{
       const listedNFTS = await nftMarketplaceContract.getListedNFTS()
+     const data= await cleanNftsData(listedNFTS)
+
       console.log("listed nftities",listedNFTS)
+      console.log('cleaned data!',data);
     }
     catch (error){
       console.log("errror has been occured fetching the marketLISTING......");
     }
   }
 
-  const createNFT = async (metahash: string) => {
+  const createNFT = async (price:number,metahash: string) => {
     try {
       if (!window.ethereum || !window.ethereum.request) {
         alert("MetaMask is not installed or the provider is unavailable!");
@@ -125,7 +129,7 @@ export const ContractContextWrapper = ({ children }: Props) => {
   
       const nftMarketplaceContract = new ethers.Contract(CONTRACT_ADDRESS, abi, signer);
   
-      const tx = await nftMarketplaceContract.createNFT(10, metahash); 
+      const tx = await nftMarketplaceContract.createNFT(price, metahash); 
       console.log(`Contract tx: ${tx.hash}`);
   
       const receipt = await tx.wait();
