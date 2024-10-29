@@ -1,14 +1,18 @@
-import { useRef, useState,useEffect } from "react";
+import { useRef, useState,useEffect, useContext } from "react";
 import ArrowLeftIcon from "@mui/icons-material/ArrowLeft";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import Search from "@mui/icons-material/Search";
+import { ContractContext } from "../contexts/ContractContext";
 import Masonry from 'react-masonry-css'
+import { filterednftsData } from "../constants";
 
 
 import { CardProfile, Banner,CardNft } from "../components";
 import { images } from "../assets";
 
 const Home = () => {
+  const {getMarketNFTs} = useContext(ContractContext)
+  const [marketNFTs,setMarketNFTs] = useState<filterednftsData[]|null>(null)
   const ParentRef = useRef<HTMLDivElement | null>(null);
   const ChildRef = useRef<HTMLDivElement | null>(null);
   const breakpointColumnsObj = {
@@ -28,11 +32,34 @@ useEffect(()=>{
                     setShouldNavigationVisible(false) */
         }
     }
+
+
     window.addEventListener('resize',handleResize)
+
     return()=>{
         window.removeEventListener('resize',handleResize)
     }
 },[])
+
+useEffect(() => {
+  const fetchMarketNFTs = async () => {
+    try {
+      const marketList = await getMarketNFTs();
+      console.log("Getting the market NFTs", marketList);
+
+      if(marketNFTs)
+          setMarketNFTs(prev=>[...marketList]);
+      else{
+        setMarketNFTs(marketList);
+      }
+
+    } catch (error) {
+      console.error("Error fetching market NFTs:", error);
+    }
+  };
+  fetchMarketNFTs();
+}, []); 
+
   const handleCarouselMove = (move: string) => {
     switch (move) {
       case "left":
@@ -74,6 +101,9 @@ useEffect(()=>{
                 ethAmount={50.0 * i}
               />
             ))}
+            {
+              
+            }
           </div>
             {shouldNavigationVisible?<>  <div
             onClick={() => handleCarouselMove("left")}
@@ -112,6 +142,12 @@ useEffect(()=>{
                 <CardNft key={i} name={`User${i}`} image={item} account={`0xC...${Math.random()}`}
                 ethAmount={100.0 * i}/>
               ))}
+   {/*            {
+                marketNFTs?.map((item,i)=>(
+                  <CardNft key={i} name={item.owner} image={item.tokenURI} account={`0xC...${Math.random()}`}
+                  ethAmount={item.price}/>
+                ))
+              } */}
           </Masonry>
 
           </div>

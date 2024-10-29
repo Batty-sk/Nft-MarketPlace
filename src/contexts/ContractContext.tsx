@@ -2,7 +2,7 @@ import React, { createContext, ReactNode } from "react";
 import { ethers } from "ethers";
 import { RPC_URL,PRIVATE_KEY,CONTRACT_ADDRESS,cleanNftsData} from "../constants";
 import contractAbi from '../../artifacts/contracts/NFT_marketPlace.sol/NFT_marketPlace.json'
-
+import { filterednftsData } from "../constants";
 type ContextProps = {
   handleUploadImageToIpfs: (
     image: File,
@@ -10,9 +10,10 @@ type ContextProps = {
     description: string,
     price: number
   ) => void;
+  getMarketNFTs:()=>Promise<filterednftsData[]>;
 };
 
-export const ContractContext = createContext<ContextProps>({handleUploadImageToIpfs:()=>0});
+export const ContractContext = createContext<ContextProps>({handleUploadImageToIpfs:()=>0,getMarketNFTs:async()=>[]});
 
 type Props = {
   children: ReactNode;
@@ -106,9 +107,11 @@ export const ContractContextWrapper = ({ children }: Props) => {
 
       console.log("listed nftities",listedNFTS)
       console.log('cleaned data!',data);
+      return data
     }
     catch (error){
       console.log("errror has been occured fetching the marketLISTING......");
+      return []
     }
   }
 
@@ -140,10 +143,12 @@ export const ContractContextWrapper = ({ children }: Props) => {
       console.error("Error creating an NFT:", error);
       return null;
     }
+
+    // here we have to update the state so that fetching happens by the home page using use effect.
   };
 
   return (
-    <ContractContext.Provider value={{ handleUploadImageToIpfs }}>
+    <ContractContext.Provider value={{ handleUploadImageToIpfs,getMarketNFTs}}>
       {children}
     </ContractContext.Provider>
   );
