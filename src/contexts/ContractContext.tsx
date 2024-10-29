@@ -11,9 +11,10 @@ type ContextProps = {
     price: number
   ) => void;
   getMarketNFTs:()=>Promise<filterednftsData[]>;
+  getMyNFTs:()=>Promise<filterednftsData[]>;
 };
 
-export const ContractContext = createContext<ContextProps>({handleUploadImageToIpfs:()=>0,getMarketNFTs:async()=>[]});
+export const ContractContext = createContext<ContextProps>({handleUploadImageToIpfs:()=>0,getMarketNFTs:async()=>[],getMyNFTs:async()=>[]});
 
 type Props = {
   children: ReactNode;
@@ -115,6 +116,34 @@ export const ContractContextWrapper = ({ children }: Props) => {
     }
   }
 
+  const getMyNFTs= async ()=>{
+    if (!window.ethereum || !window.ethereum.request) {
+      alert("MetaMask is not installed or the provider is unavailable!");
+      console.log('mynfts getting error')
+      return [];
+    }
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    await provider.send("eth_requestAccounts", []); 
+    
+    const signer = provider.getSigner(); 
+    const { abi } = contractAbi;
+    
+    const nftMarketplaceContract = new ethers.Contract(CONTRACT_ADDRESS,abi,signer);
+    
+    try{
+      const listedNFTS = await nftMarketplaceContract.getMyListedNFTS()
+     const data= await cleanNftsData(listedNFTS)
+
+      console.log("my listed nftities",listedNFTS)
+      console.log('cleaned data!',data);
+      return data
+    }
+    catch (error){
+      console.log("errror has been occured fetching the mynfts......");
+      return []
+    }
+  }
+
   const createNFT = async (price:number,metahash: string) => {
     try {
       if (!window.ethereum || !window.ethereum.request) {
@@ -148,7 +177,7 @@ export const ContractContextWrapper = ({ children }: Props) => {
   };
 
   return (
-    <ContractContext.Provider value={{ handleUploadImageToIpfs,getMarketNFTs}}>
+    <ContractContext.Provider value={{ handleUploadImageToIpfs,getMarketNFTs,getMyNFTs}}>
       {children}
     </ContractContext.Provider>
   );

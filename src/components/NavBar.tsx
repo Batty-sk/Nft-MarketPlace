@@ -13,7 +13,7 @@ const MenuItems = () => {
   return (
     <>
       {[
-        { item: "My-NFTs", path: "/" },
+        { item: "My-NFTs", path: "/my-nft" },
         { item: "Resell-NFTs", path: "/resell-NFT" },
         { item: "Details-NFTs", path: "/resell-NFT" },
       ].map((item, i) => (
