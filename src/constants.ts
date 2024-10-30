@@ -7,7 +7,11 @@ export type filterednftsData={
     creatorAddress:string,
     isListed: boolean,
     price:number,
-    tokenURI:string,
+    tokenData:{
+        name:string,
+        description:string,
+        imgURI:string
+    },
 }
 
 export const cleanNftsData = async(nfts:any[])=>{
@@ -15,11 +19,11 @@ export const cleanNftsData = async(nfts:any[])=>{
     console.log('directly consoling the nfts',nfts)
     const filteredData:filterednftsData[]= []
     for(let i=0;i<nfts.length;i++){
-        const temp={owner:nfts[i][0],
+        const temp:filterednftsData={owner:nfts[i][0],
         creatorAddress:nfts[i][1],
         isListed:nfts[i][2],
         price:hexToInt(nfts[i][3]),
-        tokenURI:nfts[i][4]
+        tokenData:{...await fetchPinataMetadata(nfts[i][4])}
         }
         filteredData.push(temp)
 
@@ -31,3 +35,25 @@ const hexToInt = (hex:string)=>{
   return parseInt(hex, 16);
     
 }
+async function fetchPinataMetadata(ipfsHash:string) {
+    console.log('ipfs hash',ipfsHash)
+    try {
+      const url = `https://gateway.pinata.cloud/ipfs/${ipfsHash}`;
+  
+      const response = await fetch(url);
+  
+      if (!response.ok) {
+        throw new Error(`Failed to fetch metadata: ${response.statusText}`);
+      }
+       const temp= await response.json();
+      console.log("temp",temp)
+      const metadata:{name:string, description:string,imgURI:string} = temp
+      console.log("Fetched metadata:", metadata);
+      return metadata;
+    } catch (error) {
+      console.error("Error fetching metadata from Pinata:", error);
+      const obj:{name:string, description:string,imgURI:string}={name:'',description:'',imgURI:''};
+      return obj;
+
+    }
+  }

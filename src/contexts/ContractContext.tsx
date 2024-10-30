@@ -44,10 +44,11 @@ export const ContractContextWrapper = ({ children }: Props) => {
       });
 
       const result = await response.json();
-      console.log("File pinned successfully:", result);
-      return result.IpfsHash;
-    } catch (error) {
+      console.log('image uploaded successfully',result.data.cid)
+      return result.data.cid;
+    } catch (error:any) {
       console.error("Error uploading file to IPFS:", error);
+      throw new Error(error)
     }
   }
 
@@ -69,6 +70,7 @@ export const ContractContextWrapper = ({ children }: Props) => {
       return result.IpfsHash;
     } catch (error) {
       console.error("Error uploading metadata to IPFS:", error);
+      throw new Error('error occureed in Pinning metadata to ipfs server !');
     }
   }
 
@@ -78,24 +80,23 @@ export const ContractContextWrapper = ({ children }: Props) => {
     description: string,
     price: number
   ) => {
-/*     await getMarketNFTs() */
-/*     const imgHash = await uploadImageToIPFS(image);
- */    await createNFT(price,"ipfs://QmSYTRbY53pKLFX6RWbpTZ1PkwRpTi96tBZHUL7FuPQTmN")
-/*     const metaData = {
+
+    const imgHash = await uploadImageToIPFS(image);
+    console.log('image hash',imgHash)
+    const metaData = {
       name,
       description,
-      price,
-      imgURI: `ipfs://${imgHash}`,
+      imgURI:imgHash, // this has to handled by the smart contract.
     };
-
     const metaHash = await uploadMetadataToIPFS(metaData);
     console.log(`Metadata hash: ipfs://${metaHash}`);
-    await createNFT(metaHash) // send the request to the smartcontract regarding creation of the nft.
+    await createNFT(price,metaHash) // send the request to the smartcontract regarding creation of the nft.
     console.log('nft has been created successfully!');
 
-    console.log("listing out he nftities .....") */
-    await getMarketNFTs()
   };
+
+
+  
 
   const getMarketNFTs = async ()=>{
     const provider = new ethers.providers.JsonRpcProvider(RPC_URL)
@@ -116,7 +117,7 @@ export const ContractContextWrapper = ({ children }: Props) => {
     }
   }
 
-  const getMyNFTs= async ()=>{
+  const getMyNFTs= async () =>{
     if (!window.ethereum || !window.ethereum.request) {
       alert("MetaMask is not installed or the provider is unavailable!");
       console.log('mynfts getting error')
@@ -133,13 +134,12 @@ export const ContractContextWrapper = ({ children }: Props) => {
     try{
       const listedNFTS = await nftMarketplaceContract.getMyListedNFTS()
      const data= await cleanNftsData(listedNFTS)
-
       console.log("my listed nftities",listedNFTS)
       console.log('cleaned data!',data);
       return data
     }
     catch (error){
-      console.log("errror has been occured fetching the mynfts......");
+      console.log("errror has been occured fetching the mynfts......",error);
       return []
     }
   }

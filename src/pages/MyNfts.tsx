@@ -6,7 +6,6 @@ import CardNft from '../components/CardNft'
 import { filterednftsData } from "../constants";
 
 
-
 const MyNfts = () => {
     const {getMyNFTs} = useContext(ContractContext)
     const [myNFTs,setMyNFTs]=useState<filterednftsData[]|null>(null)
@@ -26,7 +25,7 @@ const MyNfts = () => {
     <div className='flex flex-wrap justify-center'>
         {myNFTs?.map((item,i)=>(
           <div key={i} className='max-h-fit max-w-fit'>
-                <CardNft  name={item.owner} image={item.tokenURI} account={`0xC...${Math.random()}`}
+                <CardNft  name={item.owner} image={item.tokenData.imgURI} account={`0xC...${Math.random()}`}
                             ethAmount={item.price}/>
 </div>
         ))}
