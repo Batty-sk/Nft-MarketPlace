@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 import { useEffect } from 'react'
-import { ContractContext } from '../contexts/ContractContext'
 import { useContext } from 'react'
 
 import { filterednftsData } from "../constants";
+import { ContractContext } from '../contexts/ContractContext'
+import {Banner} from '../components';
 import { Pagination,CardNft } from '../components'
 import { BounceLoader } from 'react-spinners'
 import { ThemeContext } from '../contexts/ThemeContext'
@@ -34,6 +35,7 @@ const ListedNfts = () => {
     }
   return (
     <div className='flex flex-wrap justify-center'>
+      <Banner title='Listed NFTs' />
       <div className='h-[70vh] w-full flex flex-col justify-center items-center'>
         {loading?<><BounceLoader color='#C11A60'/>
       <span className='font-poppins mt-5'>Loading...</span>

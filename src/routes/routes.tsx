@@ -3,6 +3,8 @@ import App from "../App";
 import Home from "../pages/Home";
 import CreateNFT from "../pages/CreateNFT";
 import ListedNfts from "../pages/ListedNfts";
+import DetailsNfts from "../pages/DetailsNfts";
+import MyNfts from "../pages/MyNfts";
 export const Routes = createBrowserRouter([
     {
         path:'/',
@@ -21,8 +23,12 @@ export const Routes = createBrowserRouter([
                 element:<ListedNfts/>
             },
             {
-                path:'/my-nft',
-                element:<ListedNfts/>
+                path:'/my-nfts',
+                element:<MyNfts/>
+            },
+            {
+                path:'/details-nfts',
+                element:<DetailsNfts />
             }
 
         ]
