@@ -8,14 +8,15 @@ import { useContext } from "react";
 import { MetaMaskContext } from "../contexts/MetaMaskContext";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-
+import { ThemeContext } from "../contexts/ThemeContext";
 const MenuItems = () => {
+
   return (
     <>
       {[
-        { item: "My-NFTs", path: "/my-nft" },
-        { item: "Resell-NFTs", path: "/resell-NFT" },
-        { item: "Details-NFTs", path: "/resell-NFT" },
+        {item:"Listed-NFTs",path:"/listed-nfts"},
+        { item: "My-NFTs", path: "/my-nfts" },
+        { item: "Resell-NFTs", path: "/resell-nfts" },
       ].map((item, i) => (
         <Link to={item?.path} key={item?.item} className="no-underline p-2">
           {" "}
@@ -33,6 +34,7 @@ const NavBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const navigate=useNavigate()
   const {isConnected,connectWallet}=useContext(MetaMaskContext)
+  const {createButton} = useContext(ThemeContext)
 
   return (
     <nav className="dark:bg-black dark:border-b  max-h-10 dark:border-zinc-900 border-b border-gray-200  flex justify-between items-center py-8 px-4">
@@ -58,9 +60,9 @@ const NavBar = () => {
             </ul>
 
             <div>
-              {isConnected?<Button title="Create" path="" handleOnClickOrChange={()=>{navigate('/create-nft')}}/>:
+              {isConnected?<Button animate={createButton} title="Create" path="" handleOnClickOrChange={()=>{navigate('/create-nft')}}/>:
 
-              <Button title="Connect" path="" handleOnClickOrChange={()=>{connectWallet(true)}}/>
+              <Button animate={createButton} title="Connect" path="" handleOnClickOrChange={()=>{connectWallet(true)}}/>
             }
             </div>
           </div>

@@ -5,5 +5,5 @@ import CardProfile from "./CardProfile";
 import Footer from "./Footer";
 import CardNft from "./CardNft";
 import Input from "./Input";
-import MyNfts from "../pages/MyNfts";
-export {NavBar,Button,Banner,CardProfile,Footer,CardNft,Input,MyNfts}
+import Pagination from "./Pagination";
+export {NavBar,Button,Banner,CardProfile,Footer,CardNft,Input,Pagination}

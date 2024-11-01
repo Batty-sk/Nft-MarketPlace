@@ -21,3 +21,49 @@
   .my-masonry-grid_column > div { /* change div to reference your elements you put in <Masonry> */
     margin-bottom: 30px;
   }
+
+
+  
+ .bounce {
+    animation: bounce 1s ease forwards, pulse 1s ease infinite,gradientShift 1s ease infinite;
+  }
+  
+
+  
+  /* Bounce effect */
+  @keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+      transform: translateY(0);
+    }
+    40% {
+      transform: translateY(-20px);
+    }
+    60% {
+      transform: translateY(-10px);
+    }
+  }
+  
+  /* Pulse effect */
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.1);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  
+  @keyframes gradientShift {
+    0% {
+      background:yellow;
+    }
+    50% {
+      background:blue;
+    }
+    100% {
+      background:red;
+    }
+  }

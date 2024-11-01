@@ -3,9 +3,11 @@ import { NavBar,Footer } from "./components"
 import "./index.css"
 import { MetaMaskWrapper } from "./contexts/MetaMaskContext"
 import { ContractContextWrapper } from "./contexts/ContractContext"
+import { ThemeContextWrapper } from "./contexts/ThemeContext"
 const App = () => {
 
   return (
+    <ThemeContextWrapper >
     <ContractContextWrapper >
     <MetaMaskWrapper >
     <main>
@@ -18,6 +20,7 @@ const App = () => {
     </main>
     </MetaMaskWrapper >
     </ContractContextWrapper>
+    </ThemeContextWrapper>
 
   )
 }
