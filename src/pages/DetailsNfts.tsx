@@ -1,9 +1,11 @@
 import React from "react";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { images } from "../assets";
+import { images,etherim } from "../assets";
 import { ShoppingCart } from "@mui/icons-material";
 import AppsIcon from '@mui/icons-material/Apps';
+import { Tooltip } from "@mui/material";
+import Chip from "@mui/material/Chip";
 
 const DetailsNfts = () => {
   const nftId= useParams()  // this will also returns the from which page its been called from 
@@ -41,10 +43,14 @@ const DetailsNfts = () => {
               debitis vel possimus similique ipsa laborum, quo sunt. Similique
               culpa earum tempore.  
             </p>
-            <div className="pt-3 flex justify-between">
+            <div className="pt-3 flex justify-between pl-0 ml-0">
             <p className="font-poppins text-sm font-semibold">
-            0xC...0.6016869897472688            </p>
-            <p className="font-poppins font-semibold">
+            <Chip label="owner:" className="ml-2"/>
+            <span className="ms-2">0xC...0.6016869897472688</span></p>
+            <p className="font-poppins font-semibold flex items-center">
+              <Tooltip title={"Etherium"} >
+             <img src={etherim} alt="" height={40} width={40} />
+             </Tooltip>
                 100 ETH
             </p>
             </div>

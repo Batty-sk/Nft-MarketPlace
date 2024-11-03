@@ -12,9 +12,11 @@ import nft6 from './nft_6.jpg'
 import nft7 from './nft_7.jpg'
 import nft8 from './nft_8.jpg'
 import nft9 from './nft_9.jpg'
+import etherim from "./etherium.png"
 
 
 export const images={
     avatars:[avatar1,avatar2,avatar3,avatar4,avatar5],
     nfts:[nft1,nft2,nft3,nft4,nft5,nft6,nft7,nft8,nft9]
 }
+export {etherim}
