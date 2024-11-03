@@ -1,7 +1,6 @@
 import { useRef, useState,useEffect, useContext } from "react";
 import ArrowLeftIcon from "@mui/icons-material/ArrowLeft";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
-import Search from "@mui/icons-material/Search";
 import { ContractContext } from "../contexts/ContractContext";
 import Masonry from 'react-masonry-css'
 import { filterednftsData } from "../constants";
@@ -9,10 +8,12 @@ import { filterednftsData } from "../constants";
 
 import { CardProfile, Banner,CardNft } from "../components";
 import { images } from "../assets";
+import SearchBar from "../components/SearchBar";
 
 const Home = () => {
   const {getMarketNFTs} = useContext(ContractContext)
   const [marketNFTs,setMarketNFTs] = useState<filterednftsData[]|null>(null)
+  const [searchData,searchDataResult]= useState<filterednftsData[] |null>(null)
   const ParentRef = useRef<HTMLDivElement | null>(null);
   const ChildRef = useRef<HTMLDivElement | null>(null);
   const breakpointColumnsObj = {
@@ -126,10 +127,7 @@ useEffect(() => {
               
           <div className="flex items-center justify-between font-poppins font-semibold">
                 <h1 className="text-2xl dark:text-white text-black md:ml-5">Best Bids</h1>
-                <div className="w-72 max-w-80 min-w-52 flex items-center justify-center">
-                  <Search fontSize="large" className="cursor-pointer"/>
-                  <input type="search" name="search" id="" placeholder="Search..." className="h-10 max-h-10 border-2 rounded-md dark:bg-slate-200   w-full ms-2" />
-                </div>
+                <SearchBar nftsData={marketNFTs} searchDataResult={searchDataResult} />
           </div>
 
           <div className="mt-2 flex justify-center">
