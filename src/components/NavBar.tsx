@@ -9,6 +9,7 @@ import { MetaMaskContext } from "../contexts/MetaMaskContext";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { ThemeContext } from "../contexts/ThemeContext";
+import { logo } from "../assets";
 const MenuItems = () => {
 
   return (
@@ -39,7 +40,7 @@ const NavBar = () => {
   return (
     <nav className="dark:bg-black dark:border-b  max-h-10 dark:border-zinc-900 border-b border-gray-200  flex justify-between items-center py-8 px-4">
       <div className="dark:text-white text-black font-poppins font-semibold">
-       <Link to="/"> Logo </Link>
+       <Link to="/"><img src={logo} alt="" height={80} width={130} /> </Link>
       </div>
       <div>
         <div className="font-poppins font-semibold flex items-center ">

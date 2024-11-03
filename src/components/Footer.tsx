@@ -59,8 +59,8 @@ const Footer = () => {
       </div>
 
       <div className="flex md:flex-row flex-col justify-center pt-5 border-t dark:border-zinc-900 items-center font-poppins ">
-        <p className="dark:text-white text-black text-sm me-2">
-          All Copyrights And Trademarks.
+        <p className="dark:text-white  text-sm me-2 text-blue-900">
+          Saorav.skumar@gmail.com
         </p>
         <div className="flex">
           <div className="mx-2">
