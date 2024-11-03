@@ -1,20 +1,25 @@
 import React from "react";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { images,etherim } from "../assets";
 import { ShoppingCart } from "@mui/icons-material";
 import AppsIcon from '@mui/icons-material/Apps';
 import { Tooltip } from "@mui/material";
+import { Share } from "@mui/icons-material";
 import Chip from "@mui/material/Chip";
 
+import { images,etherim } from "../assets";
+import { ContractContext } from "../contexts/ContractContext";
+import { useContext } from "react";
+
 const DetailsNfts = () => {
+  const {getMyNFTs} = useContext(ContractContext)
   const nftId= useParams()  // this will also returns the from which page its been called from 
   // eg - if nft clicked from market then show the more nfts from market nfts, if listed nfts then show the 
   // listed nfts , if bought nfts then show the other bought nfts in More NFTs section.
   // or 
   // just get the more nft items from the same owner...
   useEffect(()=>{
-    
+      getMyNFTs()
       //fetch the nftId
 
     return()=>{
@@ -28,7 +33,7 @@ const DetailsNfts = () => {
           <img
             src={images.nfts[0]}
             height={250}
-            width={280}
+            width={270}
             alt="nft"
             style={{ objectFit: "cover" }}
             className="rounded-tl-3xl"
@@ -54,8 +59,10 @@ const DetailsNfts = () => {
                 100 ETH
             </p>
             </div>
-            <div className="mt-3">
+            <div className="mt-3 flex ">
                 <button className="px-3 py-2 rounded-md shadow-md hover:scale-105 transition-all shadow-black bg-green-700 font-poppins text-white"><ShoppingCart className="pr-2"/>Buy Now</button>
+                <button className="px-3 ml-3 py-2 rounded-md shadow-md hover:scale-105 transition-all shadow-black bg-gray-500 font-poppins outline text-white"><Share className="pr-2"/>Share</button>
+
             </div>
           </div>
 

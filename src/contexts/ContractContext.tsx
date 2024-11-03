@@ -12,9 +12,10 @@ type ContextProps = {
   ) => void;
   getMarketNFTs:()=>Promise<filterednftsData[]>;
   getMyNFTs:()=>Promise<filterednftsData[]>;
+  getOwnerNFTs:(arg:string)=>Promise<filterednftsData[]>;
 };
 
-export const ContractContext = createContext<ContextProps>({handleUploadImageToIpfs:()=>0,getMarketNFTs:async()=>[],getMyNFTs:async()=>[]});
+export const ContractContext = createContext<ContextProps>({handleUploadImageToIpfs:()=>0,getMarketNFTs:async()=>[],getMyNFTs:async()=>[],getOwnerNFTs:async()=>[]});
 
 type Props = {
   children: ReactNode;
@@ -24,9 +25,6 @@ export const ContractContextWrapper = ({ children }: Props) => {
   console.log('pinata jwt',import.meta.env.VITE_PINATA_IPFS_JWT)
 
 
-  const getProvider =()=>{
-    
-  }
 
   async function uploadImageToIPFS(file: File) {
     const url = `https://uploads.pinata.cloud/v3/files`;
@@ -144,6 +142,33 @@ export const ContractContextWrapper = ({ children }: Props) => {
     }
   }
 
+  const getOwnerNFTs=async(onwerId:string)=>{
+    if (!window.ethereum || !window.ethereum.request) {
+      alert("MetaMask is not installed or the provider is unavailable!");
+      console.log('mynfts getting error')
+      return [];
+    }
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    await provider.send("eth_requestAccounts", []); 
+    
+    const signer = provider.getSigner(); 
+    const { abi } = contractAbi;
+    
+    const nftMarketplaceContract = new ethers.Contract(CONTRACT_ADDRESS,abi,signer);
+    
+    try{
+      const ownerNFTS = await nftMarketplaceContract.getOwnerNFTS(onwerId)
+     const data= await cleanNftsData(ownerNFTS)
+      console.log("Onwer listed nftities",ownerNFTS)
+      console.log('cleaned data!',data);
+      return data
+    }
+    catch (error){
+      console.log("errror has been occured fetching the ownerNfts......",error);
+      return []
+    }
+  }
+
   const createNFT = async (price:number,metahash: string) => {
     try {
       if (!window.ethereum || !window.ethereum.request) {
@@ -177,7 +202,7 @@ export const ContractContextWrapper = ({ children }: Props) => {
   };
 
   return (
-    <ContractContext.Provider value={{ handleUploadImageToIpfs,getMarketNFTs,getMyNFTs}}>
+    <ContractContext.Provider value={{ handleUploadImageToIpfs,getMarketNFTs,getMyNFTs,getOwnerNFTs}}>
       {children}
     </ContractContext.Provider>
   );
