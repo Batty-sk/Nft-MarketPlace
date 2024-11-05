@@ -3,9 +3,9 @@ import ArrowLeftIcon from "@mui/icons-material/ArrowLeft";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import { ContractContext } from "../contexts/ContractContext";
 import Masonry from 'react-masonry-css'
+
+
 import { filterednftsData } from "../constants";
-
-
 import { CardProfile, Banner,CardNft } from "../components";
 import { images } from "../assets";
 import SearchBar from "../components/SearchBar";
@@ -130,7 +130,7 @@ useEffect(() => {
                 <SearchBar nftsData={marketNFTs} searchDataResult={searchDataResult} />
           </div>
 
-          <div className="mt-2 flex justify-center">
+          <div className="mt-2 flex justify-center" id="market-place-nft-area">
           <Masonry
               breakpointCols={breakpointColumnsObj}
               className="my-masonry-grid"

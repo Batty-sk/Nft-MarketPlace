@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 type CardNftProps = {
   name: string;
@@ -7,6 +8,8 @@ type CardNftProps = {
   ethAmount: number;
 };
 const CardNft = ({ name, image, account, ethAmount }: CardNftProps) => {
+  
+
   return (
     <div className="flex flex-col justify-center h-fit w-fit cursor-pointer hover:scale-105 hover:-translate-y-1.5 transition-all duration-500 ease-in-out flex-1 font-poppins font-semibold dark:text-white text-black py-5 px-4 m-2 rounded-md bg-slate-100 shadow-sm shadow-gray-400 dark:bg-zinc-900 dark:shadow-sm dark:shadow-pink-500">
            <div className="relative rounded-md flex justify-center">

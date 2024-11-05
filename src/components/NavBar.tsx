@@ -17,7 +17,6 @@ const MenuItems = () => {
       {[
         {item:"Listed-NFTs",path:"/listed-nfts"},
         { item: "My-NFTs", path: "/my-nfts" },
-        { item: "Resell-NFTs", path: "/resell-nfts" },
       ].map((item, i) => (
         <Link to={item?.path} key={item?.item} className="no-underline p-2">
           {" "}
