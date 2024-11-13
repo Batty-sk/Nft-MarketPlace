@@ -7,6 +7,8 @@ contract NFT_marketPlace is ERC721URIStorage {
     uint256 private _tokenIdCounter;
     uint256 public commision = 0.0025 ether;
     address owner;
+`   
+
     event NFTCreatedOrListed(uint256 indexed tokenId, address indexed owner, uint256 listingPrice);
 
     struct nftInfo {
@@ -16,6 +18,9 @@ contract NFT_marketPlace is ERC721URIStorage {
         uint256 listingPrice;
         string tokenURI;
     }
+
+    //mapping for profile owner 
+    mapping(address=>string) public ownerProfilePic;
 
     mapping(uint256 => nftInfo) public NFT;
 
@@ -170,5 +175,12 @@ contract NFT_marketPlace is ERC721URIStorage {
         return MyListedNFTS;
     }
 
+    function fetchTopSellers public view(){
+        
+    }
+
+    function fetchOwnerProfilePic public view(address arg) returns (ownerProfilePic){
+        return ownerProfilePic[arg]
+    }
     
 }
