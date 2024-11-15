@@ -145,18 +145,10 @@ export const ContractContextWrapper = ({ children }: Props) => {
   }
 
   const getOwnerNFTs=async(onwerId:string)=>{
-    if (!window.ethereum || !window.ethereum.request) {
-      alert("MetaMask is not installed or the provider is unavailable!");
-      console.log('mynfts getting error')
-      return [];
-    }
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    await provider.send("eth_requestAccounts", []); 
-    
-    const signer = provider.getSigner(); 
+
     const { abi } = contractAbi;
     
-    const nftMarketplaceContract = new ethers.Contract(CONTRACT_ADDRESS,abi,signer);
+    const nftMarketplaceContract = new ethers.Contract(CONTRACT_ADDRESS,abi);
     
     try{
       const ownerNFTS = await nftMarketplaceContract.getOwnerNFTS(onwerId)

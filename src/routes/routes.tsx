@@ -27,7 +27,7 @@ export const Routes = createBrowserRouter([
                 element:<MyNfts/>
             },
             {
-                path:'/details-nfts',
+                path:'/details-nfts/:id',
                 element:<DetailsNfts />
             }
 
