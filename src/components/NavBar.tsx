@@ -38,8 +38,9 @@ const NavBar = () => {
 
   return (
     <nav className="dark:bg-black dark:border-b  max-h-10 dark:border-zinc-900 border-b border-gray-200  flex justify-between items-center py-8 px-4">
-      <div className="dark:text-white text-black font-poppins font-semibold">
-       <Link to="/"><img src={logo} alt="" height={80} width={130} /> </Link>
+      <div className="dark:text-white text-black font-poppins font-semibold flex items-center ">
+       <Link to="/"><img src={logo} alt="" height={80} width={130} />  </Link>
+        <span className="font-bold text-pink-700">NFT-MARKETPLACE.GG</span>
       </div>
       <div>
         <div className="font-poppins font-semibold flex items-center ">

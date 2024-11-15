@@ -7,10 +7,10 @@ contract NFT_marketPlace is ERC721URIStorage {
     uint256 private _tokenIdCounter;
     uint256 public commision = 0.0025 ether;
     address owner;
-`   
 
     event NFTCreatedOrListed(uint256 indexed tokenId, address indexed owner, uint256 listingPrice);
-
+    event TopSellersInfo(address owner,uint sales);
+    
     struct nftInfo {
         address owner; // the current nft holder.
         address creatorAddress; // its basically the original owner who created this nft.
@@ -21,6 +21,7 @@ contract NFT_marketPlace is ERC721URIStorage {
 
     //mapping for profile owner 
     mapping(address=>string) public ownerProfilePic;
+
 
     mapping(uint256 => nftInfo) public NFT;
 
@@ -78,13 +79,20 @@ contract NFT_marketPlace is ERC721URIStorage {
         // Trfansfer funds to seller and contract owner
         address payable seller = payable(NFT[tokenId].owner);
         seller.transfer(NFT[tokenId].listingPrice);
+        
+
+
 
         //Transfer commission
         payable(owner).transfer(commision);
 
+        // the top sellers should only be updated in the buying phase because sales will always be increasing no matter if the owner is buying the nfts or not.
+        emit TopSellersInfo(NFT[tokenId].owner,NFT[tokenId].listingPrice);
+
         // pdate ownership and delist the NFT
         NFT[tokenId].owner = msg.sender;
         NFT[tokenId].isListed = false;
+
 
         return true;
     }
@@ -125,7 +133,7 @@ contract NFT_marketPlace is ERC721URIStorage {
         for (uint256 i = 0; i < _tokenIdCounter; i++) {
             if (!NFT[i].isListed && NFT[i].owner == msg.sender) {
                 MyListedNFTS[j] = NFT[i];
-                j++;
+                j++; 
             }
         }
 
@@ -175,12 +183,14 @@ contract NFT_marketPlace is ERC721URIStorage {
         return MyListedNFTS;
     }
 
-    function fetchTopSellers public view(){
+    function updateOnwerProfilePic(string memory ProfileURI) public {
+        
+        ownerProfilePic[msg.sender] = ProfileURI;
         
     }
 
-    function fetchOwnerProfilePic public view(address arg) returns (ownerProfilePic){
-        return ownerProfilePic[arg]
+    function fetchOwnerProfilePic(address arg) public view returns (string memory){
+        return ownerProfilePic[arg];
     }
     
 }
