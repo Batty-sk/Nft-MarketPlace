@@ -3,9 +3,10 @@ import React, { createContext, ReactNode, useState ,useEffect} from "react";
 interface MetaMaskContextType {
   isConnected: boolean;
   connectWallet: React.Dispatch<React.SetStateAction<boolean>>;
+  account:string
 }
 
-export const MetaMaskContext = createContext<MetaMaskContextType >({isConnected:false,connectWallet:()=>{}});
+export const MetaMaskContext = createContext<MetaMaskContextType >({isConnected:false,connectWallet:()=>{},account:""});
 
 type Props = {
   children: ReactNode;
@@ -13,7 +14,7 @@ type Props = {
 
 export const MetaMaskWrapper: React.FC<Props> = ({ children }) => {
   const [isConnected, setIsConnected] = useState(false);
-  const [account, setAccount] = useState<string | null>(null);
+  const [account, setAccount] = useState<string |null>(null);
 
   useEffect(() => {
     const connectWallet = async () => {
@@ -46,7 +47,7 @@ export const MetaMaskWrapper: React.FC<Props> = ({ children }) => {
 
 
   return (
-    <MetaMaskContext.Provider value={{ isConnected, connectWallet:setIsConnected }}>
+    <MetaMaskContext.Provider value={{ isConnected, connectWallet:setIsConnected,account:account?account:""}}>
       {children}
     </MetaMaskContext.Provider>
   );

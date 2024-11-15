@@ -1,23 +1,31 @@
 import React,{useState,useEffect} from 'react'
+import { Chip } from '@mui/material';
 import { Banner } from '../components'
 import SearchBar from '../components/SearchBar'
 import { filterednftsData } from "../constants";
 import { Link } from 'react-router-dom';
+import blockies from 'ethereum-blockies';
+import { useContext } from 'react';
+import { MetaMaskContext } from '../contexts/MetaMaskContext';
 
 const MyNfts = () => {
-
+  const {account} = useContext(MetaMaskContext)
+  const [accountAvatar,updateAccountAvatar] = useState(account)
   const [myNFTs,setMyNFTs] = useState<filterednftsData[]|null>(null)
   const [searchData,searchDataResult]= useState<filterednftsData[] |null>(null)
                  useEffect(()=>{
                  },[])
-                  
+  
+ useEffect(()=>{
+    updateAccountAvatar(blockies.create({seed:account, size: 20}).toDataURL())
+ },[account])                
     return (
     <div className='flex flex-col items-center'>
         <Banner title='' />
-        <div className=' relative'>
-          <span className='w-36 h-36 block bg-white border rounded-full -mt-20 z-10'></span>
+        <div className='relative w-32 h-32 block bg-white  rounded-full overflow-hidden -mt-20 z-10'>
+           <img src={accountAvatar} alt="" className='object-cover h-full w-full' />
         </div>
-
+        <Chip label={account} className='mt-5'></Chip>
         <div className='mt-10 w-2/4 '>
           <SearchBar nftsData={[]} searchDataResult={searchDataResult} styles='w-full flex  justify-center' />
         </div>

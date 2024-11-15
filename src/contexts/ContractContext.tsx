@@ -3,6 +3,7 @@ import { ethers } from "ethers";
 import { RPC_URL,PRIVATE_KEY,CONTRACT_ADDRESS,cleanNftsData} from "../constants";
 import contractAbi from '../../artifacts/contracts/NFT_marketPlace.sol/NFT_marketPlace.json'
 import { filterednftsData } from "../constants";
+import { Error } from "@mui/icons-material";
 type ContextProps = {
   handleUploadImageToIpfs: (
     image: File,
@@ -70,6 +71,7 @@ export const ContractContextWrapper = ({ children }: Props) => {
       console.error("Error uploading metadata to IPFS:", error);
       throw new Error('error occureed in Pinning metadata to ipfs server !');
     }
+
   }
 
   const handleUploadImageToIpfs = async (
@@ -169,22 +171,65 @@ export const ContractContextWrapper = ({ children }: Props) => {
     }
   }
 
+  const updateProfilePic =async(file:File)=>{
+
+   try{
+    const res= await uploadImageToIPFS(file) // this will return the cid of the image
+    const data = await openMetaMask()
+    if(data == -1)
+        throw new Error("Error occured while signing the transaction") 
+     
+    const nftMarketplaceContract = new ethers.Contract(CONTRACT_ADDRESS, data.abi, data.signer);
+  
+    const tx = await nftMarketplaceContract.updateOnwerProfilePic(res); 
+    console.log(`Contract tx: ${tx.hash}`);
+
+    const receipt = await tx.wait();
+    console.log("Transaction mined in block:", receipt.blockNumber);
+
+   }
+   catch(error:any){
+    throw new Error(error);
+   }
+
+  }
+  const fetchProfilePic = async(address:string)=>{
+    try{
+   const {abi} = contractAbi
+    const nftMarketplaceContract = new ethers.Contract(CONTRACT_ADDRESS, abi);
+    const data = await nftMarketplaceContract.fetchOwnerProfilePic(address)
+    return data
+    }
+    catch(error:any)
+    {
+      console.log("error while fetching the profile pic")
+      return -1
+    }
+  
+  }
+
+ const openMetaMask = async()=>{
+  if (!window.ethereum || !window.ethereum.request) {
+    alert("MetaMask is not installed or the provider is unavailable!");
+    return -1
+  }
+
+   await window.ethereum.request({ method: "eth_requestAccounts" });
+
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+
+  const signer = provider.getSigner();
+  const { abi } = contractAbi;
+  return {abi,signer}
+ }
+
   const createNFT = async (price:number,metahash: string) => {
     try {
-      if (!window.ethereum || !window.ethereum.request) {
-        alert("MetaMask is not installed or the provider is unavailable!");
-        return;
-      }
-  
-      await window.ethereum.request({ method: "eth_requestAccounts" });
-  
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-  
-      const signer = provider.getSigner();
-      const { abi } = contractAbi;
+      const data = await openMetaMask()
+      if(data == -1)
+          throw new Error("Error occured while signing the transaction") 
 
-  
-      const nftMarketplaceContract = new ethers.Contract(CONTRACT_ADDRESS, abi, signer);
+      const nftMarketplaceContract = new ethers.Contract(CONTRACT_ADDRESS, data.abi, data.signer);
   
       const tx = await nftMarketplaceContract.createNFT(price, metahash); 
       console.log(`Contract tx: ${tx.hash}`);
@@ -196,7 +241,7 @@ export const ContractContextWrapper = ({ children }: Props) => {
     } catch (error) {
       console.error("Error creating an NFT:", error);
       return null;
-    }
+    } 
 
     // here we have to update the state so that fetching happens by the home page using use effect.
   };
