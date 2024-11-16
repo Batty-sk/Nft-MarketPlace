@@ -20,17 +20,23 @@ type ContextProps = {
   getMarketNFTs: () => Promise<filterednftsData[]>;
   getMyNFTs: () => Promise<filterednftsData[]>;
   getOwnerNFTs: (arg: string) => Promise<filterednftsData[]>;
-  fetchToken:(arg:number)=>Promise<[]>,
-  buyNFT:(arg:number)=>Promise<boolean>
+  fetchToken: (arg: number) => Promise<[]>;
+  getMyListedNFTS: () => Promise<filterednftsData[]>;
+  buyNFT: (arg: number, amount: string) => Promise<boolean>;
+  removeNftFromMarket: (arg: number) => Promise<boolean>;
+  resellNFT:(arg:number,newPrice:number)=>Promise<boolean>;
 };
 
 export const ContractContext = createContext<ContextProps>({
   handleUploadImageToIpfs: () => 0,
   getMarketNFTs: async () => [],
   getMyNFTs: async () => [],
+  getMyListedNFTS: async () => [],
   getOwnerNFTs: async () => [],
-  fetchToken:async () => [],
-  buyNFT:async ()=> true
+  fetchToken: async () => [],
+  buyNFT: async () => true,
+  removeNftFromMarket: async () => true,
+  resellNFT:async () =>true
 });
 
 type Props = {
@@ -92,7 +98,7 @@ export const ContractContextWrapper = ({ children }: Props) => {
     description: string,
     price: number
   ) => {
-   /*  const imgHash = await uploadImageToIPFS(image);
+    /*  const imgHash = await uploadImageToIPFS(image);
     console.log("image hash", imgHash);
     const metaData = {
       name,
@@ -147,9 +153,9 @@ export const ContractContextWrapper = ({ children }: Props) => {
     );
 
     try {
-      const listedNFTS = await nftMarketplaceContract.getMyListedNFTS();
-      const data = await cleanNftsData(listedNFTS);
-      console.log("my listed nftities", listedNFTS);
+      const myNfts = await nftMarketplaceContract.getMyNFTS();
+      const data = await cleanNftsData(myNfts);
+      console.log("my listed nftities", myNfts);
       console.log("cleaned data!", data);
       return data;
     } catch (error) {
@@ -157,15 +163,83 @@ export const ContractContextWrapper = ({ children }: Props) => {
       return [];
     }
   };
+  const getMyListedNFTS = async () => {
+    if (!window.ethereum || !window.ethereum.request) {
+      alert("MetaMask is not installed or the provider is unavailable!");
+      console.log("mynfts getting error");
+      return [];
+    }
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    await provider.send("eth_requestAccounts", []);
 
-  const getOwnerNFTs = async (onwerId: string) => {
+    const signer = provider.getSigner();
     const { abi } = contractAbi;
-    const provider = new ethers.providers.JsonRpcProvider(RPC_URL);
 
     const nftMarketplaceContract = new ethers.Contract(
       CONTRACT_ADDRESS,
       abi,
-      provider
+      signer
+    );
+
+    try {
+      const myNfts = await nftMarketplaceContract.getMyListedNFTS();
+      const data = await cleanNftsData(myNfts);
+      console.log("my listed nftities", myNfts);
+      console.log("cleaned data!", data);
+      return data;
+    } catch (error) {
+      console.log("errror has been occured fetching the mynfts......", error);
+      return [];
+    }
+  };
+  const removeNftFromMarket = async (tokenId: number) => {
+    if (!window.ethereum || !window.ethereum.request) {
+      alert("MetaMask is not installed or the provider is unavailable!");
+      console.log("removing nfts getting error");
+      return false;
+    }
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    await provider.send("eth_requestAccounts", []);
+
+    const signer = provider.getSigner();
+    const { abi } = contractAbi;
+
+    const nftMarketplaceContract = new ethers.Contract(
+      CONTRACT_ADDRESS,
+      abi,
+      signer
+    );
+    try {
+      const tx = await nftMarketplaceContract.removeNftFromMarketPlace(tokenId);
+      const receipt = await tx.wait();
+      console.log("Transaction mined in block:", receipt.blockNumber);
+      console.log("removed succesffullly!", tx);
+      return true;
+    } catch (error) {
+      console.log("errror has been occured while removing the nfts", error);
+      return false;
+    }
+  };
+  const getOwnerNFTs = async (onwerId: string) => {
+    const { abi } = contractAbi;
+
+    if (!window.ethereum || !window.ethereum.request) {
+      console.error("MetaMask is not installed or unavailable.");
+      return [];
+    }
+
+    // Connect to MetaMask
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+
+    // Get the current account
+    const signer = provider.getSigner();
+    const currentAccount = await signer.getAddress();
+    console.log("Using current account:", currentAccount);
+
+    const nftMarketplaceContract = new ethers.Contract(
+      CONTRACT_ADDRESS,
+      abi,
+      signer
     );
 
     try {
@@ -207,15 +281,20 @@ export const ContractContextWrapper = ({ children }: Props) => {
       return -1;
     }
 
-    await window.ethereum.request({ method: "eth_requestAccounts" });
+    const accounts = await window.ethereum.request({ method: "eth_accounts" });
+    if (accounts.length === 0) {
+      await window.ethereum.request({ method: "eth_requestAccounts" });
+    }
 
     const provider = new ethers.providers.Web3Provider(window.ethereum);
-
     const signer = provider.getSigner();
+    const connectedAccount = await signer.getAddress();
+
+    console.log("Signer address:", connectedAccount);
     const { abi } = contractAbi;
+
     return { abi, signer };
   };
-
   const fetchToken = async (tokenId: number) => {
     const { abi } = contractAbi;
     const provider = new ethers.providers.JsonRpcProvider(RPC_URL);
@@ -224,34 +303,61 @@ export const ContractContextWrapper = ({ children }: Props) => {
       abi,
       provider
     );
-      const tokenData = await nftMarketplaceContract.fetchToken(tokenId);
-      console.log('tokenData')
-      return tokenData
+    const tokenData = await nftMarketplaceContract.fetchToken(tokenId);
+    console.log("tokenData");
+    return tokenData;
   };
 
-  const buyNFT = async (tokenId:number)=>{
+  const buyNFT = async (tokenId: number, amount: string) => {
     const data = await openMetaMask();
-    if (data == -1)
-      return false
-  
-    try{
-    const nftMarketplaceContract = new ethers.Contract(
-      CONTRACT_ADDRESS,
-      data.abi,
-      data.signer
-    );
-    const tx = await nftMarketplaceContract.buyNFT(tokenId);
-    console.log(`Contract tx: ${tx.hash}`);
+    if (data == -1) return false;
 
-    const receipt = await tx.wait();
-    console.log("Transaction mined in block:", receipt.blockNumber);
-    return true
-  }
-  catch(error){
-    return false
-  }
-  }
+    try {
+      const nftMarketplaceContract = new ethers.Contract(
+        CONTRACT_ADDRESS,
+        data.abi,
+        data.signer
+      );
+      console.log("buying nfts...with token id", tokenId);
+      const priceInWei = ethers.utils.parseEther(amount);
+      console.log("price in wei", priceInWei);
+      const tx = await nftMarketplaceContract.buyNFT(tokenId, {
+        value: priceInWei,
+      });
+      console.log(`Contract tx: ${tx.hash}`);
 
+      const receipt = await tx.wait();
+      console.log("Transaction mined in block:", receipt.blockNumber);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+
+  const resellNFT = async (tokenId: number, newPrice: number) => {
+    const data = await openMetaMask();
+    if (data == -1) return false;
+
+    try {
+      const nftMarketplaceContract = new ethers.Contract(
+        CONTRACT_ADDRESS,
+        data.abi,
+        data.signer
+      );
+      console.log("reselling nft...with token id", tokenId);
+      const priceInWei = ethers.utils.parseEther(newPrice.toString());
+
+      const tx = await nftMarketplaceContract.resellNFT(tokenId, priceInWei);
+      console.log(`Contract tx: ${tx.hash}`);
+
+      const receipt = await tx.wait();
+      console.log("Transaction mined in block:", receipt.blockNumber);
+      return true;
+    } catch (error) {
+      console.log("error while reselling the nft", error);
+      return false;
+    }
+  };
   const createNFT = async (price: number, metahash: string) => {
     try {
       const data = await openMetaMask();
@@ -287,7 +393,10 @@ export const ContractContextWrapper = ({ children }: Props) => {
         getMyNFTs,
         getOwnerNFTs,
         fetchToken,
-        buyNFT
+        buyNFT,
+        getMyListedNFTS,
+        removeNftFromMarket,
+        resellNFT
       }}
     >
       {children}

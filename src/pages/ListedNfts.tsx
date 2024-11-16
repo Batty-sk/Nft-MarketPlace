@@ -9,23 +9,25 @@ import { Pagination, CardNft } from "../components";
 import { BounceLoader } from "react-spinners";
 import { ThemeContext } from "../contexts/ThemeContext";
 import { Link } from "react-router-dom";
+import { MetaMaskContext } from "../contexts/MetaMaskContext";
 
 const ListedNfts = () => {
-  const { getMyNFTs } = useContext(ContractContext);
+  const { getMyListedNFTS } = useContext(ContractContext);
+  const {account} = useContext(MetaMaskContext)
   const { animateCreateButton } = useContext(ThemeContext);
   const [loading, updateLoading] = useState();
   const [myNFTs, setMyNFTs] = useState<filterednftsData[] | null>(null);
   useEffect(() => {
     async function fetchMyNfts() {
       try {
-        const data = await getMyNFTs();
+        const data = await getMyListedNFTS();
         setMyNFTs(data);
       } catch (e) {
         console.log("some errror while fetching the mY nfts");
       }
     }
     fetchMyNfts();
-  }, []);
+  }, [account]);
 
   const handleShowButtonToUser = () => {
     animateCreateButton(true);
@@ -63,7 +65,7 @@ const ListedNfts = () => {
             tokenId={item.tokenId}
             name={item.owner}
             image={item.tokenData.imgURI}
-            account={`0xC...${Math.random()}`}
+            account={account}
             ethAmount={item.price}
           />
         </div>

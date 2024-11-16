@@ -38,8 +38,8 @@
       ]
     },
     "D:\\NFT MarketPlace\\nft-marketplace\\contracts\\NFT_marketPlace.sol": {
-      "lastModificationDate": 1731743416684,
-      "contentHash": "7c45852ab10235c23999f5ecd925a59e",
+      "lastModificationDate": 1731760871350,
+      "contentHash": "30a2d2aa3b85a5acd2ae8934c185f4d1",
       "sourceName": "contracts/NFT_marketPlace.sol",
       "solcConfig": {
         "version": "0.8.20",

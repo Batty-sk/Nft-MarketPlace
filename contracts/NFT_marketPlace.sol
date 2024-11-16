@@ -144,17 +144,16 @@ contract NFT_marketPlace is ERC721URIStorage {
 
     function getOwnerNFTS(address Id)public view returns(nftInfo[] memory){
         uint256 totalOwned = 0;
-        for (uint256 i=0;i<_tokenIdCounter;i++){
-          if (NFT[i].isListed && NFT[i].owner == Id) {
-                totalOwned++;
+        for (uint256 i=0;i<_tokenIdCounter;i++){     
+          if ((NFT[i].isListed || msg.sender==Id) && NFT[i].owner == Id) {
+                totalOwned++;                        
             }
         }
-
         nftInfo[] memory OwnerNFTS = new nftInfo[](totalOwned);
         uint256 j = 0;
 
         for (uint256 i = 0; i < _tokenIdCounter; i++) {
-            if (NFT[i].isListed && NFT[i].owner == Id) {
+            if ((NFT[i].isListed || msg.sender==Id) && NFT[i].owner == Id) {
                 OwnerNFTS[j] = NFT[i];
                 j++;
             }
@@ -163,6 +162,12 @@ contract NFT_marketPlace is ERC721URIStorage {
 
     }
 
+    function removeNftFromMarketPlace(uint tokenId) external returns(bool){
+        require(msg.sender==NFT[tokenId].owner,"you dont own this nft");
+        NFT[tokenId].isListed = false;
+        return true;
+
+    }
     function getMyListedNFTS() public view returns (nftInfo[] memory) {
         uint256 totalListed = 0;
 

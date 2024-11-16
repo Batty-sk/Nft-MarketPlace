@@ -27,7 +27,7 @@ export const MetaMaskWrapper: React.FC<Props> = ({ children }) => {
             method: "eth_requestAccounts",
           });
           setAccount(accounts[0]);
-          console.log('successfully connecteedd!, accounts[0]:',accounts[0],"accouns",accounts)
+          console.log('successfully connecteedd!, accounts[0]:',accounts[0],"accounts",accounts)
           setIsConnected(true);
           
           ethereum.on("accountsChanged", (newAccounts: string[]) => {
