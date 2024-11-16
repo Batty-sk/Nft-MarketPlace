@@ -45,7 +45,7 @@ const ListedNfts = () => {
       </div>
         {myNFTs?.map((item,i)=>(
           <div key={i} className='max-h-fit max-w-fit'>
-                <CardNft  name={item.owner} image={item.tokenData.imgURI} account={`0xC...${Math.random()}`}
+                <CardNft  tokenId={item.tokenId} name={item.owner} image={item.tokenData.imgURI} account={`0xC...${Math.random()}`}
                             ethAmount={item.price}/>
 </div>
         ))}
