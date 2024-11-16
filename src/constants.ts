@@ -21,7 +21,7 @@ export const cleanNftsData = async(nfts:any[])=>{
     const filteredData:filterednftsData[]= []
     for(let i=0;i<nfts.length;i++){
         const temp:filterednftsData={
-        tokenId:nfts[i][0],
+        tokenId:hexToInt(nfts[i][0]),
         owner:nfts[i][1],
         creatorAddress:nfts[i][2],
         isListed:nfts[i][3],

@@ -20,7 +20,8 @@ type ContextProps = {
   getMarketNFTs: () => Promise<filterednftsData[]>;
   getMyNFTs: () => Promise<filterednftsData[]>;
   getOwnerNFTs: (arg: string) => Promise<filterednftsData[]>;
-  fetchToken:(arg:number)=>Promise<[]>
+  fetchToken:(arg:number)=>Promise<[]>,
+  buyNFT:(arg:number)=>Promise<boolean>
 };
 
 export const ContractContext = createContext<ContextProps>({
@@ -28,7 +29,8 @@ export const ContractContext = createContext<ContextProps>({
   getMarketNFTs: async () => [],
   getMyNFTs: async () => [],
   getOwnerNFTs: async () => [],
-  fetchToken:async () => []
+  fetchToken:async () => [],
+  buyNFT:async ()=> true
 });
 
 type Props = {
@@ -90,7 +92,7 @@ export const ContractContextWrapper = ({ children }: Props) => {
     description: string,
     price: number
   ) => {
-    const imgHash = await uploadImageToIPFS(image);
+   /*  const imgHash = await uploadImageToIPFS(image);
     console.log("image hash", imgHash);
     const metaData = {
       name,
@@ -98,8 +100,8 @@ export const ContractContextWrapper = ({ children }: Props) => {
       imgURI: imgHash, // this has to handled by the smart contract.
     };
     const metaHash = await uploadMetadataToIPFS(metaData);
-    console.log(`Metadata hash: ipfs://${metaHash}`);
-    await createNFT(price, metaHash); // send the request to the smartcontract regarding creation of the nft.
+    console.log(`Metadata hash: ipfs://${metaHash}`); */
+    await createNFT(price, "QmfAzgbcUyxKbz3LZQiRh3kQsCpsaoNaj6jSkr8zX8Gu1Z"); // send the request to the smartcontract regarding creation of the nft.
     console.log("nft has been created successfully!");
   };
 
@@ -230,8 +232,9 @@ export const ContractContextWrapper = ({ children }: Props) => {
   const buyNFT = async (tokenId:number)=>{
     const data = await openMetaMask();
     if (data == -1)
-      throw new Error("Error occured while signing the transaction");
-
+      return false
+  
+    try{
     const nftMarketplaceContract = new ethers.Contract(
       CONTRACT_ADDRESS,
       data.abi,
@@ -242,7 +245,11 @@ export const ContractContextWrapper = ({ children }: Props) => {
 
     const receipt = await tx.wait();
     console.log("Transaction mined in block:", receipt.blockNumber);
-
+    return true
+  }
+  catch(error){
+    return false
+  }
   }
 
   const createNFT = async (price: number, metahash: string) => {
@@ -279,7 +286,8 @@ export const ContractContextWrapper = ({ children }: Props) => {
         getMarketNFTs,
         getMyNFTs,
         getOwnerNFTs,
-        fetchToken
+        fetchToken,
+        buyNFT
       }}
     >
       {children}

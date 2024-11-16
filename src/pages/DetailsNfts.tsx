@@ -15,6 +15,7 @@ const DetailsNfts = () => {
   const { id } = useParams();
   const [accountAvatar, updateAccountAvatar] = useState("");
   const [moreOwnerNFTs, updateMoreOwnerNFTs] = useState<filterednftsData[]>([]);
+  const [currentNFT,updateCurrentNFT] = useState<filterednftsData>()
   const [isModalOpen, setIsModalOpen] = useState(false); // Modal visibility state
   
   useEffect(() => {
@@ -25,6 +26,8 @@ const DetailsNfts = () => {
       );
       (async () => {
         const data = await getOwnerNFTs(ownerId);
+        updateCurrentNFT(data.find((item)=>item.tokenId==+tokenId))
+
         updateMoreOwnerNFTs(data);
       })();
     }
@@ -32,10 +35,10 @@ const DetailsNfts = () => {
 
   const handleConfirmPurchase = ()=>{
    setIsModalOpen(false)
-   
+  // get the details ..
   }
 
-  if (!id) {
+  if (!currentNFT) {
     return (
       <div className="flex justify-center items-center mt-10 mb-10">
         <h1 className="font-poppins">
@@ -59,15 +62,11 @@ const DetailsNfts = () => {
           />
 
           <div className="flex flex-col pl-10">
-            <h1 className="font-poppins text-3xl font-semibold">NFT Name</h1>
+            <h1 className="font-poppins text-3xl font-semibold">{currentNFT.tokenData.name}</h1>
             <p className="font-poppins text-sm text-zinc-700 pt-5">
+              {currentNFT.tokenData.description}
               Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-              Officiis, non ducimus. Nobis obcaecati commodi numquam officia
-              vitae minima, temporibus sed praesentium iste ex nesciunt ullam
-              esse magnam odio? Pariatur aperiam possimus optio quaerat
-              consequatur ipsam aliquid. Rem, dolores praesentium perferendis
-              deleniti eius vel harum officiis tempora tenetur adipisci tempore,
-              voluptatum veniam voluptatibus necessitatibus nulla sapiente.
+              Officiis, non ducimus.
             </p>
             <div className="pt-3 flex justify-between pl-0 ml-0">
               <div className="font-poppins text-sm font-semibold flex items-center">
@@ -82,7 +81,7 @@ const DetailsNfts = () => {
                 <Tooltip title={"Ethereum"}>
                   <img src={etherim} alt="" height={30} width={30} />
                 </Tooltip>
-                100 ETH
+                {currentNFT.price}
               </p>
             </div>
             <div className="mt-3 flex">
@@ -109,8 +108,8 @@ const DetailsNfts = () => {
               </h2>
               <p className="text-sm text-gray-700 mb-4">
                 <span className="font-bold font-poppins">NFT Name:</span>{" "}
-                Amazing NFT <br />
-                <span className="font-bold font-poppins">Price:</span> 100 ETH{" "}
+               {currentNFT.tokenData.name} <br />
+                <span className="font-bold font-poppins">Price:</span> {currentNFT.price}{" "}
                 <br />
                 <span className="font-bold font-poppins ">
                   Platform Fee:
@@ -119,7 +118,7 @@ const DetailsNfts = () => {
               </p>
               <hr className="bg-gray-300 h-1" />
               <p className="text-lg font-bold text-center mb-6 font-poppins mt-3">
-                Total: 100.0025 ETH
+                Total: {currentNFT.price+0.0025} ETH
               </p>
               <div className="flex justify-center gap-4">
                 <button

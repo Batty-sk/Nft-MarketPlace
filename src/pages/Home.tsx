@@ -141,7 +141,7 @@ useEffect(() => {
               ))}
                {
                 marketNFTs?.map((item,i)=>(
-                  <CardNft key={i} name={item.owner} tokenId={item.tokenId} image={item.tokenData.imgURI} account={`0xC...${Math.random()}`}
+                  <CardNft key={i} name={item.tokenData.name} tokenId={item.tokenId} image={item.tokenData.imgURI} account={item.owner}
                   ethAmount={item.price}/>
                 ))
               } 

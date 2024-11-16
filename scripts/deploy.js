@@ -15,7 +15,7 @@ async function deployContract() {
 
     console.log("Deploying contract with account:", wallet.address);
     console.log("Account balance:", (await wallet.getBalance()).toString());
-
+     
     // Read and parse the compiled contract's ABI and bytecode
     const contractPath = path.join(__dirname, "../artifacts/contracts/NFT_marketPlace.sol/NFT_marketPlace.json");
     const contractJson = JSON.parse(fs.readFileSync(contractPath, "utf8"));
