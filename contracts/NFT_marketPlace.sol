@@ -57,6 +57,10 @@ contract NFT_marketPlace is ERC721URIStorage {
         emit NFTCreatedOrListed(newTokenId, msg.sender, price);
         return newTokenId;
     }
+    
+    function fetchNFT(uint tokenId) external  view returns (nftInfo memory){
+        return NFT[tokenId];
+    }
 
     function resellNFT(uint256 tokenId, uint256 price) public returns (string memory) {
         require(NFT[tokenId].owner == msg.sender, "You can't sell this token as it doesn't belong to you.");

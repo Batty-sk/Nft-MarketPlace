@@ -16,7 +16,7 @@ const DetailsNfts = () => {
   const [accountAvatar, updateAccountAvatar] = useState("");
   const [moreOwnerNFTs, updateMoreOwnerNFTs] = useState<filterednftsData[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false); // Modal visibility state
-
+  
   useEffect(() => {
     if (id) {
       const [tokenId, ownerId] = id.split("_");
@@ -29,6 +29,11 @@ const DetailsNfts = () => {
       })();
     }
   }, [id]);
+
+  const handleConfirmPurchase = ()=>{
+   setIsModalOpen(false)
+   
+  }
 
   if (!id) {
     return (
@@ -119,10 +124,7 @@ const DetailsNfts = () => {
               <div className="flex justify-center gap-4">
                 <button
                   className="px-3 py-2 w-full rounded-md shadow-md hover:scale-105 transition-all shadow-black bg-green-700 font-poppins text-white"
-                  onClick={() => {
-                    setIsModalOpen(false);
-                    alert("Order Confirmed!");
-                  }} // Open modal
+                  onClick={handleConfirmPurchase} // Open modal
                 >
                   {" "}
                   Confirm

@@ -226,6 +226,25 @@ export const ContractContextWrapper = ({ children }: Props) => {
       console.log('tokenData')
       return tokenData
   };
+
+  const buyNFT = async (tokenId:number)=>{
+    const data = await openMetaMask();
+    if (data == -1)
+      throw new Error("Error occured while signing the transaction");
+
+    const nftMarketplaceContract = new ethers.Contract(
+      CONTRACT_ADDRESS,
+      data.abi,
+      data.signer
+    );
+    const tx = await nftMarketplaceContract.buyNFT(tokenId);
+    console.log(`Contract tx: ${tx.hash}`);
+
+    const receipt = await tx.wait();
+    console.log("Transaction mined in block:", receipt.blockNumber);
+
+  }
+
   const createNFT = async (price: number, metahash: string) => {
     try {
       const data = await openMetaMask();
