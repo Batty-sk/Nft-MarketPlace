@@ -47,7 +47,6 @@ useEffect(() => {
     try {
       const marketList = await getMarketNFTs();
       console.log("Getting the market NFTs", marketList);
-       marketList[0].creatorAddress
       if(marketNFTs)
           setMarketNFTs(prev=>[...marketList]);
       else{
@@ -137,15 +136,15 @@ useEffect(() => {
               columnClassName="my-masonry-grid_column">
               {
               images.nfts.map((item,i)=>(
-                <CardNft key={i} name={`User${i}`} image={item} account={`0xC...${Math.random()}`}
+                <CardNft key={i} name={`User${i}`} tokenId={i} image={item} account={`0xC...${Math.random()}`}
                 ethAmount={100.0 * i}/>
               ))}
-   {/*            {
+               {
                 marketNFTs?.map((item,i)=>(
-                  <CardNft key={i} name={item.owner} image={item.tokenURI} account={`0xC...${Math.random()}`}
+                  <CardNft key={i} name={item.owner} tokenId={item.tokenId} image={item.tokenData.imgURI} account={`0xC...${Math.random()}`}
                   ethAmount={item.price}/>
                 ))
-              } */}
+              } 
           </Masonry>
 
           </div>
