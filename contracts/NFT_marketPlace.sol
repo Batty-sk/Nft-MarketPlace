@@ -12,6 +12,7 @@ contract NFT_marketPlace is ERC721URIStorage {
     event TopSellersInfo(address owner,uint sales);
     
     struct nftInfo {
+        uint tokenId;
         address owner; // the current nft holder.
         address creatorAddress; // its basically the original owner who created this nft.
         bool isListed;
@@ -20,14 +21,13 @@ contract NFT_marketPlace is ERC721URIStorage {
     }
 
     //mapping for profile owner 
-    mapping(address=>string) public ownerProfilePic;
 
 
     mapping(uint256 => nftInfo) public NFT;
 
     constructor() ERC721("NFT MarketPlace", "NFTMKT") {
         _totalItems = 0;
-        _tokenIdCounter = 0;
+        _tokenIdCounter = 1;
         owner = msg.sender;
     }
 
@@ -45,6 +45,7 @@ contract NFT_marketPlace is ERC721URIStorage {
         _setTokenURI(newTokenId,tokenURI);
 
         NFT[newTokenId] = nftInfo({
+            tokenId:newTokenId,
             owner: msg.sender,
             creatorAddress: msg.sender,
             isListed: true,
@@ -80,9 +81,6 @@ contract NFT_marketPlace is ERC721URIStorage {
         address payable seller = payable(NFT[tokenId].owner);
         seller.transfer(NFT[tokenId].listingPrice);
         
-
-
-
         //Transfer commission
         payable(owner).transfer(commision);
 
@@ -183,14 +181,6 @@ contract NFT_marketPlace is ERC721URIStorage {
         return MyListedNFTS;
     }
 
-    function updateOnwerProfilePic(string memory ProfileURI) public {
-        
-        ownerProfilePic[msg.sender] = ProfileURI;
-        
-    }
 
-    function fetchOwnerProfilePic(address arg) public view returns (string memory){
-        return ownerProfilePic[arg];
-    }
-    
+
 }

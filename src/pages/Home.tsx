@@ -47,7 +47,7 @@ useEffect(() => {
     try {
       const marketList = await getMarketNFTs();
       console.log("Getting the market NFTs", marketList);
-
+       marketList[0].creatorAddress
       if(marketNFTs)
           setMarketNFTs(prev=>[...marketList]);
       else{

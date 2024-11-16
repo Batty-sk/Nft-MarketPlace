@@ -105,6 +105,7 @@ export const ContractContextWrapper = ({ children }: Props) => {
     
     try{
       const listedNFTS = await nftMarketplaceContract.getListedNFTS()
+      
      const data= await cleanNftsData(listedNFTS)
 
       console.log("listed nftities",listedNFTS)
@@ -147,8 +148,9 @@ export const ContractContextWrapper = ({ children }: Props) => {
   const getOwnerNFTs=async(onwerId:string)=>{
 
     const { abi } = contractAbi;
-    
-    const nftMarketplaceContract = new ethers.Contract(CONTRACT_ADDRESS,abi);
+    const provider = new ethers.providers.JsonRpcProvider(RPC_URL)
+
+    const nftMarketplaceContract = new ethers.Contract(CONTRACT_ADDRESS,abi,provider);
     
     try{
       const ownerNFTS = await nftMarketplaceContract.getOwnerNFTS(onwerId)
@@ -163,28 +165,8 @@ export const ContractContextWrapper = ({ children }: Props) => {
     }
   }
 
-  const updateProfilePic =async(file:File)=>{
-
-   try{
-    const res= await uploadImageToIPFS(file) // this will return the cid of the image
-    const data = await openMetaMask()
-    if(data == -1)
-        throw new Error("Error occured while signing the transaction") 
-     
-    const nftMarketplaceContract = new ethers.Contract(CONTRACT_ADDRESS, data.abi, data.signer);
+ 
   
-    const tx = await nftMarketplaceContract.updateOnwerProfilePic(res); 
-    console.log(`Contract tx: ${tx.hash}`);
-
-    const receipt = await tx.wait();
-    console.log("Transaction mined in block:", receipt.blockNumber);
-
-   }
-   catch(error:any){
-    throw new Error(error);
-   }
-
-  }
   const fetchProfilePic = async(address:string)=>{
     try{
    const {abi} = contractAbi

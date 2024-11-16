@@ -32,6 +32,7 @@ const DetailsNfts = () => {
         updateAccountAvatar(blockies.create({seed:id,size:16}).toDataURL());
       (async()=>{
           const data=  await getOwnerNFTs(id)
+          //get the current nft details
           updateMoreOwnerNFTs(data)
         })
       }
@@ -69,7 +70,7 @@ const DetailsNfts = () => {
             <div className="font-poppins text-sm font-semibold flex items-center">
             <img src={accountAvatar} alt="" className="object-cover h-10 w-10 rounded-full"/>
 
-            <span className="ms-2">0xC...0.6016869897472688</span></div>
+            <span className="ms-2">{id}</span></div>
             <p className="font-poppins font-semibold flex items-center">
               <Tooltip title={"Etherium"} >
              <img src={etherim} alt="" height={40} width={40} />
