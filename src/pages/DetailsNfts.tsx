@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { ShoppingCart, Share } from "@mui/icons-material";
 import AppsIcon from "@mui/icons-material/Apps";
 import { Tooltip } from "@mui/material";
@@ -13,6 +13,13 @@ import { ContractContext } from "../contexts/ContractContext";
 import blockies from "ethereum-blockies";
 import { CardNft } from "../components";
 import { MetaMaskContext } from "../contexts/MetaMaskContext";
+import SnackBar from "../components/SnackBar";
+
+export type snackBarProp={
+message:string,
+open:boolean,
+style?:string
+}
 
 const DetailsNfts = () => {
   const { getOwnerNFTs, fetchToken, buyNFT, removeNftFromMarket,resellNFT } =
@@ -25,6 +32,8 @@ const DetailsNfts = () => {
   const [isModalOpen, setIsModalOpen] = useState(false); // Modal visibility state
   const [manualRender, setManualRender] = useState<boolean>(false);
   const [newPrice,updateNewPrice] = useState(0)
+  const [snackBar,updateSnackBar] = useState<snackBarProp>({message:'',open:false})
+
   console.log("account", account, "0xdF3e18d64BC6A983f673Ab319CCaE4f1a57C7097");
 
   useEffect(() => {
@@ -47,7 +56,9 @@ const DetailsNfts = () => {
     if (currentNFT) {
       const res = await buyNFT(currentNFT?.tokenId,(currentNFT.price+0.0025).toString());
       console.log('result',res);
-      if (res) setManualRender(!manualRender);
+      if (res){ setManualRender(!manualRender);
+      updateSnackBar({message:'Transaction Successfull!',open:true,style:'text-green-500 font-poppins md:p-3 md:ps-4 md:pe-4 p-2 font-semibold'})
+      }
       else
         alert(
           "something went wrong! Please make sure you have sufficient balance and have the correct credentials"
@@ -62,6 +73,7 @@ const DetailsNfts = () => {
       const res =await resellNFT(currentNFT?.tokenId,newPrice)
       console.log('successfully re-listed on the market with new value',res)
       setManualRender(!manualRender)
+      updateSnackBar({message:"Successfully Listed The NFT!",open:true,style:"text-green-500 font-poppins md:p-3 md:ps-4 md:pe-4 p-2 font-semibold"})
     }
     
   };
@@ -87,6 +99,7 @@ const DetailsNfts = () => {
 
   return (
     <section className="flex justify-center">
+    <SnackBar msg={snackBar.message} open={snackBar.open} handleClose={updateSnackBar} />
       <div className="flex flex-col justify-center items-center md:w-4/5">
         <div className="flex p-8 bg-gray-100 shadow-sm shadow-gray-400 mt-10 rounded-tl-3xl mb-8">
           <img
@@ -210,10 +223,10 @@ const DetailsNfts = () => {
         )}
         {id?.split("_")[1] == account ? (
           <div className="flex justify-center items-center p-5 mt-5 mb-5">
-            <span className="cursor-pointer font-poppins">
+            <Link to={'/'} className="cursor-pointer font-poppins">
               <ArrowBackIosTwoTone fontSize="large" />
-              Go Back
-            </span>
+              Go Back To Market Place
+            </Link>
           </div>
         ) : (
           <div className="flex flex-col">
