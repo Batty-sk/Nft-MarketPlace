@@ -319,7 +319,8 @@ export const ContractContextWrapper = ({ children }: Props) => {
         data.signer
       );
       console.log("buying nfts...with token id", tokenId);
-      const priceInWei = ethers.utils.parseEther(amount);
+      const weivalue=ethers.BigNumber.from(amount);
+      const priceInWei = ethers.utils.parseEther(weivalue.toString());
       console.log("price in wei", priceInWei);
       const tx = await nftMarketplaceContract.buyNFT(tokenId, {
         value: priceInWei,
@@ -330,6 +331,7 @@ export const ContractContextWrapper = ({ children }: Props) => {
       console.log("Transaction mined in block:", receipt.blockNumber);
       return true;
     } catch (error) {
+      console.log('error while buying the nft',error)
       return false;
     }
   };

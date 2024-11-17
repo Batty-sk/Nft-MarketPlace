@@ -7,21 +7,27 @@ type Prop={
     searchDataResult:React.Dispatch<React.SetStateAction<filterednftsData[] | null>>
     styles?:string
 }
+
 const SearchBar = ({nftsData,searchDataResult,styles}:Prop) => {
     const [searchTerm,updateSearchTerm]=useState('')
 
     const handleInputChange = (text:string)=>{
-        const result  = nftsData?.filter((item,index)=>item.tokenData.name.startsWith(text))
-        if (result?.length){
-            searchDataResult(result)
+        if(text=='')
+        {
+            searchDataResult([])
+            return 
         }
+        const result  = nftsData?.filter((item)=>item.tokenData.name.toLowerCase().startsWith(text.toLowerCase()))
+        if(result)
+            searchDataResult(result)
         console.log("result",result)
     }
 
     useEffect(()=>{
         const timer = setTimeout(() => {
+            console.log('searching....');
             handleInputChange(searchTerm)
-        }, 800);
+        }, 500);
 
         return ()=>clearTimeout(timer)
 

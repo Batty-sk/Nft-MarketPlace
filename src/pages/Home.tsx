@@ -128,20 +128,25 @@ useEffect(() => {
                 <h1 className="text-2xl dark:text-white text-black md:ml-5">Best Bids</h1>
                 <SearchBar nftsData={marketNFTs} searchDataResult={searchDataResult} />
           </div>
-
+          
           <div className="mt-2 flex justify-center" id="market-place-nft-area">
           <Masonry
               breakpointCols={breakpointColumnsObj}
               className="my-masonry-grid"
               columnClassName="my-masonry-grid_column">
-              {
+              {!(searchData?.length) && 
               images.nfts.map((item,i)=>(
                 <CardNft key={i} name={`User${i}`} tokenId={i} image={item} account={`0xC...${Math.random()}`}
                 ethAmount={100.0 * i}/>
               ))}
-               {
+               {searchData?.length?
+               searchData?.map((item)=>(
+                <CardNft key={item.tokenId} name={item.tokenData.name} tokenId={item.tokenId} image={item.tokenData.imgURI} account={item.owner}
+                  ethAmount={item.price}/>
+               ))
+               :
                 marketNFTs?.map((item,i)=>(
-                  <CardNft key={i} name={item.tokenData.name} tokenId={item.tokenId} image={item.tokenData.imgURI} account={item.owner}
+                  <CardNft key={item.tokenId} name={item.tokenData.name} tokenId={item.tokenId} image={item.tokenData.imgURI} account={item.owner}
                   ethAmount={item.price}/>
                 ))
               } 

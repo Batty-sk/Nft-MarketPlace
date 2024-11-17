@@ -46,6 +46,7 @@ const DetailsNfts = () => {
     setIsModalOpen(false);
     if (currentNFT) {
       const res = await buyNFT(currentNFT?.tokenId,(currentNFT.price+0.0025).toString());
+      console.log('result',res);
       if (res) setManualRender(!manualRender);
       else
         alert(
