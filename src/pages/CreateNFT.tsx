@@ -5,13 +5,15 @@ import { useDropzone } from "react-dropzone";
 import { useContext } from "react";
 import { ContractContext } from "../contexts/ContractContext";
 import { Input, Button } from "../components";
+import SnackBar from "../components/SnackBar";
+import { snackBarProp } from "./DetailsNfts";
 
 interface PreviewFile extends File {
   preview: string;
 }
 
 var arr;
-console.log('arr',arr);
+console.log("arr", arr);
 
 interface FormFields {
   title: string;
@@ -19,9 +21,43 @@ interface FormFields {
   description: string;
 }
 
-const CreateNFT: React.FC = () => {
-  const {handleUploadImageToIpfs} = useContext(ContractContext)
+type createNftProps = {
+  image: File;
+  name: string;
+  description: string;
+  price: number;
+};
 
+const CreateNFT: React.FC = () => {
+  const { handleUploadImageToIpfs } = useContext(ContractContext);
+  const [snackBar, updateSnackBar] = useState<snackBarProp>({
+    message: "",
+    open: false,
+  });
+
+  const handleCreateNFT = async ({
+    image,
+    name,
+    description,
+    price,
+  }: createNftProps) => {
+    const res = await handleUploadImageToIpfs(image, name, description, price);
+    if (res) {
+      updateSnackBar({
+        message: "NFT Created Successfully!",
+        open: true,
+        style:
+          "font-poppins font-semibold md:ps-4 md:pe-4 md:p-3 p-2 text-green-500 bg-slate-50",
+      });
+      return;
+    }
+    updateSnackBar({
+      message: "Something Went Wrong Please Try Again Later!",
+      open: true,
+      style:
+        "font-poppins font-semibold md:ps-4 md:pe-4 md:p-3 p-2 text-red-500 bg-black",
+    });
+  };
 
   const [formFields, updateFormFields] = useState<FormFields>({
     title: "",
@@ -29,7 +65,7 @@ const CreateNFT: React.FC = () => {
     description: "",
   });
 
-  const [image, setImage] = useState<PreviewFile | any>(null); 
+  const [image, setImage] = useState<PreviewFile | any>(null);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     accept: {
@@ -39,7 +75,7 @@ const CreateNFT: React.FC = () => {
     onDrop: (acceptedFiles) => {
       const uploadedFile = acceptedFiles[0];
       if (uploadedFile) {
-        console.log('uploaded file',uploadedFile)
+        console.log("uploaded file", uploadedFile);
         setImage(
           Object.assign(uploadedFile, {
             preview: URL.createObjectURL(uploadedFile),
@@ -48,7 +84,6 @@ const CreateNFT: React.FC = () => {
       }
     },
   });
-
 
   return (
     <main className="p-10 dark:bg-black bg-white w-full flex flex-col justify-center items-center mb-10">
@@ -109,7 +144,9 @@ const CreateNFT: React.FC = () => {
             <Input
               title="Title"
               inputType="text"
-              handleOnChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+              handleOnChange={(
+                e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+              ) => {
                 updateFormFields((prev) => ({
                   ...prev,
                   title: e.target.value,
@@ -120,7 +157,9 @@ const CreateNFT: React.FC = () => {
             <Input
               title="Description"
               inputType="textarea"
-              handleOnChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+              handleOnChange={(
+                e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+              ) => {
                 updateFormFields((prev) => ({
                   ...prev,
                   description: e.target.value,
@@ -130,8 +169,10 @@ const CreateNFT: React.FC = () => {
             />
             <Input
               title="Price"
-              inputType="price" 
-              handleOnChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+              inputType="price"
+              handleOnChange={(
+                e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+              ) => {
                 updateFormFields((prev) => ({
                   ...prev,
                   price: parseFloat(e.target.value),
@@ -144,11 +185,14 @@ const CreateNFT: React.FC = () => {
                 title="Create"
                 path=""
                 handleOnClickOrChange={() => {
-                  console.log('handling image uploadation...')
-                  handleUploadImageToIpfs(image,formFields.title,formFields.description,formFields.price)
+                  console.log("handling image uploadation...");
+                  handleCreateNFT({
+                    image,
+                    name: formFields.title,
+                    description: formFields.description,
+                    price: formFields.price,
+                  });
                   //yea
-
-                
                 }}
               />
             </div>

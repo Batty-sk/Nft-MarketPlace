@@ -16,7 +16,7 @@ type ContextProps = {
     name: string,
     description: string,
     price: number
-  ) => void;
+  ) => Promise<boolean>;
   getMarketNFTs: () => Promise<filterednftsData[]>;
   getMyNFTs: () => Promise<filterednftsData[]>;
   getOwnerNFTs: (arg: string) => Promise<filterednftsData[]>;
@@ -24,11 +24,11 @@ type ContextProps = {
   getMyListedNFTS: () => Promise<filterednftsData[]>;
   buyNFT: (arg: number, amount: string) => Promise<boolean>;
   removeNftFromMarket: (arg: number) => Promise<boolean>;
-  resellNFT:(arg:number,newPrice:number)=>Promise<boolean>;
+  resellNFT: (arg: number, newPrice: number) => Promise<boolean>;
 };
 
 export const ContractContext = createContext<ContextProps>({
-  handleUploadImageToIpfs: () => 0,
+  handleUploadImageToIpfs: async () => false,
   getMarketNFTs: async () => [],
   getMyNFTs: async () => [],
   getMyListedNFTS: async () => [],
@@ -36,7 +36,7 @@ export const ContractContext = createContext<ContextProps>({
   fetchToken: async () => [],
   buyNFT: async () => true,
   removeNftFromMarket: async () => true,
-  resellNFT:async () =>true
+  resellNFT: async () => true,
 });
 
 type Props = {
@@ -98,17 +98,23 @@ export const ContractContextWrapper = ({ children }: Props) => {
     description: string,
     price: number
   ) => {
-    /*  const imgHash = await uploadImageToIPFS(image);
-    console.log("image hash", imgHash);
-    const metaData = {
-      name,
-      description,
-      imgURI: imgHash, // this has to handled by the smart contract.
-    };
-    const metaHash = await uploadMetadataToIPFS(metaData);
-    console.log(`Metadata hash: ipfs://${metaHash}`); */
-    await createNFT(price, "QmfAzgbcUyxKbz3LZQiRh3kQsCpsaoNaj6jSkr8zX8Gu1Z"); // send the request to the smartcontract regarding creation of the nft.
-    console.log("nft has been created successfully!");
+    try {
+      const imgHash = await uploadImageToIPFS(image);
+      console.log("image hash", imgHash);
+      const metaData = {
+        name,
+        description,
+        imgURI: imgHash, // this has to handled by the smart contract.
+      };
+      const metaHash = await uploadMetadataToIPFS(metaData);
+      console.log(`Metadata hash: ipfs://${metaHash}`);
+      await createNFT(price, metaHash); // send the request to the smartcontract regarding creation of the nft.
+      console.log("nft has been created successfully!");
+      return true;
+    } catch (error) {
+      console.log("Something went wrong", error);
+      return false;
+    }
   };
 
   const getMarketNFTs = async () => {
@@ -319,7 +325,7 @@ export const ContractContextWrapper = ({ children }: Props) => {
         data.signer
       );
       console.log("buying nfts...with token id", tokenId);
-      const weivalue=ethers.BigNumber.from(amount);
+      const weivalue = ethers.BigNumber.from(amount);
       const priceInWei = ethers.utils.parseEther(weivalue.toString());
       console.log("price in wei", priceInWei);
       const tx = await nftMarketplaceContract.buyNFT(tokenId, {
@@ -331,7 +337,7 @@ export const ContractContextWrapper = ({ children }: Props) => {
       console.log("Transaction mined in block:", receipt.blockNumber);
       return true;
     } catch (error) {
-      console.log('error while buying the nft',error)
+      console.log("error while buying the nft", error);
       return false;
     }
   };
@@ -398,7 +404,7 @@ export const ContractContextWrapper = ({ children }: Props) => {
         buyNFT,
         getMyListedNFTS,
         removeNftFromMarket,
-        resellNFT
+        resellNFT,
       }}
     >
       {children}
