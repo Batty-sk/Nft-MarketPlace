@@ -114,7 +114,7 @@ const DetailsNfts = () => {
                   alt=""
                   className="object-cover h-10 w-10 rounded-full"
                 />
-                <span className="ms-2">{currentNFT.owner}</span>
+                <span className="ms-2">{currentNFT.owner.toLowerCase()}</span>
               </div>
               <p className="font-poppins font-semibold flex items-center">
                 <Tooltip title={"Ethereum"}>
