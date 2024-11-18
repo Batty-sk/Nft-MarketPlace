@@ -1,4 +1,4 @@
-import React, { createContext, ReactNode } from "react";
+import React, { createContext, ReactNode, useEffect } from "react";
 import { ethers } from "ethers";
 import {
   RPC_URL,
@@ -9,6 +9,7 @@ import {
 import contractAbi from "../../artifacts/contracts/NFT_marketPlace.sol/NFT_marketPlace.json";
 import { filterednftsData } from "../constants";
 import { Error } from "@mui/icons-material";
+import { c } from "vite/dist/node/types.d-aGj9QkWt";
 
 type ContextProps = {
   handleUploadImageToIpfs: (
@@ -99,7 +100,7 @@ export const ContractContextWrapper = ({ children }: Props) => {
     price: number
   ) => {
     try {
-      const imgHash = await uploadImageToIPFS(image);
+   /*    const imgHash = await uploadImageToIPFS(image);
       console.log("image hash", imgHash);
       const metaData = {
         name,
@@ -107,8 +108,8 @@ export const ContractContextWrapper = ({ children }: Props) => {
         imgURI: imgHash, // this has to handled by the smart contract.
       };
       const metaHash = await uploadMetadataToIPFS(metaData);
-      console.log(`Metadata hash: ipfs://${metaHash}`);
-      await createNFT(price, metaHash); // send the request to the smartcontract regarding creation of the nft.
+      console.log(`Metadata hash: ipfs://${metaHash}`); */
+      await createNFT(price, "QmbuZ9xfpHiq4LBE8bLJ353Tresrc1shhEZKE2mipKLyu1"); // send the request to the smartcontract regarding creation of the nft.
       console.log("nft has been created successfully!");
       return true;
     } catch (error) {
@@ -393,7 +394,32 @@ export const ContractContextWrapper = ({ children }: Props) => {
     // here we have to update the state so that fetching happens by the home page using use effect.
   };
 
+  async function listenToTopSellers() {
+    try {
+      const provider = new ethers.providers.WebSocketProvider(RPC_URL);
+  
+      const nftMarketplace = new ethers.Contract(
+        CONTRACT_ADDRESS,
+        contractAbi.abi,
+        provider
+      );
+  
+      nftMarketplace.on("TopSellersInfo", (owner: string, sales: number) => {
+        console.log(`Top Seller: ${owner}, Total Sales: ${ethers.utils.formatEther(sales)} ETH`);
+      });
+      console.log('listnening for the topsellers events....')
+      return nftMarketplace
+    } catch (error) {
+      console.error("Error setting up event listener:", error);
+      return null
+    }
+  }
+  
+useEffect(()=>{
+
+},[])
   return (
+  
     <ContractContext.Provider
       value={{
         handleUploadImageToIpfs,

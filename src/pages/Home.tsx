@@ -1,64 +1,64 @@
-import { useRef, useState,useEffect, useContext } from "react";
+import { useRef, useState, useEffect, useContext } from "react";
 import ArrowLeftIcon from "@mui/icons-material/ArrowLeft";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import { ContractContext } from "../contexts/ContractContext";
-import Masonry from 'react-masonry-css'
-
+import Masonry from "react-masonry-css";
 
 import { filterednftsData } from "../constants";
-import { CardProfile, Banner,CardNft } from "../components";
+import Loader from "../components/Loader";
+import { CardProfile, Banner, CardNft } from "../components";
 import { images } from "../assets";
 import SearchBar from "../components/SearchBar";
 
 const Home = () => {
-  const {getMarketNFTs} = useContext(ContractContext)
-  const [marketNFTs,setMarketNFTs] = useState<filterednftsData[]|null>(null)
-  const [searchData,searchDataResult]= useState<filterednftsData[] |null>(null)
+  const { getMarketNFTs } = useContext(ContractContext);
+  const [marketNFTs, setMarketNFTs] = useState<filterednftsData[] | null>(null);
+  const [searchData, searchDataResult] = useState<filterednftsData[] | null>(
+    null
+  );
   const ParentRef = useRef<HTMLDivElement | null>(null);
   const ChildRef = useRef<HTMLDivElement | null>(null);
   const breakpointColumnsObj = {
     default: 3,
     1100: 3,
     700: 2,
-    500: 1
+    500: 1,
   };
-  
-  const [shouldNavigationVisible,setShouldNavigationVisible]=useState<boolean>(true)
 
-useEffect(()=>{
-    const handleResize = ()=>{
-        if (ParentRef && ChildRef)   // one fix here.
-        {
- /*            if(  ChildRef.current?.scrollWidth < ParentRef.current?.offsetWidth)
+  const [shouldNavigationVisible, setShouldNavigationVisible] =
+    useState<boolean>(true);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (ParentRef && ChildRef) {
+        // one fix here.
+        /*            if(  ChildRef.current?.scrollWidth < ParentRef.current?.offsetWidth)
                     setShouldNavigationVisible(false) */
-        }
-    }
-
-
-    window.addEventListener('resize',handleResize)
-
-    return()=>{
-        window.removeEventListener('resize',handleResize)
-    }
-},[])
-
-useEffect(() => {
-  const fetchMarketNFTs = async () => {
-    try {
-      const marketList = await getMarketNFTs();
-      console.log("Getting the market NFTs", marketList);
-      if(marketNFTs)
-          setMarketNFTs(prev=>[...marketList]);
-      else{
-        setMarketNFTs(marketList);
       }
+    };
 
-    } catch (error) {
-      console.error("Error fetching market NFTs:", error);
-    }
-  };
-  fetchMarketNFTs();
-}, []); 
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  useEffect(() => {
+    const fetchMarketNFTs = async () => {
+      try {
+        const marketList = await getMarketNFTs();
+        console.log("Getting the market NFTs", marketList);
+        if (marketNFTs) setMarketNFTs((prev) => [...marketList]);
+        else {
+          setMarketNFTs(marketList);
+        }
+      } catch (error) {
+        console.error("Error fetching market NFTs:", error);
+      }
+    };
+    fetchMarketNFTs();
+  }, []);
 
   const handleCarouselMove = (move: string) => {
     switch (move) {
@@ -76,13 +76,13 @@ useEffect(() => {
         return 0;
     }
   };
-
+  
   return (
     <main className="p-10 dark:bg-black flex flex-col items-center">
+      {" "}
       <div className="flex justify-center  ">
         <Banner title="Dive into the NFT universe where art, technology, and ownership meet!" />
       </div>
-
       <div className="md:mt-12 w-3/4 relative">
         <h1 className="font-poppins dark:text-white text-black text-2xl md:ml-5 font-semibold">
           Top Sellers
@@ -90,7 +90,7 @@ useEffect(() => {
         <div className="carosel-parent relative w-full " ref={ParentRef}>
           <div
             className="carosel-child flex justify-evenly overflow-x-scroll"
-            style={{ scrollbarWidth: "none",scrollBehavior:'smooth'}}
+            style={{ scrollbarWidth: "none", scrollBehavior: "smooth" }}
             ref={ChildRef}
           >
             {images.avatars.map((item, i) => (
@@ -101,58 +101,78 @@ useEffect(() => {
                 ethAmount={50.0 * i}
               />
             ))}
-            {
-              
-            }
+            {}
           </div>
-            {shouldNavigationVisible?<>  <div
-            onClick={() => handleCarouselMove("left")}
-            className="absolute flex justify-center items-center top-1/2 transform -translate-y-1/2 left-0 w-10 h-10 rounded-full dark:bg-white bg-slate-50 border cursor-pointer hover:bg-orange-200"
-          >
-            <ArrowLeftIcon fontSize="large" />
-          </div>
-
-          <div
-            onClick={() => handleCarouselMove("right")}
-            className="absolute flex justify-center items-center top-1/2 transform -translate-y-1/2 right-0 w-10 h-10 rounded-full dark:bg-white bg-slate-50 border cursor-pointer hover:bg-orange-200"
-          >
-            <ArrowRightIcon fontSize="large" />
-          </div></>:null}
-        
+          {shouldNavigationVisible ? (
+            <>
+              {" "}
+              <div
+                onClick={() => handleCarouselMove("left")}
+                className="absolute flex justify-center items-center top-1/2 transform -translate-y-1/2 left-0 w-10 h-10 rounded-full dark:bg-white bg-slate-50 border cursor-pointer hover:bg-orange-200"
+              >
+                <ArrowLeftIcon fontSize="large" />
+              </div>
+              <div
+                onClick={() => handleCarouselMove("right")}
+                className="absolute flex justify-center items-center top-1/2 transform -translate-y-1/2 right-0 w-10 h-10 rounded-full dark:bg-white bg-slate-50 border cursor-pointer hover:bg-orange-200"
+              >
+                <ArrowRightIcon fontSize="large" />
+              </div>
+            </>
+          ) : null}
         </div>
       </div>
-
       <div className="md:mt-12 w-3/4">
-              
-          <div className="flex items-center justify-between font-poppins font-semibold">
-                <h1 className="text-2xl dark:text-white text-black md:ml-5">Best Bids</h1>
-                <SearchBar nftsData={marketNFTs} searchDataResult={searchDataResult} />
-          </div>
-          
-          <div className="mt-2 flex justify-center" id="market-place-nft-area">
-          <Masonry
-              breakpointCols={breakpointColumnsObj}
-              className="my-masonry-grid"
-              columnClassName="my-masonry-grid_column">
-              {!(searchData?.length) && 
-              images.nfts.map((item,i)=>(
-                <CardNft key={i} name={`User${i}`} tokenId={i} image={item} account={`0xC...${Math.random()}`}
-                ethAmount={100.0 * i}/>
-              ))}
-               {searchData?.length?
-               searchData?.map((item)=>(
-                <CardNft key={item.tokenId} name={item.tokenData.name} tokenId={item.tokenId} image={item.tokenData.imgURI} account={item.owner}
-                  ethAmount={item.price}/>
-               ))
-               :
-                marketNFTs?.map((item,i)=>(
-                  <CardNft key={item.tokenId} name={item.tokenData.name} tokenId={item.tokenId} image={item.tokenData.imgURI} account={item.owner}
-                  ethAmount={item.price}/>
-                ))
-              } 
-          </Masonry>
+        <div className="flex items-center justify-between font-poppins font-semibold">
+          <h1 className="text-2xl dark:text-white text-black md:ml-5">
+            Best Bids
+          </h1>
+          <SearchBar
+            nftsData={marketNFTs}
+            searchDataResult={searchDataResult}
+          />
+        </div>
 
-          </div>
+        <div className="mt-2 flex justify-center" id="market-place-nft-area">
+          <Masonry
+            breakpointCols={breakpointColumnsObj}
+            className="my-masonry-grid"
+            columnClassName="my-masonry-grid_column"
+          >
+            {!searchData?.length &&
+              images.nfts.map((item, i) => (
+                <CardNft
+                  key={i}
+                  name={`User${i}`}
+                  tokenId={i}
+                  image={item}
+                  account={`0xC...${Math.random()}`}
+                  ethAmount={100.0 * i}
+                />
+              ))}
+            {searchData?.length
+              ? searchData?.map((item) => (
+                  <CardNft
+                    key={item.tokenId}
+                    name={item.tokenData.name}
+                    tokenId={item.tokenId}
+                    image={item.tokenData.imgURI}
+                    account={item.owner}
+                    ethAmount={item.price}
+                  />
+                ))
+              : marketNFTs?.map((item, i) => (
+                  <CardNft
+                    key={item.tokenId}
+                    name={item.tokenData.name}
+                    tokenId={item.tokenId}
+                    image={item.tokenData.imgURI}
+                    account={item.owner}
+                    ethAmount={item.price}
+                  />
+                ))}
+          </Masonry>
+        </div>
       </div>
     </main>
   );

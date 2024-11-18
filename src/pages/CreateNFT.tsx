@@ -3,10 +3,10 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useDropzone } from "react-dropzone";
 import { useContext } from "react";
+
 import { ContractContext } from "../contexts/ContractContext";
 import { Input, Button } from "../components";
-import SnackBar from "../components/SnackBar";
-import { snackBarProp } from "./DetailsNfts";
+import CustomSnackbar,{CustomSnackbarProps,SnackbarType} from "../components/CustomSnackBar";
 
 interface PreviewFile extends File {
   preview: string;
@@ -30,9 +30,11 @@ type createNftProps = {
 
 const CreateNFT: React.FC = () => {
   const { handleUploadImageToIpfs } = useContext(ContractContext);
-  const [snackBar, updateSnackBar] = useState<snackBarProp>({
+  const [snackBar, updateSnackBar] = useState<CustomSnackbarProps>({
     message: "",
     open: false,
+    type:'success',
+    onClose:()=>{}
   });
 
   const handleCreateNFT = async ({
@@ -46,18 +48,21 @@ const CreateNFT: React.FC = () => {
       updateSnackBar({
         message: "NFT Created Successfully!",
         open: true,
-        style:
-          "font-poppins font-semibold md:ps-4 md:pe-4 md:p-3 p-2 text-green-500 bg-slate-50",
+        type:'success',
+        onClose:()=>{}
       });
       return;
     }
     updateSnackBar({
       message: "Something Went Wrong Please Try Again Later!",
       open: true,
-      style:
-        "font-poppins font-semibold md:ps-4 md:pe-4 md:p-3 p-2 text-red-500 bg-black",
+      type:'error',
+      onClose:()=>{}
     });
   };
+  const handleCloseSnackBar=()=>{
+    updateSnackBar({message:'',open:false,type:'success',onClose:()=>{}})
+  }
 
   const [formFields, updateFormFields] = useState<FormFields>({
     title: "",
@@ -87,6 +92,7 @@ const CreateNFT: React.FC = () => {
 
   return (
     <main className="p-10 dark:bg-black bg-white w-full flex flex-col justify-center items-center mb-10">
+      <CustomSnackbar {...{...snackBar,onClose:handleCloseSnackBar}}/>
       <div className="flex flex-col justify-center items-center md:w-3/5 w-full">
         <div className="flex justify-start w-full">
           <h1 className="font-poppins dark:text-white text-black text-2xl font-semibold">

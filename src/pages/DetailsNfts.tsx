@@ -13,16 +13,19 @@ import { ContractContext } from "../contexts/ContractContext";
 import blockies from "ethereum-blockies";
 import { CardNft } from "../components";
 import { MetaMaskContext } from "../contexts/MetaMaskContext";
-import SnackBar from "../components/SnackBar";
+import CustomSnackbar, {
+  CustomSnackbarProps,
+  SnackbarType,
+} from "../components/CustomSnackBar";
 
-export type snackBarProp={
-message:string,
-open:boolean,
-style?:string
-}
+export type snackBarProp = {
+  message: string;
+  open: boolean;
+  style?: string;
+};
 
 const DetailsNfts = () => {
-  const { getOwnerNFTs, fetchToken, buyNFT, removeNftFromMarket,resellNFT } =
+  const { getOwnerNFTs, fetchToken, buyNFT, removeNftFromMarket, resellNFT } =
     useContext(ContractContext);
   const { id } = useParams();
   const { account } = useContext(MetaMaskContext);
@@ -31,8 +34,13 @@ const DetailsNfts = () => {
   const [currentNFT, updateCurrentNFT] = useState<filterednftsData>();
   const [isModalOpen, setIsModalOpen] = useState(false); // Modal visibility state
   const [manualRender, setManualRender] = useState<boolean>(false);
-  const [newPrice,updateNewPrice] = useState(0)
-  const [snackBar,updateSnackBar] = useState<snackBarProp>({message:'',open:false})
+  const [newPrice, updateNewPrice] = useState(0);
+  const [snackBar, updateSnackBar] = useState<CustomSnackbarProps>({
+    message: "",
+    open: false,
+    onClose: () => {},
+    type: "success",
+  });
 
   console.log("account", account, "0xdF3e18d64BC6A983f673Ab319CCaE4f1a57C7097");
 
@@ -54,36 +62,51 @@ const DetailsNfts = () => {
   const handleConfirmPurchase = async () => {
     setIsModalOpen(false);
     if (currentNFT) {
-      const res = await buyNFT(currentNFT?.tokenId,(currentNFT.price+0.0025).toString());
-      console.log('result',res);
-      if (res){ setManualRender(!manualRender);
-      updateSnackBar({message:'Transaction Successfull!',open:true,style:'text-green-500 font-poppins md:p-3 md:ps-4 md:pe-4 p-2 font-semibold'})
-      }
-      else
-        alert(
-          "something went wrong! Please make sure you have sufficient balance and have the correct credentials"
-        );
+      const res = await buyNFT(
+        currentNFT?.tokenId,
+        (currentNFT.price + 0.0025).toString()
+      );
+      console.log("result", res);
+      if (res) {
+        setManualRender(!manualRender);
+        updateSnackBar({message:'Transaction Successfull!',open:true,onClose:()=>{},type:'success'});
+      } else
+      updateSnackBar({message:'Something Went Wrong!',open:true,onClose:()=>{},type:'error'});
+
     }
 
     // get the details ..
   };
 
+  const handleClose = ()=>{
+    updateSnackBar({message:'!',open:false,onClose:()=>{},type:'success'});
+  }
+
   const handleResellNft = async () => {
-    if(currentNFT){
-      const res =await resellNFT(currentNFT?.tokenId,newPrice)
-      console.log('successfully re-listed on the market with new value',res)
-      setManualRender(!manualRender)
-      updateSnackBar({message:"Successfully Listed The NFT!",open:true,style:"text-green-500 font-poppins md:p-3 md:ps-4 md:pe-4 p-2 font-semibold"})
+    if (currentNFT) {
+      const res = await resellNFT(currentNFT?.tokenId, newPrice);
+      if(res){
+      console.log("successfully re-listed on the market with new value", res);
+      setManualRender(!manualRender);
+      updateSnackBar({message:'Successfully Listed On The MarketPlace!',open:true,onClose:()=>{},type:'success'});
+      ;
+      }
+      else{
+        updateSnackBar({message:'Something Went Wrong! Please Try Again ',open:true,onClose:()=>{},type:'error'});
+
+      }
     }
-    
   };
   const handleRemoveToken = async () => {
     console.log("removing the tokem from the marketplace..");
     if (currentNFT) {
       const res = await removeNftFromMarket(currentNFT?.tokenId);
+      if(res)
+        updateSnackBar({message:"Removed From The MarketPlace!",open:true,onClose:()=>{},type:'success'});
+      
       res
         ? setManualRender(!manualRender)
-        : console.log("Something went Wrong!");
+        : updateSnackBar({message:"Something Went Wrong!",open:true,onClose:()=>{},type:'error'});
     }
   };
 
@@ -99,7 +122,9 @@ const DetailsNfts = () => {
 
   return (
     <section className="flex justify-center">
-    <SnackBar msg={snackBar.message} open={snackBar.open} handleClose={updateSnackBar} />
+      <CustomSnackbar
+        {...{...snackBar,onClose:handleClose}} 
+      />
       <div className="flex flex-col justify-center items-center md:w-4/5">
         <div className="flex p-8 bg-gray-100 shadow-sm shadow-gray-400 mt-10 rounded-tl-3xl mb-8">
           <img
@@ -140,10 +165,10 @@ const DetailsNfts = () => {
               {id?.split("_")[1] == account && !currentNFT.isListed ? (
                 <button
                   className="px-3 py-2 rounded-md shadow-md hover:scale-105 transition-all shadow-black bg-yellow-400 font-poppins text-black"
-                  onClick={()=>setIsModalOpen(true)} // Open modal
+                  onClick={() => setIsModalOpen(true)} // Open modal
                 >
                   <ResetTv className="pr-2" fontSize="medium" />
-                  Resell 
+                  Resell
                 </button>
               ) : id?.split("_")[1] == account ? (
                 <button
@@ -174,43 +199,63 @@ const DetailsNfts = () => {
           <div className="fixed inset-0 z-50 flex justify-center items-center bg-black bg-opacity-50">
             <div className="bg-white rounded-lg shadow-lg p-8 w-5/12">
               <h2 className="text-2xl font-semibold text-center mb-4 font-poppins">
-                {currentNFT.isListed?"Confirm Purchase":"Resell NFT"}
+                {currentNFT.isListed ? "Confirm Purchase" : "Resell NFT"}
               </h2>
               <p className="text-sm text-gray-700 mb-4">
-    
-                {currentNFT.isListed?
-                <>
-                            <span className="font-bold font-poppins">NFT Name:</span>{" "}
-                {currentNFT.tokenData.name} <br />
-                <span className="font-bold font-poppins">Price:</span>{" "}
-                {currentNFT.price} ETH<br />
-                <span className="font-bold font-poppins ">
-                  Platform Fee:
-                </span>{" "}
-                0.0025 ETH</>:<span ><label htmlFor="new-price" className="font-poppins font-bold">New Price</label>
-                  <input type="number" name="" id="" onChange={(x)=>updateNewPrice(+x.target.value)} className="ms-3 p-2 mt-4  outline-dashed "/>
-                  </span>}
+                {currentNFT.isListed ? (
+                  <>
+                    <span className="font-bold font-poppins">NFT Name:</span>{" "}
+                    {currentNFT.tokenData.name} <br />
+                    <span className="font-bold font-poppins">Price:</span>{" "}
+                    {currentNFT.price} ETH
+                    <br />
+                    <span className="font-bold font-poppins ">
+                      Platform Fee:
+                    </span>{" "}
+                    0.0025 ETH
+                  </>
+                ) : (
+                  <span>
+                    <label
+                      htmlFor="new-price"
+                      className="font-poppins font-bold"
+                    >
+                      New Price
+                    </label>
+                    <input
+                      type="number"
+                      name=""
+                      id=""
+                      onChange={(x) => updateNewPrice(+x.target.value)}
+                      className="ms-3 p-2 mt-4  outline-dashed "
+                    />
+                  </span>
+                )}
               </p>
               <hr className="bg-gray-300 h-1" />
               <p className="text-lg font-bold text-center mb-6 font-poppins mt-3">
-                {currentNFT.isListed?
-                `New Price: ${currentNFT.price + 0.0025} ETH`:`New Price: ${newPrice} ETH`}
+                {currentNFT.isListed
+                  ? `New Price: ${currentNFT.price + 0.0025} ETH`
+                  : `New Price: ${newPrice} ETH`}
               </p>
               <div className="flex justify-center gap-4">
-                {currentNFT.isListed?
-                <button
-                  className="px-3 py-2 w-full rounded-md shadow-md hover:scale-105 transition-all shadow-black bg-gradient-to-br from-purple-500 via-pink-500 to-blue-500  font-poppins text-white"
-                  onClick={handleConfirmPurchase} // Open modal
-                >
-                  {" "}
-                  Confirm
-                </button>:<button
-                  className="px-3 py-2 w-full rounded-md shadow-md hover:scale-105 transition-all shadow-black bg-gradient-to-br from-purple-500 via-pink-500 to-blue-500 font-poppins text-white"
-                  onClick={handleResellNft} // Open modal
-                >
-                  {" "}
-                  Confirm
-                </button>}
+                {currentNFT.isListed ? (
+                  <button
+                    className="px-3 py-2 w-full rounded-md shadow-md hover:scale-105 transition-all shadow-black bg-gradient-to-br from-purple-500 via-pink-500 to-blue-500  font-poppins text-white"
+                    onClick={handleConfirmPurchase} // Open modal
+                  >
+                    {" "}
+                    Confirm
+                  </button>
+                ) : (
+                  <button
+                    className="px-3 py-2 w-full rounded-md shadow-md hover:scale-105 transition-all shadow-black bg-gradient-to-br from-purple-500 via-pink-500 to-blue-500 font-poppins text-white"
+                    onClick={handleResellNft} // Open modal
+                  >
+                    {" "}
+                    Confirm
+                  </button>
+                )}
                 <button
                   className="px-3 ml-3 py-2 rounded-md shadow-md hover:scale-105 transition-all shadow-black bg-gradient-to-br from-purple-500 via-pink-500 to-blue-500  font-poppins outline text-white"
                   onClick={() => setIsModalOpen(false)}
@@ -223,7 +268,7 @@ const DetailsNfts = () => {
         )}
         {id?.split("_")[1] == account ? (
           <div className="flex justify-center items-center p-5 mt-5 mb-5">
-            <Link to={'/'} className="cursor-pointer font-poppins">
+            <Link to={"/"} className="cursor-pointer font-poppins">
               <ArrowBackIosTwoTone fontSize="large" />
               Go Back To Market Place
             </Link>
