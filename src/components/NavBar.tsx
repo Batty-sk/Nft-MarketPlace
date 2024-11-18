@@ -39,8 +39,8 @@ const NavBar = () => {
   return (
     <nav className="dark:bg-black dark:border-b  max-h-10 dark:border-zinc-900 border-b border-gray-200  flex justify-between items-center py-8 px-4">
       <div className="dark:text-white text-black font-poppins font-semibold flex items-center ">
-       <Link to="/"><img src={logo} alt="" height={80} width={130} />  </Link>
-        <span className="font-bold text-black -ms-4 text-sm">NFT-MARKETPLACE.GG</span>
+       <Link to="/"><img src={logo} alt="" height={80} width={130} className="md:ms-0 -ms-5"/>  </Link>
+        <span className="font-bold text-black -ms-4 text-sm md:block hidden">NFT-MARKETPLACE.GG</span>
       </div>
       <div>
         <div className="font-poppins font-semibold flex items-center ">

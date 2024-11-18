@@ -76,15 +76,15 @@ const Home = () => {
         return 0;
     }
   };
-  
+
   return (
-    <main className="p-10 dark:bg-black flex flex-col items-center">
+    <main className="md:p-10 p-4 dark:bg-black flex flex-col items-center">
       {" "}
-      <div className="flex justify-center  ">
+      <div className="flex justify-center md:w-10/12 w-full ">
         <Banner title="Dive into the NFT universe where art, technology, and ownership meet!" />
       </div>
-      <div className="md:mt-12 w-3/4 relative">
-        <h1 className="font-poppins dark:text-white text-black text-2xl md:ml-5 font-semibold">
+      <div className="md:mt-12 mt-10 md:w-3/4 w-11/12  relative">
+        <h1 className="font-poppins dark:text-white text-black text-2xl md:ml-5 ml-0 font-semibold">
           Top Sellers
         </h1>
         <div className="carosel-parent relative w-full " ref={ParentRef}>
@@ -122,18 +122,19 @@ const Home = () => {
           ) : null}
         </div>
       </div>
-      <div className="md:mt-12 w-3/4">
-        <div className="flex items-center justify-between font-poppins font-semibold">
-          <h1 className="text-2xl dark:text-white text-black md:ml-5">
+      <div className="md:mt-12 mt-10 md:w-3/4 w-11/12">
+        <div className="flex items-center justify-between font-poppins font-semibold flex-wrap">
+          <h1 className="text-2xl dark:text-white text-black md:ml-5 md:mb-2 mb-2">
             Best Bids
           </h1>
           <SearchBar
             nftsData={marketNFTs}
             searchDataResult={searchDataResult}
+            
           />
         </div>
 
-        <div className="mt-2 flex justify-center" id="market-place-nft-area">
+        <div className="md:mt-2 mt-5 flex justify-center" id="market-place-nft-area">
           <Masonry
             breakpointCols={breakpointColumnsObj}
             className="my-masonry-grid"

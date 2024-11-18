@@ -3,10 +3,10 @@ import { useEffect } from "react";
 import { useContext } from "react";
 
 import { filterednftsData } from "../constants";
+import {CustomLoader} from "../components";
 import { ContractContext } from "../contexts/ContractContext";
 import { Banner } from "../components";
 import { Pagination, CardNft } from "../components";
-import { BounceLoader } from "react-spinners";
 import { ThemeContext } from "../contexts/ThemeContext";
 import { Link } from "react-router-dom";
 import { MetaMaskContext } from "../contexts/MetaMaskContext";
@@ -36,19 +36,19 @@ const ListedNfts = () => {
     }, 3000);
   };
   return (
-    <div className="flex flex-wrap justify-center">
+    <div className="flex flex-wrap justify-center ">
       <Banner title="Listed NFTs" />
-      <div className="h-[70vh] w-full flex flex-col justify-center items-center">
+      <div className="mt-16 mb-16 w-full flex flex-col justify-center items-center">
         {loading ? (
           <>
-            <BounceLoader color="#C11A60" />
+            <CustomLoader />
             <span className="font-poppins mt-5">Loading...</span>
           </>
         ) : null}
         {!loading && !myNFTs?.length && (
           <>
             {" "}
-            <h3 className="font-poppins text-3xl font-bold">
+            <h3 className="font-poppins md:text-3xl text-2xl text-center font-bold">
               You've Not Created Any NFTs Yet.
             </h3>
             <Link to={'/create-nft'}
@@ -59,8 +59,9 @@ const ListedNfts = () => {
           </>
         )}
       </div>
+      <div className="flex flex-wrap">
       {myNFTs?.map((item, i) => (
-        <div key={i} className="max-h-fit max-w-fit">
+        <div key={i} className="max-h-fit max-w-fit w-3/4">
           <CardNft
             tokenId={item.tokenId}
             name={item.owner}
@@ -70,6 +71,7 @@ const ListedNfts = () => {
           />
         </div>
       ))}
+      </div>
       <Pagination />
     </div>
   );

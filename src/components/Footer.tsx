@@ -59,7 +59,7 @@ const Footer = () => {
       </div>
 
       <div className="flex md:flex-row flex-col justify-center pt-5 border-t dark:border-zinc-900 items-center font-poppins ">
-        <p className="dark:text-white  text-sm me-2 text-blue-900">
+        <p className="dark:text-white  text-sm me-2 text-blue-900 p-2">
           Saorav.skumar@gmail.com
         </p>
         <div className="flex">

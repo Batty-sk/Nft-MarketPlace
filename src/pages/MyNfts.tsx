@@ -48,10 +48,10 @@ const MyNfts = () => {
           styles="w-full flex  justify-center"
         />
       </div>
-      <div className="mt-5 w-3/4">
+      <div className="mt-5 w-3/4 flex flex-wrap">
         {!myNFTs?.length ? (
-          <div className="flex flex-col justify-center items-center ">
-            <h1 className="font-poppins font-bold text-3xl">
+          <div className="flex flex-col justify-center items-center mb-10 ">
+            <h1 className="font-poppins font-bold md:text-3xl text-2xl text-center">
               You Don't Own Any NFTs
             </h1>
             <Link

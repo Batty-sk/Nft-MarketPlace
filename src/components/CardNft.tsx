@@ -19,9 +19,9 @@ const CardNft = ({ name, image, account, ethAmount,tokenId }: CardNftProps) => {
            </div>
            
            <div className="card-meta flex flex-col justify-center px-1 pt-4">
-                <h3 className="text-sm font-semibold">{name}</h3>
+                <h3 className="text-sm font-semibold mb-3">{name?name:"NFT"}</h3>
                 <div className="md:mt-3">
-                <p className="text-sm">{account}</p>
+                <p className="text-sm truncate w-56 font-normal ">{account}</p>
                 <p className="">{ethAmount} ETH</p>
                 </div>
            </div>   

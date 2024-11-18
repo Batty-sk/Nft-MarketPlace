@@ -5,7 +5,7 @@ import { useDropzone } from "react-dropzone";
 import { useContext } from "react";
 
 import { ContractContext } from "../contexts/ContractContext";
-import { Input, Button,CustomLoader } from "../components";
+import { Input, Button,CustomLoader, Banner } from "../components";
 import CustomSnackbar,{CustomSnackbarProps,SnackbarType} from "../components/CustomSnackBar";
 
 
@@ -96,16 +96,14 @@ const CreateNFT: React.FC = () => {
   });
 
   return (
-    <main className="p-10 dark:bg-black bg-white w-full flex flex-col justify-center items-center mb-10">
+    <main className=" dark:bg-black bg-white w-full flex flex-col justify-center items-center mb-10">
       <CustomSnackbar {...{...snackBar,onClose:handleCloseSnackBar}}/>
-      <div className="flex flex-col justify-center items-center md:w-3/5 w-full">
+      <div className="flex flex-col justify-center items-center md:w-5/5 w-full">
         <div className="flex justify-start w-full">
-          <h1 className="font-poppins dark:text-white text-black text-2xl font-semibold">
-          {loading?<CustomLoader />:"Create NFT"}
-          </h1>
+          <Banner  title="Create NFT"/>
         </div>
 
-        <div className="flex flex-col justify-center items-center w-full py-16 px-8">
+        <div className="flex flex-col justify-center items-center  py-16 md:px-8 px-4 md:w-8/12 w-full">
           <div className="w-full bg-[#eff7f6] rounded-md flex justify-center">
             <div
               {...getRootProps()}
@@ -117,13 +115,13 @@ const CreateNFT: React.FC = () => {
                   Drop the files here...
                 </p>
               ) : (
-                <div className="text-center">
+                <div className="text-center ">
                   {image ? (
                     <>
                       <img
                         src={image.preview}
                         alt="Preview"
-                        className="w-32 h-32 object-cover mb-4"
+                        className="md:w-32 md:h-32 w-28 h-28 object-cover mb-4"
                       />
                       <p className="font-semibold font-poppins dark:text-white text-black">
                         File Uploaded: {image.name}
@@ -134,12 +132,12 @@ const CreateNFT: React.FC = () => {
                       <p className="font-semibold font-poppins dark:text-white text-black">
                         Upload: SVG, PNG, JPG
                       </p>
-                      <AddPhotoAlternateIcon style={{ fontSize: 170 }} />
+                      <AddPhotoAlternateIcon style={{ fontSize: 150 }} />
                       <p className="font-semibold font-poppins dark:text-white text-black">
                         Drag & Drop Or{" "}
                       </p>
                       <p>
-                        <Link to="" className="underline font-semibold text-sm">
+                        <Link to="" className=" font-poppins underline md:font-semibold text-sm font-normal">
                           {" "}
                           Browse A File From Your Computer{" "}
                         </Link>
