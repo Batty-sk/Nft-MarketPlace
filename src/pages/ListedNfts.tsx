@@ -66,7 +66,7 @@ const ListedNfts = () => {
             name={item.owner}
             image={item.tokenData.imgURI}
             account={account}
-            ethAmount={item.price}
+            ethAmount={+item.price}
           />
         </div>
       ))}

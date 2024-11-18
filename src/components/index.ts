@@ -6,4 +6,7 @@ import Footer from "./Footer";
 import CardNft from "./CardNft";
 import Input from "./Input";
 import Pagination from "./Pagination";
-export {NavBar,Button,Banner,CardProfile,Footer,CardNft,Input,Pagination}
+import CustomLoader from "./CustomLoader";
+import CustomSnackbar from "./CustomSnackBar";
+import SearchBar from "./SearchBar";
+export {NavBar,Button,Banner,CardProfile,Footer,CardNft,Input,Pagination,CustomLoader,CustomSnackbar,SearchBar}

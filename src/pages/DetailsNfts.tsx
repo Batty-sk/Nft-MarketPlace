@@ -11,7 +11,7 @@ import { filterednftsData } from "../constants";
 import { images, etherim } from "../assets";
 import { ContractContext } from "../contexts/ContractContext";
 import blockies from "ethereum-blockies";
-import { CardNft } from "../components";
+import { CardNft, CustomLoader } from "../components";
 import { MetaMaskContext } from "../contexts/MetaMaskContext";
 import CustomSnackbar, {
   CustomSnackbarProps,
@@ -35,6 +35,7 @@ const DetailsNfts = () => {
   const [isModalOpen, setIsModalOpen] = useState(false); // Modal visibility state
   const [manualRender, setManualRender] = useState<boolean>(false);
   const [newPrice, updateNewPrice] = useState(0);
+  const [loading, updateLoading] = useState(false);
   const [snackBar, updateSnackBar] = useState<CustomSnackbarProps>({
     message: "",
     open: false,
@@ -51,66 +52,115 @@ const DetailsNfts = () => {
         blockies.create({ seed: ownerId, size: 16 }).toDataURL()
       );
       (async () => {
+        updateLoading(true)
         const data = await getOwnerNFTs(ownerId);
         updateCurrentNFT(data.find((item) => item.tokenId == +tokenId));
         console.log("getting the data as ", data);
         updateMoreOwnerNFTs(data);
+        updateLoading(false)
       })();
     }
   }, [id, manualRender]);
 
   const handleConfirmPurchase = async () => {
     setIsModalOpen(false);
+    
     if (currentNFT) {
+      updateLoading(true);
       const res = await buyNFT(
         currentNFT?.tokenId,
-        (currentNFT.price + 0.0025).toString()
+        (+currentNFT.price + 0.0025).toString()
       );
       console.log("result", res);
       if (res) {
         setManualRender(!manualRender);
-        updateSnackBar({message:'Transaction Successfull!',open:true,onClose:()=>{},type:'success'});
+        updateSnackBar({
+          message: "Transaction Successfull!",
+          open: true,
+          onClose: () => {},
+          type: "success",
+        });
       } else
-      updateSnackBar({message:'Something Went Wrong!',open:true,onClose:()=>{},type:'error'});
-
+        updateSnackBar({
+          message: "Something Went Wrong!",
+          open: true,
+          onClose: () => {},
+          type: "error",
+        });
+      updateLoading(false);
     }
 
     // get the details ..
   };
 
-  const handleClose = ()=>{
-    updateSnackBar({message:'!',open:false,onClose:()=>{},type:'success'});
-  }
+  const handleClose = () => {
+    updateSnackBar({
+      message: "!",
+      open: false,
+      onClose: () => {},
+      type: "success",
+    });
+  };
 
   const handleResellNft = async () => {
-    if (currentNFT) {
+    if (currentNFT && !loading) {
+      updateLoading(true);
       const res = await resellNFT(currentNFT?.tokenId, newPrice);
-      if(res){
-      console.log("successfully re-listed on the market with new value", res);
-      setManualRender(!manualRender);
-      updateSnackBar({message:'Successfully Listed On The MarketPlace!',open:true,onClose:()=>{},type:'success'});
-      ;
+      if (res) {
+        console.log("successfully re-listed on the market with new value", res);
+        setManualRender(!manualRender);
+        updateSnackBar({
+          message: "Successfully Listed On The MarketPlace!",
+          open: true,
+          onClose: () => {},
+          type: "success",
+        });
+      } else {
+        updateSnackBar({
+          message: "Something Went Wrong! Please Try Again ",
+          open: true,
+          onClose: () => {},
+          type: "error",
+        });
       }
-      else{
-        updateSnackBar({message:'Something Went Wrong! Please Try Again ',open:true,onClose:()=>{},type:'error'});
-
-      }
+      updateLoading(false);
     }
   };
   const handleRemoveToken = async () => {
     console.log("removing the tokem from the marketplace..");
-    if (currentNFT) {
+    if (currentNFT && !loading) {
+      updateLoading(true)
       const res = await removeNftFromMarket(currentNFT?.tokenId);
-      if(res)
-        updateSnackBar({message:"Removed From The MarketPlace!",open:true,onClose:()=>{},type:'success'});
-      
+      if (res)
+        updateSnackBar({
+          message: "Removed From The MarketPlace!",
+          open: true,
+          onClose: () => {},
+          type: "success",
+        });
+
       res
         ? setManualRender(!manualRender)
-        : updateSnackBar({message:"Something Went Wrong!",open:true,onClose:()=>{},type:'error'});
+        : updateSnackBar({
+            message: "Something Went Wrong!",
+            open: true,
+            onClose: () => {},
+            type: "error",
+          });
+      updateLoading(false)
     }
+
   };
 
   if (!currentNFT) {
+    if(loading){
+      return <div className="flex justify-center items-center mt-10 mb-10 h-80">
+      <h1 className="font-poppins">
+        <CustomLoader />
+      </h1>
+    </div>
+    }
+
     return (
       <div className="flex justify-center items-center mt-10 mb-10">
         <h1 className="font-poppins">
@@ -120,11 +170,9 @@ const DetailsNfts = () => {
     );
   }
 
-  return (
+  return ( 
     <section className="flex justify-center">
-      <CustomSnackbar
-        {...{...snackBar,onClose:handleClose}} 
-      />
+      <CustomSnackbar {...{ ...snackBar, onClose: handleClose }} />
       <div className="flex flex-col justify-center items-center md:w-4/5">
         <div className="flex p-8 bg-gray-100 shadow-sm shadow-gray-400 mt-10 rounded-tl-3xl mb-8">
           <img
@@ -168,7 +216,7 @@ const DetailsNfts = () => {
                   onClick={() => setIsModalOpen(true)} // Open modal
                 >
                   <ResetTv className="pr-2" fontSize="medium" />
-                  Resell
+                 {loading?<CustomLoader/>:"Resell"}
                 </button>
               ) : id?.split("_")[1] == account ? (
                 <button
@@ -184,7 +232,7 @@ const DetailsNfts = () => {
                   onClick={() => setIsModalOpen(true)} // Open modal
                 >
                   <ShoppingCart className="pr-2" />
-                  Buy Now
+                  {loading?<CustomLoader/>:"Buy Now"}
                 </button>
               )}
               <button className="px-3 ml-3 py-2 rounded-md shadow-md hover:scale-105 transition-all shadow-black bg-gray-500 font-poppins outline text-white">
@@ -235,7 +283,7 @@ const DetailsNfts = () => {
               <hr className="bg-gray-300 h-1" />
               <p className="text-lg font-bold text-center mb-6 font-poppins mt-3">
                 {currentNFT.isListed
-                  ? `New Price: ${currentNFT.price + 0.0025} ETH`
+                  ? `New Price: ${+currentNFT.price + 0.0025} ETH`
                   : `New Price: ${newPrice} ETH`}
               </p>
               <div className="flex justify-center gap-4">
@@ -244,8 +292,7 @@ const DetailsNfts = () => {
                     className="px-3 py-2 w-full rounded-md shadow-md hover:scale-105 transition-all shadow-black bg-gradient-to-br from-purple-500 via-pink-500 to-blue-500  font-poppins text-white"
                     onClick={handleConfirmPurchase} // Open modal
                   >
-                    {" "}
-                    Confirm
+                    {loading?<CustomLoader/>:'Confirm'}
                   </button>
                 ) : (
                   <button
@@ -253,7 +300,7 @@ const DetailsNfts = () => {
                     onClick={handleResellNft} // Open modal
                   >
                     {" "}
-                    Confirm
+                    {loading?<CustomLoader/>:'Confirm'}
                   </button>
                 )}
                 <button
@@ -286,7 +333,7 @@ const DetailsNfts = () => {
                   name={item.tokenData.name}
                   key={item.owner}
                   account={item.owner}
-                  ethAmount={item.price}
+                  ethAmount={+item.price}
                   image={item.tokenData.imgURI}
                 />
               ))}

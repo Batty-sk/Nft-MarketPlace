@@ -22,7 +22,7 @@ const CardNft = ({ name, image, account, ethAmount,tokenId }: CardNftProps) => {
                 <h3 className="text-sm font-semibold">{name}</h3>
                 <div className="md:mt-3">
                 <p className="text-sm">{account}</p>
-                <p className="">{ethAmount.toFixed(2)} ETH</p>
+                <p className="">{ethAmount} ETH</p>
                 </div>
            </div>   
     </div>

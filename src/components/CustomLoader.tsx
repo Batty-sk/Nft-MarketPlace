@@ -4,7 +4,7 @@ import CircularProgress, {
 } from '@mui/material/CircularProgress';
 
 
-function Loader() {
+function CustomLoader() {
   return (
     <React.Fragment>
       <svg width={0} height={0}>
@@ -20,4 +20,4 @@ function Loader() {
   );
 }
 
-export default Loader
+export default CustomLoader

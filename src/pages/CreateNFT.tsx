@@ -5,8 +5,9 @@ import { useDropzone } from "react-dropzone";
 import { useContext } from "react";
 
 import { ContractContext } from "../contexts/ContractContext";
-import { Input, Button } from "../components";
+import { Input, Button,CustomLoader } from "../components";
 import CustomSnackbar,{CustomSnackbarProps,SnackbarType} from "../components/CustomSnackBar";
+
 
 interface PreviewFile extends File {
   preview: string;
@@ -36,6 +37,7 @@ const CreateNFT: React.FC = () => {
     type:'success',
     onClose:()=>{}
   });
+  const [loading,updateLoading] = useState(false)
 
   const handleCreateNFT = async ({
     image,
@@ -43,6 +45,7 @@ const CreateNFT: React.FC = () => {
     description,
     price,
   }: createNftProps) => {
+    updateLoading(true)
     const res = await handleUploadImageToIpfs(image, name, description, price);
     if (res) {
       updateSnackBar({
@@ -51,6 +54,7 @@ const CreateNFT: React.FC = () => {
         type:'success',
         onClose:()=>{}
       });
+      updateLoading(false)
       return;
     }
     updateSnackBar({
@@ -59,6 +63,7 @@ const CreateNFT: React.FC = () => {
       type:'error',
       onClose:()=>{}
     });
+    updateLoading(false)
   };
   const handleCloseSnackBar=()=>{
     updateSnackBar({message:'',open:false,type:'success',onClose:()=>{}})
@@ -96,7 +101,7 @@ const CreateNFT: React.FC = () => {
       <div className="flex flex-col justify-center items-center md:w-3/5 w-full">
         <div className="flex justify-start w-full">
           <h1 className="font-poppins dark:text-white text-black text-2xl font-semibold">
-            Create NFT
+          {loading?<CustomLoader />:"Create NFT"}
           </h1>
         </div>
 
@@ -187,6 +192,8 @@ const CreateNFT: React.FC = () => {
               placeHolder="Price"
             />
             <div className="flex mt-8">
+            {loading?<CustomLoader />:
+
               <Button
                 title="Create"
                 path=""
@@ -201,6 +208,7 @@ const CreateNFT: React.FC = () => {
                   //yea
                 }}
               />
+}
             </div>
           </div>
 

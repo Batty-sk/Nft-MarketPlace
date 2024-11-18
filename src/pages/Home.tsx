@@ -5,7 +5,7 @@ import { ContractContext } from "../contexts/ContractContext";
 import Masonry from "react-masonry-css";
 
 import { filterednftsData } from "../constants";
-import Loader from "../components/Loader";
+import Loader from "../components/CustomLoader";
 import { CardProfile, Banner, CardNft } from "../components";
 import { images } from "../assets";
 import SearchBar from "../components/SearchBar";
@@ -158,7 +158,7 @@ const Home = () => {
                     tokenId={item.tokenId}
                     image={item.tokenData.imgURI}
                     account={item.owner}
-                    ethAmount={item.price}
+                    ethAmount={+item.price}
                   />
                 ))
               : marketNFTs?.map((item, i) => (
@@ -168,7 +168,7 @@ const Home = () => {
                     tokenId={item.tokenId}
                     image={item.tokenData.imgURI}
                     account={item.owner}
-                    ethAmount={item.price}
+                    ethAmount={+item.price}
                   />
                 ))}
           </Masonry>

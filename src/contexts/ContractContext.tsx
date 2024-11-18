@@ -1,4 +1,4 @@
-import React, { createContext, ReactNode, useEffect } from "react";
+import React, { createContext, ReactNode, useEffect, useState } from "react";
 import { ethers } from "ethers";
 import {
   RPC_URL,
@@ -100,7 +100,7 @@ export const ContractContextWrapper = ({ children }: Props) => {
     price: number
   ) => {
     try {
-   /*    const imgHash = await uploadImageToIPFS(image);
+  /*     const imgHash = await uploadImageToIPFS(image);
       console.log("image hash", imgHash);
       const metaData = {
         name,
@@ -109,9 +109,7 @@ export const ContractContextWrapper = ({ children }: Props) => {
       };
       const metaHash = await uploadMetadataToIPFS(metaData);
       console.log(`Metadata hash: ipfs://${metaHash}`); */
-      await createNFT(price, "QmbuZ9xfpHiq4LBE8bLJ353Tresrc1shhEZKE2mipKLyu1"); // send the request to the smartcontract regarding creation of the nft.
-      console.log("nft has been created successfully!");
-      return true;
+      return await createNFT(price, "bafybeibzeaduaeterw23rjd3jcqhe4gg7pfbl56snc5updnwfvjh6ygo24"); // send the request to the smartcontract regarding creation of the nft.
     } catch (error) {
       console.log("Something went wrong", error);
       return false;
@@ -326,9 +324,9 @@ export const ContractContextWrapper = ({ children }: Props) => {
         data.signer
       );
       console.log("buying nfts...with token id", tokenId);
-      const weivalue = ethers.BigNumber.from(amount);
-      const priceInWei = ethers.utils.parseEther(weivalue.toString());
+      const priceInWei = ethers.utils.parseEther(amount);
       console.log("price in wei", priceInWei);
+
       const tx = await nftMarketplaceContract.buyNFT(tokenId, {
         value: priceInWei,
       });
@@ -379,7 +377,10 @@ export const ContractContextWrapper = ({ children }: Props) => {
         data.signer
       );
 
-      const tx = await nftMarketplaceContract.createNFT(price, metahash);
+      const PRICE_IN_WEI = ethers.utils.parseEther(price.toString())
+      console.log('price in wei',PRICE_IN_WEI)
+
+      const tx = await nftMarketplaceContract.createNFT(PRICE_IN_WEI, metahash);
       console.log(`Contract tx: ${tx.hash}`);
 
       const receipt = await tx.wait();
@@ -393,33 +394,48 @@ export const ContractContextWrapper = ({ children }: Props) => {
 
     // here we have to update the state so that fetching happens by the home page using use effect.
   };
-
-  async function listenToTopSellers() {
-    try {
-      const provider = new ethers.providers.WebSocketProvider(RPC_URL);
-  
-      const nftMarketplace = new ethers.Contract(
-        CONTRACT_ADDRESS,
-        contractAbi.abi,
-        provider
-      );
-  
-      nftMarketplace.on("TopSellersInfo", (owner: string, sales: number) => {
-        console.log(`Top Seller: ${owner}, Total Sales: ${ethers.utils.formatEther(sales)} ETH`);
-      });
-      console.log('listnening for the topsellers events....')
-      return nftMarketplace
-    } catch (error) {
-      console.error("Error setting up event listener:", error);
-      return null
-    }
+  interface topSellersProps {
+    owner: string;
+    sales: number;
   }
-  
-useEffect(()=>{
+  const [topSellers, updateTopSellers] = useState<topSellersProps>();
 
-},[])
+  useEffect(() => {
+    let nftref: ethers.Contract | null = null;
+    const handleEventListener = (owner: string, sales: number) => {
+      console.log(
+        `Top Seller: ${owner}, Total Sales: ${ethers.utils.formatEther(
+          sales
+        )} ETH`
+      );
+    };
+    function listenToTopSellers() {
+      try {
+        const provider = new ethers.providers.WebSocketProvider(RPC_URL);
+
+        const nftMarketplace = new ethers.Contract(
+          CONTRACT_ADDRESS,
+          contractAbi.abi,
+          provider
+        );
+
+        nftMarketplace.on("TopSellersInfo", handleEventListener);
+        nftref = nftMarketplace;
+        console.log("listnening for the topsellers events....");
+        return nftMarketplace;
+      } catch (error) {
+        console.error("Error setting up event listener:", error);
+        return null;
+      }
+    }
+    listenToTopSellers();
+    return () => {
+      if (nftref) {
+        nftref.off("TopSellersInfo", handleEventListener);
+      }
+    };
+  }, []);
   return (
-  
     <ContractContext.Provider
       value={{
         handleUploadImageToIpfs,

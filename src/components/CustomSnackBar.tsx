@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@mui/icons-material/Close";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorIcon from "@mui/icons-material/Error";
 
@@ -50,7 +49,7 @@ const CustomSnackbar: React.FC<CustomSnackbarProps> = ({
         onClose={onClose}
         severity={type}
         icon={false} // We'll add our own icon
-        sx={{ display: "flex", alignItems: "center" }}
+        sx={{ display: "flex", alignItems: "center" ,fontFamily:'poppins'}}
       >
         {getIcon(type)}
         {message}
@@ -61,7 +60,6 @@ const CustomSnackbar: React.FC<CustomSnackbarProps> = ({
           onClick={onClose}
           sx={{ marginLeft: "auto" }}
         >
-          <CloseIcon fontSize="small" />
         </IconButton>
       </Alert>
     </Snackbar>
