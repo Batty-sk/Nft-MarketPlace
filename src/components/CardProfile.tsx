@@ -5,7 +5,7 @@ ethAmount:number
 }
 const CardProfile = ({image,accountHash,ethAmount}:Props)=>{
     return (
-        <div className="flex flex-col justify-center items-center py-10 p px-5 mx-4 my-2 dark:bg-zinc-900 bg-slate-200 min-w-64 w-64 max-w-64 rounded-md">
+        <div className="flex flex-col justify-center items-center py-10 p px-5 mx-4 my-2 dark:bg-zinc-800 bg-slate-200 min-w-64 w-64 max-w-64 rounded-md">
 
             <div className="">
                 <img src={image} height={100} width={100} alt="avatar" className="rounded-full scale-100 transition-all hover:scale-110  border border-gray-400"/>

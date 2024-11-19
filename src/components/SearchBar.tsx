@@ -35,7 +35,7 @@ const SearchBar = ({nftsData,searchDataResult,styles}:Prop) => {
 
   return (
     <div className={`${styles?styles:"md:w-80 max-w-full w-full min-w-52 flex items-center justify-center"}`}>
-    <Search fontSize="large" className="cursor-pointer" />
+    <Search fontSize="large" className="cursor-pointer dark:filter dark:invert" />
     <input type="search" name="search" id="" onChange={(e)=>{
         updateSearchTerm(e.target.value)
     }} placeholder="Search..." className="h-10 max-h-10 border-2 rounded-md dark:bg-slate-200  w-full ms-2" />

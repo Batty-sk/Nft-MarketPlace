@@ -25,14 +25,14 @@ const MyNfts = () => {
     (async () => {
       console.log("getting My nfts......u");
       const data = await getMyNFTs();
-      console.log('data we got ',data)
+      console.log("data we got ", data);
       setMyNFTs(data);
     })();
   }, [account]);
 
   return (
-    <div className="flex flex-col items-center">
-      <Banner title="" />
+    <div className="flex flex-col items-center dark:bg-zinc-900">
+        <Banner title="" />
       <div className="relative w-32 h-32 block bg-white  rounded-full overflow-hidden -mt-20 z-10">
         <img
           src={accountAvatar}
@@ -40,7 +40,7 @@ const MyNfts = () => {
           className="object-cover h-full w-full"
         />
       </div>
-      <Chip label={account} className="mt-5"></Chip>
+      <Chip label={account} className="mt-5 dark:bg-gray-300"></Chip>
       <div className="mt-10 w-2/4 ">
         <SearchBar
           nftsData={[]}
@@ -48,20 +48,20 @@ const MyNfts = () => {
           styles="w-full flex  justify-center"
         />
       </div>
-      <div className="mt-5 w-3/4 flex flex-wrap">
+      <div className="mt-5 w-3/4 flex flex-wrap mb-10 justify-center">
         {!myNFTs?.length ? (
           <div className="flex flex-col justify-center items-center mb-10 ">
-            <h1 className="font-poppins font-bold md:text-3xl text-2xl text-center">
+            <h1 className="font-poppins font-bold md:text-3xl text-2xl text-center dark:text-white text-black">
               You Don't Own Any NFTs
             </h1>
             <Link
-              className="underline font-poppins mt-3"
+              className="underline font-poppins mt-3 dark:text-white text-black"
               to={"/#market-place-nft-area"}
             >
               Buy Now?
             </Link>
           </div>
-        ) : myNFTs ? 
+        ) : myNFTs ? (
           myNFTs.map((item) => (
             <CardNft
               name={item.tokenData.name}
@@ -72,7 +72,7 @@ const MyNfts = () => {
               key={item.tokenData.imgURI}
             ></CardNft>
           ))
-         : null}
+        ) : null}
       </div>
     </div>
   );

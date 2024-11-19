@@ -37,10 +37,10 @@ const NavBar = () => {
   const {createButton} = useContext(ThemeContext)
 
   return (
-    <nav className="dark:bg-black dark:border-b  max-h-10 dark:border-zinc-900 border-b border-gray-200  flex justify-between items-center py-8 px-4">
+    <nav className="dark:bg-zinc-900 dark:border-b  max-h-10 dark:border-zinc-700 border-b border-gray-200  flex justify-between items-center py-8 px-4">
       <div className="dark:text-white text-black font-poppins font-semibold flex items-center ">
        <Link to="/"><img src={logo} alt="" height={80} width={130} className="md:ms-0 -ms-5"/>  </Link>
-        <span className="font-bold text-black -ms-4 text-sm md:block hidden">NFT-MARKETPLACE.GG</span>
+        <span className="font-bold text-black dark:text-white -ms-4 text-sm md:block hidden">NFT-MARKETPLACE.GG</span>
       </div>
       <div>
         <div className="font-poppins font-semibold flex items-center ">
@@ -69,7 +69,7 @@ const NavBar = () => {
           </div>
 
           <div className="block md:hidden" >
-            <Menu onClick={()=>setIsMenuOpen(true)}/>
+            <Menu onClick={()=>setIsMenuOpen(true)} className="dark:filter invert"/>
           </div>
         
         {isMenuOpen?<div className="fixed inset-0 flex-col items-center justify-center">

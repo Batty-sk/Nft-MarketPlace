@@ -10,7 +10,7 @@ const App = () => {
     <ThemeContextWrapper >
     <ContractContextWrapper >
     <MetaMaskWrapper >
-    <main>
+    <main className="dark:bg-zinc-900 bg-white"> 
       <NavBar />
         <Outlet />    
         {

@@ -78,7 +78,7 @@ const Home = () => {
   };
 
   return (
-    <main className="md:p-10 p-4 dark:bg-black flex flex-col items-center">
+    <main className="md:p-10 p-4 dark:bg-zinc-900 flex flex-col items-center">
       {" "}
       <div className="flex justify-center md:w-10/12 w-full ">
         <Banner title="Dive into the NFT universe where art, technology, and ownership meet!" />

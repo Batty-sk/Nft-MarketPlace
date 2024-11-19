@@ -96,18 +96,18 @@ const CreateNFT: React.FC = () => {
   });
 
   return (
-    <main className=" dark:bg-black bg-white w-full flex flex-col justify-center items-center mb-10">
+    <main className=" dark:bg-zinc-900 md:p-10 p-4 bg-white w-full flex flex-col justify-center items-center mb-10">
       <CustomSnackbar {...{...snackBar,onClose:handleCloseSnackBar}}/>
       <div className="flex flex-col justify-center items-center md:w-5/5 w-full">
-        <div className="flex justify-start w-full">
+        <div className="flex justify-start w-full md:w-10/12">
           <Banner  title="Create NFT"/>
         </div>
 
-        <div className="flex flex-col justify-center items-center  py-16 md:px-8 px-4 md:w-8/12 w-full">
-          <div className="w-full bg-[#eff7f6] rounded-md flex justify-center">
+        <div className="flex flex-col justify-center items-center  py-16 md:px-8 px-4 md:w-8/12 w-full rounded-md">
+          <div className="w-full dark:bg-[rgb(255,253,253)] bg-gray-50 rounded-md flex justify-center">
             <div
               {...getRootProps()}
-              className="upload-image w-full border-2 border-gray-500 border-dotted dark:border-white flex py-8 px-8 flex-col items-center"
+              className="upload-image w-full border-2 border-gray-500 border-dotted dark:border-white flex py-8 px-8 flex-col items-center rounded-md"
             >
               <input {...getInputProps()} />
               {isDragActive ? (
@@ -129,11 +129,11 @@ const CreateNFT: React.FC = () => {
                     </>
                   ) : (
                     <>
-                      <p className="font-semibold font-poppins dark:text-white text-black">
+                      <p className="font-semibold font-poppins dark:text-black text-black">
                         Upload: SVG, PNG, JPG
                       </p>
                       <AddPhotoAlternateIcon style={{ fontSize: 150 }} />
-                      <p className="font-semibold font-poppins dark:text-white text-black">
+                      <p className="font-semibold font-poppins dark:text-black text-black">
                         Drag & Drop Or{" "}
                       </p>
                       <p>
@@ -162,7 +162,9 @@ const CreateNFT: React.FC = () => {
                 }));
               }}
               placeHolder="Title"
+              
             />
+          
             <Input
               title="Description"
               inputType="textarea"

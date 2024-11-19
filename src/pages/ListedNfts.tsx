@@ -36,9 +36,11 @@ const ListedNfts = () => {
     }, 3000);
   };
   return (
-    <div className="flex flex-wrap justify-center ">
+    <div className="flex flex-wrap justify-center dark:bg-zinc-900 md:p-10 p-4">
+      <div className="md:w-10/12 w-full ">
       <Banner title="Listed NFTs" />
-      <div className="mt-16 mb-16 w-full flex flex-col justify-center items-center">
+      </div>
+      <div className="mt-32 mb-32 w-full flex flex-col justify-center items-center">
         {loading ? (
           <>
             <CustomLoader />
@@ -48,11 +50,11 @@ const ListedNfts = () => {
         {!loading && !myNFTs?.length && (
           <>
             {" "}
-            <h3 className="font-poppins md:text-3xl text-2xl text-center font-bold">
+            <h3 className="font-poppins md:text-3xl text-2xl text-center font-bold dark:text-white">
               You've Not Created Any NFTs Yet.
             </h3>
             <Link to={'/create-nft'}
-              className="font-poppins mt-5 underline cursor-pointer"
+              className="font-poppins mt-5 underline cursor-pointer dark:text-white"
             >
               create one?
             </Link>{" "}

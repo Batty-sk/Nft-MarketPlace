@@ -28,8 +28,6 @@
     animation: bounce 1s ease forwards, pulse 1s ease infinite,gradientShift 1s ease infinite;
   }
   
-
-  
   /* Bounce effect */
   @keyframes bounce {
     0%, 20%, 50%, 80%, 100% {

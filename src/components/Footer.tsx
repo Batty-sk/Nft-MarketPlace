@@ -33,7 +33,7 @@ const LinksBox = ({ title, links }: LinksBoxProp) => {
 
 const Footer = () => {
   return (
-    <footer className="dark:bg-black border-t dark:border-zinc-900 border-slate-200  py-8 px-2">
+    <footer className="dark:bg-zinc-900 border-t dark:border-zinc-700 border-slate-200  py-8 px-2">
       <div className="flex md:flex-row flex-col justify-evenly items-center">
         <div className="flex flex-col ">
           <h5 className="font-poppins dark:text-white text-black">Logo</h5>
@@ -64,13 +64,13 @@ const Footer = () => {
         </p>
         <div className="flex">
           <div className="mx-2">
-            <FacebookOutlined fontSize="medium" />
+            <FacebookOutlined fontSize="medium" className="filter dark:invert" />
           </div>
           <div className="mx-2">
-            <XIcon fontSize="medium" />
+            <XIcon fontSize="medium" className="filter dark:invert" />
           </div>
           <div className="mx-2">
-            <InstagramIcon fontSize="medium" />
+            <InstagramIcon fontSize="medium"  className="filter dark:invert"/>
           </div>
         </div>
       </div>
