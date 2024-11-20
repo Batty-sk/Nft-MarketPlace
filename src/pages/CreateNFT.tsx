@@ -7,6 +7,7 @@ import { useContext } from "react";
 import { ContractContext } from "../contexts/ContractContext";
 import { Input, Button,CustomLoader, Banner } from "../components";
 import CustomSnackbar,{CustomSnackbarProps,SnackbarType} from "../components/CustomSnackBar";
+import { MetaMaskContext } from "../contexts/MetaMaskContext";
 
 
 interface PreviewFile extends File {
@@ -30,6 +31,9 @@ type createNftProps = {
 };
 
 const CreateNFT: React.FC = () => {
+
+  const {account} = useContext(MetaMaskContext)
+  console.log("account connected", account)
   const { handleUploadImageToIpfs } = useContext(ContractContext);
   const [snackBar, updateSnackBar] = useState<CustomSnackbarProps>({
     message: "",
@@ -45,6 +49,15 @@ const CreateNFT: React.FC = () => {
     description,
     price,
   }: createNftProps) => {
+    if(!account){
+      updateSnackBar({
+        message:"Metamask is not installed!",
+        open:true,
+        type:'error',
+        onClose:()=>{},
+      })
+      return
+    }
     if(!image && !name && !price){
       updateSnackBar({
         message:"Please fill all the details!",
@@ -52,6 +65,7 @@ const CreateNFT: React.FC = () => {
         type:'error',
         onClose:()=>{},
       })
+      return
 
     }
     updateLoading(true)
@@ -132,7 +146,7 @@ const CreateNFT: React.FC = () => {
                         alt="Preview"
                         className="md:w-32 md:h-32 w-28 h-28 object-cover mb-4"
                       />
-                      <p className="font-semibold font-poppins dark:text-white text-black">
+                      <p className="font-semibold font-poppins dark:text-black text-black">
                         File Uploaded: {image.name}
                       </p>
                     </>

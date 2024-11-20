@@ -10,18 +10,15 @@ import { MetaMaskContext } from "../contexts/MetaMaskContext";
 import { ContractContext } from "../contexts/ContractContext";
 
 const MyNfts = () => {
-  const { account } = useContext(MetaMaskContext);
+  const { account,accountAvatar } = useContext(MetaMaskContext);
   const { getMyNFTs } = useContext(ContractContext);
-  const [accountAvatar, updateAccountAvatar] = useState(account);
   const [myNFTs, setMyNFTs] = useState<filterednftsData[] | null>(null);
   const [searchData, searchDataResult] = useState<filterednftsData[] | null>(
     null
   );
 
   useEffect(() => {
-    updateAccountAvatar(
-      blockies.create({ seed: account, size: 20 }).toDataURL()
-    );
+
     (async () => {
       console.log("getting My nfts......u");
       const data = await getMyNFTs();
@@ -43,7 +40,7 @@ const MyNfts = () => {
       <Chip label={account} className="mt-5 dark:bg-gray-300"></Chip>
       <div className="mt-10 md:w-2/4 w-9/12  ">
         <SearchBar
-          nftsData={[]}
+          nftsData={myNFTs}
           searchDataResult={searchDataResult}
           styles="w-full flex  justify-center"
         />
@@ -61,7 +58,18 @@ const MyNfts = () => {
               Buy Now?
             </Link>
           </div>
-        ) : myNFTs ? (
+        ) : (searchData?.length && searchData.map((item) => (
+          <CardNft
+            name={item.tokenData.name}
+            image={item.tokenData.imgURI}
+            account={account}
+            ethAmount={0}
+            tokenId={item.tokenId}
+            key={item.tokenData.imgURI}
+          ></CardNft>
+        )))||
+      (myNFTs &&
+  
           myNFTs.map((item) => (
             <CardNft
               name={item.tokenData.name}
@@ -72,7 +80,7 @@ const MyNfts = () => {
               key={item.tokenData.imgURI}
             ></CardNft>
           ))
-        ) : null}
+        )}
       </div>
     </div>
   );

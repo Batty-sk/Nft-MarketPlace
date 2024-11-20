@@ -5,20 +5,22 @@ import { ContractContext } from "../contexts/ContractContext";
 import Masonry from "react-masonry-css";
 
 import { filterednftsData } from "../constants";
-import Loader from "../components/CustomLoader";
 import { CardProfile, Banner, CardNft } from "../components";
 import { images } from "../assets";
 import SearchBar from "../components/SearchBar";
+
 import blockies from "ethereum-blockies";
 
 const Home = () => {
-  const { getMarketNFTs,topSellers} = useContext(ContractContext);
+  const { getMarketNFTs, topSellers } = useContext(ContractContext);
   const [marketNFTs, setMarketNFTs] = useState<filterednftsData[] | null>(null);
   const [searchData, searchDataResult] = useState<filterednftsData[] | null>(
     null
   );
   const ParentRef = useRef<HTMLDivElement | null>(null);
   const ChildRef = useRef<HTMLDivElement | null>(null);
+  const [imageSrc, setImageSrc] = useState<string | null>(null);
+
   const breakpointColumnsObj = {
     default: 3,
     1100: 3,
@@ -26,7 +28,7 @@ const Home = () => {
     500: 1,
   };
 
-  const [shouldNavigationVisible, setShouldNavigationVisible] =
+  const [shouldNavigationVisible] =
     useState<boolean>(true);
 
   useEffect(() => {
@@ -50,8 +52,9 @@ const Home = () => {
       try {
         const marketList = await getMarketNFTs();
         console.log("Getting the market NFTs", marketList);
-        if (marketNFTs) setMarketNFTs((prev) => [...marketList]);
-        else {
+        if (marketNFTs) {
+          setMarketNFTs((prev) => [...marketList]);
+        } else {
           setMarketNFTs(marketList);
         }
       } catch (error) {
@@ -94,14 +97,16 @@ const Home = () => {
             style={{ scrollbarWidth: "none", scrollBehavior: "smooth" }}
             ref={ChildRef}
           >
-          {topSellers.map(item=>(
-            <CardProfile 
-            key={item.owner}
-            image={blockies.create({ seed: item.owner, size: 20 }).toDataURL()}
-            accountHash={item.owner}
-            ethAmount={item.sales}
-            />)
-          )}
+            {topSellers.map((item) => (
+              <CardProfile
+                key={item.owner}
+                image={blockies
+                  .create({ seed: item.owner, size: 20 })
+                  .toDataURL()}
+                accountHash={item.owner}
+                ethAmount={item.sales}
+              />
+            ))}
             {images.avatars.map((item, i) => (
               <CardProfile
                 key={i}
@@ -139,11 +144,13 @@ const Home = () => {
           <SearchBar
             nftsData={marketNFTs}
             searchDataResult={searchDataResult}
-            
           />
         </div>
 
-        <div className="md:mt-2 mt-5 flex justify-center" id="market-place-nft-area">
+        <div
+          className="md:mt-2 mt-5 flex justify-center"
+          id="market-place-nft-area"
+        >
           <Masonry
             breakpointCols={breakpointColumnsObj}
             className="my-masonry-grid"

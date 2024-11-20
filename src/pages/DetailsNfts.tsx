@@ -166,18 +166,19 @@ const DetailsNfts = () => {
       <div className="flex justify-center items-center mt-10 mb-10 h-svh">
         <h1 className="font-poppins dark:text-white text-black">
           Couldn't Find The NFT You're Looking For.
+          Check MyNFts Section If You Recently Bought This NFT
         </h1>
       </div>
     );
   }
 
   return (
-    <section className="flex justify-center">
+    <section className="flex justify-center dark:text-white text-black">
       <CustomSnackbar {...{ ...snackBar, onClose: handleClose }} />
       <div className="flex flex-col justify-center items-center md:w-4/5 w-full p-4">
-        <div className="flex md:flex-nowrap flex-wrap md:justify-normal justify-center p-8 bg-gray-100 shadow-sm shadow-gray-400 mt-10 rounded-tl-3xl mb-8">
+        <div className="flex md:flex-nowrap flex-wrap md:justify-normal justify-center p-8 bg-gray-100 dark:bg-zinc-900  shadow-sm shadow-gray-400 mt-10 rounded-tl-3xl mb-8">
           <img
-            src={images.nfts[0]}
+            src={currentNFT.tokenData.imgURI}
             height={250}
             width={270}
             alt="nft"
@@ -189,10 +190,9 @@ const DetailsNfts = () => {
             <h1 className="font-poppins text-3xl font-semibold">
               {currentNFT.tokenData.name}
             </h1>
-            <p className="font-poppins text-sm text-zinc-700 pt-5 leading-7">
+            <p className="font-poppins text-sm dark:text-gray-100 text-black pt-5 leading-7">
               {currentNFT.tokenData.description}
-              Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-              Officiis, non ducimus.
+              
             </p>
             <div className="pt-3 flex md:flex-nowrap flex-wrap justify-between pl-0 ml-0">
               <div className="font-poppins text-sm font-semibold flex items-center md:flex-nowrap flex-wrap">
@@ -201,12 +201,12 @@ const DetailsNfts = () => {
                   alt=""
                   className="object-cover h-10 w-10 rounded-full"
                 />
-                <span className="md:ms-2 ms-1 text-xs md:mt-0 mt-3 truncate md:w-fit w-64">
+                <span className="md:ms-2 ms-1 text-xs md:mt-0 mt-3 truncate md:w-fit w-64 dark:text-white text-black">
                   {currentNFT.owner.toLowerCase()}
                 </span>
               </div>
               {currentNFT.isListed && (
-                <p className="font-poppins font-semibold flex items-center md:mt-0 mt-5">
+                <p className="font-poppins font-semibold flex items-center md:mt-0 mt-5  dark:text-white text-black">
                   <Tooltip title={"Ethereum"}>
                     <img src={etherim} alt="" height={30} width={30} />
                   </Tooltip>
@@ -214,7 +214,7 @@ const DetailsNfts = () => {
                 </p>
               )}
             </div>
-            <div className="mt-10 flex">
+            <div className="mt-10 flex dark:text-white text-black">
               {id?.split("_")[1] == account && !currentNFT.isListed ? (
                 <button
                   className="px-3 py-2 rounded-md shadow-md hover:scale-105 transition-all shadow-black bg-yellow-400 font-poppins text-black"
@@ -259,7 +259,7 @@ const DetailsNfts = () => {
                   <>
                     <span className="font-bold font-poppins">NFT Name:</span>{" "}
                     {currentNFT.tokenData.name} <br />
-                    <span className="font-bold font-poppins">Price:</span>{" "}
+                    <span className="font-bold font-poppins ">Price:</span>{" "}
                     {currentNFT.price} ETH
                     <br />
                     <span className="font-bold font-poppins ">

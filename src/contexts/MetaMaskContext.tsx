@@ -1,12 +1,14 @@
+import blockies from "ethereum-blockies";
 import React, { createContext, ReactNode, useState ,useEffect} from "react";
 
 interface MetaMaskContextType {
   isConnected: boolean;
   connectWallet: React.Dispatch<React.SetStateAction<boolean>>;
   account:string
+  accountAvatar:string
 }
 
-export const MetaMaskContext = createContext<MetaMaskContextType >({isConnected:false,connectWallet:()=>{},account:""});
+export const MetaMaskContext = createContext<MetaMaskContextType >({isConnected:false,connectWallet:()=>{},account:"",accountAvatar:""});
 
 type Props = {
   children: ReactNode;
@@ -15,7 +17,7 @@ type Props = {
 export const MetaMaskWrapper: React.FC<Props> = ({ children }) => {
   const [isConnected, setIsConnected] = useState(false);
   const [account, setAccount] = useState<string |null>(null);
-
+  const [accountAvatar,updateAvatar]= useState<string>("")
   useEffect(() => {
     const connectWallet = async () => {
       const ethereum = (window as any).ethereum; 
@@ -45,9 +47,12 @@ export const MetaMaskWrapper: React.FC<Props> = ({ children }) => {
   }, [isConnected]);
 
 
-
+useEffect(()=>{
+  if(account)
+  updateAvatar(blockies.create({ seed: account, size: 16 }).toDataURL())
+},[account])
   return (
-    <MetaMaskContext.Provider value={{ isConnected, connectWallet:setIsConnected,account:account?account:""}}>
+    <MetaMaskContext.Provider value={{ isConnected, connectWallet:setIsConnected,account:account?account:"",accountAvatar}}>
       {children}
     </MetaMaskContext.Provider>
   );

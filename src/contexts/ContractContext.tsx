@@ -1,5 +1,7 @@
 import React, { createContext, ReactNode, useEffect, useState } from "react";
 import { ethers } from "ethers";
+import { PinataSDK } from "pinata-web3";
+
 import {
   RPC_URL,
   PRIVATE_KEY,
@@ -10,6 +12,11 @@ import contractAbi from "../../artifacts/contracts/NFT_marketPlace.sol/NFT_marke
 import { filterednftsData } from "../constants";
 import { Error } from "@mui/icons-material";
 import { c } from "vite/dist/node/types.d-aGj9QkWt";
+
+const pinata = new PinataSDK({
+  pinataJwt:import.meta.env.VITE_PINATA_IPFS_JWT,
+  pinataGateway: "plum-cheap-wasp-820.mypinata.cloud",
+});
 
 interface topSellersProps {
   owner: string;
@@ -54,23 +61,12 @@ export const ContractContextWrapper = ({ children }: Props) => {
   console.log("pinata jwt", import.meta.env.VITE_PINATA_IPFS_JWT);
 
   async function uploadImageToIPFS(file: File) {
-    const url = `https://uploads.pinata.cloud/v3/files`;
 
-    let formData = new FormData();
-    formData.append("file", file);
-
+  
     try {
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${import.meta.env.VITE_PINATA_IPFS_JWT}`,
-        },
-        body: formData,
-      });
-
-      const result = await response.json();
-      console.log("image uploaded successfully", result.data.cid);
-      return result.data.cid;
+      const response = await pinata.upload.file(file)
+      console.log('response',response)
+      return response.IpfsHash
     } catch (error: any) {
       console.error("Error uploading file to IPFS:", error);
       throw new Error(error);
@@ -232,26 +228,15 @@ export const ContractContextWrapper = ({ children }: Props) => {
     }
   };
   const getOwnerNFTs = async (onwerId: string) => {
+
+    const provider = new ethers.providers.JsonRpcProvider(RPC_URL);
     const { abi } = contractAbi;
-
-    if (!window.ethereum || !window.ethereum.request) {
-      console.error("MetaMask is not installed or unavailable.");
-      return [];
-    }
-
-    // Connect to MetaMask
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-
-    // Get the current account
-    const signer = provider.getSigner();
-    const currentAccount = await signer.getAddress();
-    console.log("Using current account:", currentAccount);
-
     const nftMarketplaceContract = new ethers.Contract(
       CONTRACT_ADDRESS,
       abi,
-      signer
+      provider
     );
+
 
     try {
       const ownerNFTS = await nftMarketplaceContract.getOwnerNFTS(onwerId);

@@ -1,5 +1,5 @@
 import { LightMode, DarkMode, Menu, Close } from "@mui/icons-material";
-import React from "react";
+import React, { useEffect } from "react";
 
 import Button from "./Button";
 import useToggleModes from "../customHooks/useToggleModes";
@@ -11,13 +11,15 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { ThemeContext } from "../contexts/ThemeContext";
 import { logo } from "../assets";
-
-const MenuItems = ({setIsMenuOpen}:{setIsMenuOpen:React.Dispatch<React.SetStateAction<boolean>>}) => {
+import CustomSnackbar from "./CustomSnackBar";
+import { CustomSnackbarProps } from "./CustomSnackBar";
+const MenuItems = ({setIsMenuOpen,isConnected}:{setIsMenuOpen:React.Dispatch<React.SetStateAction<boolean>>,isConnected:boolean}) => {
   return (
+    
     <>
       {[
-        { item: "Listed-NFTs", path: "/listed-nfts" },
-        { item: "My-NFTs", path: "/my-nfts" },
+        { item: "Listed-NFTs", path: isConnected?"/listed-nfts":'/' },
+        { item: "My-NFTs", path: isConnected?"/my-nfts":'/' },
       ].map((item, i) => (
         <Link to={item?.path} key={item?.item} className="no-underline p-2 " onClick={()=>{setIsMenuOpen(prev=>prev?false:false)}}>
           {" "}
@@ -34,11 +36,26 @@ const NavBar = () => {
   const [mode, setMode] = useToggleModes();
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const navigate = useNavigate();
-  const { isConnected, connectWallet } = useContext(MetaMaskContext);
+  const { account, connectWallet } = useContext(MetaMaskContext);
   const { createButton } = useContext(ThemeContext);
+  const [snackBar,updateSnackBar] = useState<CustomSnackbarProps>(
+    {message:'',open:false,type:'success',onClose:()=>{}}
+  )
+  const handleConnectionToMetaMask =()=>{
+    if(!account)
+    {
+      updateSnackBar(
+        {message:'MetaMask is Not Installed!',open:true,type:'error',onClose:()=>{}}
+      )
+    }
+  }
+  const handleClose=()=>{
+    updateSnackBar({message:'',open:false,type:'success',onClose:()=>{}})
 
+  }
   return (
     <nav className="dark:bg-zinc-900 dark:border-b  max-h-10 dark:border-zinc-700 border-b border-gray-200  flex justify-between items-center py-8 px-4">
+      <CustomSnackbar {...{ ...snackBar, onClose: handleClose }} />
       <div className="dark:text-white text-black font-poppins font-semibold flex items-center ">
         <Link to="/">
           <img
@@ -68,11 +85,11 @@ const NavBar = () => {
 
           <div className="hidden md:flex items-center">
             <ul className="flex">
-              <MenuItems setIsMenuOpen={setIsMenuOpen}/>
+              <MenuItems isConnected={account?true:false} setIsMenuOpen={setIsMenuOpen}/>
             </ul>
 
             <div>
-              {isConnected ? (
+              {account ? (
                 <Button
                   animate={createButton}
                   title="Create"
@@ -87,8 +104,7 @@ const NavBar = () => {
                   title="Connect"
                   path=""
                   handleOnClickOrChange={() => {
-                    connectWallet(true);
-                  }}
+                    handleConnectionToMetaMask()                  }}
                 />
               )}
             </div>
@@ -107,14 +123,28 @@ const NavBar = () => {
                 <Close fontSize="large" className="dark:filter dark:invert"/>
               </div>
               <ul className="flex flex-col justify-center items-center h-fit  ">
-                <MenuItems setIsMenuOpen={setIsMenuOpen}/>
+                <MenuItems isConnected={account?true:false} setIsMenuOpen={setIsMenuOpen}/>
               </ul>
               <div className="mt-5">
+              {account ? (
                 <Button
+                  animate={createButton}
+                  title="Create"
+                  path=""
+                  handleOnClickOrChange={() => {
+                    navigate("/create-nft");
+                  }}
+                />
+              ) : (
+                <Button
+                  animate={createButton}
                   title="Connect"
                   path=""
-                  handleOnClickOrChange={() => 0}
+                  handleOnClickOrChange={() => {
+                    handleConnectionToMetaMask()
+                  }}
                 />
+              )}
               </div>
             </div>
           ) : (
