@@ -12,7 +12,7 @@ const CardProfile = ({image,accountHash,ethAmount}:Props)=>{
             </div>
 
             <div className="pt-10 text-center">
-                <p className="dark:text-white text-black font-mono ">{accountHash}</p>
+                <p className="dark:text-white text-black font-mono truncate md:w-56 w-52">{accountHash}</p>
                 <p className="dark:text-white text-black font-mono font-semibold ">{ethAmount} ETH</p>
             </div>
 

@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useContext } from "react";
 
 import { filterednftsData } from "../constants";
-import {CustomLoader} from "../components";
+import { CustomLoader } from "../components";
 import { ContractContext } from "../contexts/ContractContext";
 import { Banner } from "../components";
 import { Pagination, CardNft } from "../components";
@@ -13,7 +13,7 @@ import { MetaMaskContext } from "../contexts/MetaMaskContext";
 
 const ListedNfts = () => {
   const { getMyListedNFTS } = useContext(ContractContext);
-  const {account} = useContext(MetaMaskContext)
+  const { account } = useContext(MetaMaskContext);
   const { animateCreateButton } = useContext(ThemeContext);
   const [loading, updateLoading] = useState();
   const [myNFTs, setMyNFTs] = useState<filterednftsData[] | null>(null);
@@ -38,7 +38,7 @@ const ListedNfts = () => {
   return (
     <div className="flex flex-wrap justify-center dark:bg-zinc-900 md:p-10 p-4">
       <div className="md:w-10/12 w-full ">
-      <Banner title="Listed NFTs" />
+        <Banner title="Listed NFTs" />
       </div>
       <div className="mt-32 mb-32 w-full flex flex-col justify-center items-center">
         {loading ? (
@@ -53,7 +53,8 @@ const ListedNfts = () => {
             <h3 className="font-poppins md:text-3xl text-2xl text-center font-bold dark:text-white">
               You've Not Created Any NFTs Yet.
             </h3>
-            <Link to={'/create-nft'}
+            <Link
+              to={"/create-nft"}
               className="font-poppins mt-5 underline cursor-pointer dark:text-white"
             >
               create one?
@@ -61,20 +62,21 @@ const ListedNfts = () => {
           </>
         )}
       </div>
-      <div className="flex flex-wrap">
-      {myNFTs?.map((item, i) => (
-        <div key={i} className="max-h-fit max-w-fit w-3/4">
-          <CardNft
-            tokenId={item.tokenId}
-            name={item.owner}
-            image={item.tokenData.imgURI}
-            account={account}
-            ethAmount={+item.price}
-          />
-        </div>
-      ))}
+      <div className="flex mt-5 w-3/4  flex-wrap mb-10 justify-center">
+        {myNFTs?.map((item, i) => (
+          <div key={i} className="max-h-fit max-w-fit w-3/4">
+            <CardNft
+              tokenId={item.tokenId}
+              name={item.tokenData.name}
+              image={item.tokenData.imgURI}
+              account={account}
+              ethAmount={+item.price}
+            />
+          </div>
+        ))}
       </div>
-      <Pagination />
+      {/*       <Pagination />
+       */}{" "}
     </div>
   );
 };

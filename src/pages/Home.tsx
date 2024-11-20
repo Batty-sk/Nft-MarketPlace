@@ -9,9 +9,10 @@ import Loader from "../components/CustomLoader";
 import { CardProfile, Banner, CardNft } from "../components";
 import { images } from "../assets";
 import SearchBar from "../components/SearchBar";
+import blockies from "ethereum-blockies";
 
 const Home = () => {
-  const { getMarketNFTs } = useContext(ContractContext);
+  const { getMarketNFTs,topSellers} = useContext(ContractContext);
   const [marketNFTs, setMarketNFTs] = useState<filterednftsData[] | null>(null);
   const [searchData, searchDataResult] = useState<filterednftsData[] | null>(
     null
@@ -93,6 +94,14 @@ const Home = () => {
             style={{ scrollbarWidth: "none", scrollBehavior: "smooth" }}
             ref={ChildRef}
           >
+          {topSellers.map(item=>(
+            <CardProfile 
+            key={item.owner}
+            image={blockies.create({ seed: item.owner, size: 20 }).toDataURL()}
+            accountHash={item.owner}
+            ethAmount={item.sales}
+            />)
+          )}
             {images.avatars.map((item, i) => (
               <CardProfile
                 key={i}

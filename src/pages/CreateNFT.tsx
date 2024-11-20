@@ -45,6 +45,15 @@ const CreateNFT: React.FC = () => {
     description,
     price,
   }: createNftProps) => {
+    if(!image && !name && !price){
+      updateSnackBar({
+        message:"Please fill all the details!",
+        open:true,
+        type:'error',
+        onClose:()=>{},
+      })
+
+    }
     updateLoading(true)
     const res = await handleUploadImageToIpfs(image, name, description, price);
     if (res) {

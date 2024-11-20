@@ -172,10 +172,10 @@ const DetailsNfts = () => {
   }
 
   return (
-    <section className="flex justify-center h-svh">
+    <section className="flex justify-center">
       <CustomSnackbar {...{ ...snackBar, onClose: handleClose }} />
       <div className="flex flex-col justify-center items-center md:w-4/5 w-full p-4">
-        <div className="flex flex-wrap md:justify-normal justify-center p-8 bg-gray-100 shadow-sm shadow-gray-400 mt-10 rounded-tl-3xl mb-8">
+        <div className="flex md:flex-nowrap flex-wrap md:justify-normal justify-center p-8 bg-gray-100 shadow-sm shadow-gray-400 mt-10 rounded-tl-3xl mb-8">
           <img
             src={images.nfts[0]}
             height={250}
@@ -194,8 +194,8 @@ const DetailsNfts = () => {
               Lorem ipsum dolor sit, amet consectetur adipisicing elit.
               Officiis, non ducimus.
             </p>
-            <div className="pt-3 flex flex-wrap justify-between pl-0 ml-0">
-              <div className="font-poppins text-sm font-semibold flex items-center flex-wrap">
+            <div className="pt-3 flex md:flex-nowrap flex-wrap justify-between pl-0 ml-0">
+              <div className="font-poppins text-sm font-semibold flex items-center md:flex-nowrap flex-wrap">
                 <img
                   src={accountAvatar}
                   alt=""
@@ -332,7 +332,7 @@ const DetailsNfts = () => {
               More From This Owner
             </h1>
             <div className="flex flex-wrap gap-3 justify-center">
-              {moreOwnerNFTs.map((item) => (
+              {moreOwnerNFTs.map((item) => ((currentNFT.tokenId != item.tokenId) &&
                 <CardNft
                   tokenId={item.tokenId}
                   name={item.tokenData.name}

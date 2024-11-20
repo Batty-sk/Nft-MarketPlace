@@ -11,6 +11,10 @@ import { filterednftsData } from "../constants";
 import { Error } from "@mui/icons-material";
 import { c } from "vite/dist/node/types.d-aGj9QkWt";
 
+interface topSellersProps {
+  owner: string;
+  sales: number;
+}
 type ContextProps = {
   handleUploadImageToIpfs: (
     image: File,
@@ -26,6 +30,7 @@ type ContextProps = {
   buyNFT: (arg: number, amount: string) => Promise<boolean>;
   removeNftFromMarket: (arg: number) => Promise<boolean>;
   resellNFT: (arg: number, newPrice: number) => Promise<boolean>;
+  topSellers:topSellersProps[];
 };
 
 export const ContractContext = createContext<ContextProps>({
@@ -38,6 +43,7 @@ export const ContractContext = createContext<ContextProps>({
   buyNFT: async () => true,
   removeNftFromMarket: async () => true,
   resellNFT: async () => true,
+  topSellers:[]
 });
 
 type Props = {
@@ -100,7 +106,7 @@ export const ContractContextWrapper = ({ children }: Props) => {
     price: number
   ) => {
     try {
-  /*     const imgHash = await uploadImageToIPFS(image);
+      const imgHash = await uploadImageToIPFS(image);
       console.log("image hash", imgHash);
       const metaData = {
         name,
@@ -108,8 +114,8 @@ export const ContractContextWrapper = ({ children }: Props) => {
         imgURI: imgHash, // this has to handled by the smart contract.
       };
       const metaHash = await uploadMetadataToIPFS(metaData);
-      console.log(`Metadata hash: ipfs://${metaHash}`); */
-      return await createNFT(price, "bafybeibzeaduaeterw23rjd3jcqhe4gg7pfbl56snc5updnwfvjh6ygo24"); // send the request to the smartcontract regarding creation of the nft.
+      console.log(`Metadata hash: ipfs://${metaHash}`);
+      return await createNFT(price, metaHash); // send the request to the smartcontract regarding creation of the nft.
     } catch (error) {
       console.log("Something went wrong", error);
       return false;
@@ -394,10 +400,7 @@ export const ContractContextWrapper = ({ children }: Props) => {
 
     // here we have to update the state so that fetching happens by the home page using use effect.
   };
-  interface topSellersProps {
-    owner: string;
-    sales: number;
-  }
+
   const [Sellers, updateSellers] = useState<Map<string,topSellersProps>>(new Map());
   const [topSellers,updateTopSellers]=useState<topSellersProps[]>([])
 
@@ -413,7 +416,9 @@ export const ContractContextWrapper = ({ children }: Props) => {
 
   useEffect(() => {
     let nftref: ethers.Contract | null = null;
-    const handleEventListener = (owner: string, sales: number) => {
+    const handleEventListener = (owner: string, Sales: number) => {
+      let sales=+ethers.utils.formatEther(
+        Sales.toString())
       updateSellers((prevMap) => {
         const newMap = new Map(prevMap);
 
@@ -474,6 +479,7 @@ export const ContractContextWrapper = ({ children }: Props) => {
         getMyListedNFTS,
         removeNftFromMarket,
         resellNFT,
+        topSellers
       }}
     >
       {children}
