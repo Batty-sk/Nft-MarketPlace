@@ -398,11 +398,37 @@ export const ContractContextWrapper = ({ children }: Props) => {
     owner: string;
     sales: number;
   }
-  const [topSellers, updateTopSellers] = useState<topSellersProps>();
+  const [Sellers, updateSellers] = useState<Map<string,topSellersProps>>(new Map());
+  const [topSellers,updateTopSellers]=useState<topSellersProps[]>([])
+
+
+  useEffect(()=>{
+    const sellersArray = Array.from(Sellers.values());
+
+    sellersArray.sort((a, b) => b.sales - a.sales);
+
+     updateTopSellers(sellersArray.slice(0, 5))
+      },[Sellers])
+  
 
   useEffect(() => {
     let nftref: ethers.Contract | null = null;
     const handleEventListener = (owner: string, sales: number) => {
+      updateSellers((prevMap) => {
+        const newMap = new Map(prevMap);
+
+        if (newMap.has(owner)) {
+          const existingSeller = newMap.get(owner);
+          if (existingSeller) {
+            newMap.set(owner, { ...existingSeller, sales: existingSeller.sales + sales });
+          }
+        } else {
+          newMap.set(owner, { owner, sales });
+        }
+
+        return newMap;
+      });
+  
       console.log(
         `Top Seller: ${owner}, Total Sales: ${ethers.utils.formatEther(
           sales
@@ -420,6 +446,7 @@ export const ContractContextWrapper = ({ children }: Props) => {
         );
 
         nftMarketplace.on("TopSellersInfo", handleEventListener);
+
         nftref = nftMarketplace;
         console.log("listnening for the topsellers events....");
         return nftMarketplace;

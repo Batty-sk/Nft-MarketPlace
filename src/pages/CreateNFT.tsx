@@ -99,7 +99,7 @@ const CreateNFT: React.FC = () => {
     <main className=" dark:bg-zinc-900 md:p-10 p-4 bg-white w-full flex flex-col justify-center items-center mb-10">
       <CustomSnackbar {...{...snackBar,onClose:handleCloseSnackBar}}/>
       <div className="flex flex-col justify-center items-center md:w-5/5 w-full">
-        <div className="flex justify-start w-full md:w-10/12">
+        <div className="flex justify-center w-full md:w-10/12">
           <Banner  title="Create NFT"/>
         </div>
 

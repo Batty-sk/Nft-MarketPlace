@@ -163,8 +163,8 @@ const DetailsNfts = () => {
     }
 
     return (
-      <div className="flex justify-center items-center mt-10 mb-10">
-        <h1 className="font-poppins">
+      <div className="flex justify-center items-center mt-10 mb-10 h-svh">
+        <h1 className="font-poppins dark:text-white text-black">
           Couldn't Find The NFT You're Looking For.
         </h1>
       </div>
@@ -172,7 +172,7 @@ const DetailsNfts = () => {
   }
 
   return (
-    <section className="flex justify-center ">
+    <section className="flex justify-center h-svh">
       <CustomSnackbar {...{ ...snackBar, onClose: handleClose }} />
       <div className="flex flex-col justify-center items-center md:w-4/5 w-full p-4">
         <div className="flex flex-wrap md:justify-normal justify-center p-8 bg-gray-100 shadow-sm shadow-gray-400 mt-10 rounded-tl-3xl mb-8">

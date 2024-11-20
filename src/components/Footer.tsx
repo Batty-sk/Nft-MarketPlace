@@ -3,6 +3,7 @@ import XIcon from "@mui/icons-material/X";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import Button from "./Button";
 import React from "react";
+import { Link } from "react-router-dom";
 
 
 type LinksBoxProp = {
@@ -19,7 +20,7 @@ const LinksBox = ({ title, links }: LinksBoxProp) => {
         {links.map((item, i) => (
           <li key={i}>
             <a
-              href={`/${item}`}
+              href={`#`}
               className="no-underline dark:text-white text-black font-poppins text-sm"
             >
               {item}
@@ -63,15 +64,15 @@ const Footer = () => {
           Saorav.skumar@gmail.com
         </p>
         <div className="flex">
-          <div className="mx-2">
+          <Link to={"https://www.linkedin.com/in/saurav-kumar-5225a2292/"} className="mx-2">
             <FacebookOutlined fontSize="medium" className="filter dark:invert" />
-          </div>
-          <div className="mx-2">
+          </Link>
+          <Link to={"https://www.linkedin.com/in/saurav-kumar-5225a2292/"} className="mx-2">
             <XIcon fontSize="medium" className="filter dark:invert" />
-          </div>
-          <div className="mx-2">
+          </Link>
+          <Link to={"https://www.linkedin.com/in/saurav-kumar-5225a2292/"} className="mx-2">
             <InstagramIcon fontSize="medium"  className="filter dark:invert"/>
-          </div>
+          </Link>
         </div>
       </div>
     </footer>

@@ -41,7 +41,7 @@ const MyNfts = () => {
         />
       </div>
       <Chip label={account} className="mt-5 dark:bg-gray-300"></Chip>
-      <div className="mt-10 w-2/4 ">
+      <div className="mt-10 md:w-2/4 w-9/12  ">
         <SearchBar
           nftsData={[]}
           searchDataResult={searchDataResult}

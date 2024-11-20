@@ -1,6 +1,6 @@
 const Banner = ({ title }: { title: string }) => {
   return (
-    <div className="bg-gradient-to-r from-pink-600 to-pink-700 w-full  minmd:3/4 xl:w-3/4 md:px-8 px-6 py-16 rounded-lg overflow-hidden relative">
+    <div className="bg-gradient-to-r from-pink-600 to-pink-700 w-full  minmd:3/4  md:px-8 px-6 py-16 rounded-lg overflow-hidden relative">
       <h1 className="dark:text-white text-white md:text-3xl text-2xl  text-center leading-10 font-poppins font-semibold">
         {title}
       </h1>
