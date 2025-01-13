@@ -52,8 +52,9 @@ const DetailsNfts = () => {
       );
       (async () => {
         updateLoading(true);
-        console.log("token id and owner id",tokenId,ownerId)
-        const data = await getOwnerNFTs(ownerId);
+        console.log("token id and owner id",account,ownerId)
+
+        const data = await getOwnerNFTs(ownerId,account.toLowerCase()==ownerId.toLowerCase()?false:true);
         updateCurrentNFT(data.find((item) => item.tokenId == +tokenId));
         console.log("getting the data as ", data);
         updateMoreOwnerNFTs(data);

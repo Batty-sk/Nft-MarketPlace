@@ -28,7 +28,7 @@ type ContextProps = {
   ) => Promise<boolean>;
   getMarketNFTs: () => Promise<filterednftsData[]>;
   getMyNFTs: () => Promise<filterednftsData[]>;
-  getOwnerNFTs: (arg: string) => Promise<filterednftsData[]>;
+  getOwnerNFTs: (arg: string,guest:boolean) => Promise<filterednftsData[]>;
   fetchToken: (arg: number) => Promise<[]>;
   getMyListedNFTS: () => Promise<filterednftsData[]>;
   buyNFT: (arg: number, amount: string) => Promise<boolean>;
@@ -226,15 +226,33 @@ export const ContractContextWrapper = ({ children }: Props) => {
       return false;
     }
   };
-  const getOwnerNFTs = async (onwerId: string) => {
-
+  const getOwnerNFTs = async (onwerId: string,guest:boolean) => {
     const { abi } = contractAbi;
-    const provider = new ethers.providers.JsonRpcProvider(RPC_URL);
-    const nftMarketplaceContract = new ethers.Contract(
+    let provider;
+    let nftMarketplaceContract;
+    if(guest){
+       provider = new ethers.providers.JsonRpcProvider(RPC_URL);
+       nftMarketplaceContract = new ethers.Contract(
+        CONTRACT_ADDRESS,
+        abi,
+        provider
+      );
+    }
+    else{
+    if (!window.ethereum || !window.ethereum.request) {
+      alert("MetaMask is not installed or the provider is unavailable!");
+      return [];
+    }
+    provider = new ethers.providers.Web3Provider(window.ethereum);
+    await provider.send("eth_requestAccounts", []);
+
+    const signer = provider.getSigner();
+     nftMarketplaceContract = new ethers.Contract(
       CONTRACT_ADDRESS,
       abi,
-      provider
+      signer
     );
+  }
     try {
       const ownerNFTS = await nftMarketplaceContract.getOwnerNFTS(onwerId);
       const data = await cleanNftsData(ownerNFTS);

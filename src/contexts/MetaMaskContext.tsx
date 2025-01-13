@@ -39,7 +39,6 @@ export const MetaMaskWrapper: React.FC<Props> = ({ children }) => {
           console.error("Error connecting to MetaMask", error);
         }
       } else {
-        alert("No Wallet Found!")        
       }
     };
 
