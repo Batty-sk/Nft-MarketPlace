@@ -3,7 +3,7 @@ import ArrowLeftIcon from "@mui/icons-material/ArrowLeft";
 import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import { ContractContext } from "../contexts/ContractContext";
 import Masonry from "react-masonry-css";
-
+import {CustomLoader} from "../components";
 import { filterednftsData } from "../constants";
 import { CardProfile, Banner, CardNft } from "../components";
 import { images } from "../assets";
@@ -20,9 +20,9 @@ const Home = () => {
   const ParentRef = useRef<HTMLDivElement | null>(null);
   const ChildRef = useRef<HTMLDivElement | null>(null);
   const [imageSrc, setImageSrc] = useState<string | null>(null);
-
+  const [loading,setLoading]=useState<boolean>(false)
   const breakpointColumnsObj = {
-    default: 3,
+    default: 2,
     1100: 3,
     700: 2,
     500: 1,
@@ -50,6 +50,7 @@ const Home = () => {
   useEffect(() => {
     const fetchMarketNFTs = async () => {
       try {
+        setLoading(true)
         const marketList = await getMarketNFTs();
         console.log("Getting the market NFTs", marketList);
         if (marketNFTs) {
@@ -60,6 +61,7 @@ const Home = () => {
       } catch (error) {
         console.error("Error fetching market NFTs:", error);
       }
+      setLoading(false)
     };
     fetchMarketNFTs();
   }, []);
@@ -112,7 +114,7 @@ const Home = () => {
                 key={i}
                 image={item}
                 accountHash={`0xC...${Math.random()}`}
-                ethAmount={50.0 * i}
+                ethAmount={50.0 * i+1}
               />
             ))}
             {}
@@ -156,7 +158,7 @@ const Home = () => {
             className="my-masonry-grid"
             columnClassName="my-masonry-grid_column"
           >
-            {!searchData?.length &&
+          {/*   {!searchData?.length &&
               images.nfts.map((item, i) => (
                 <CardNft
                   key={i}
@@ -166,7 +168,7 @@ const Home = () => {
                   account={`0xC...${Math.random()}`}
                   ethAmount={100.0 * i}
                 />
-              ))}
+              ))} */}
             {searchData?.length
               ? searchData?.map((item) => (
                   <CardNft
@@ -189,6 +191,8 @@ const Home = () => {
                   />
                 ))}
           </Masonry>
+          {loading?<CustomLoader />:''}
+
         </div>
       </div>
     </main>

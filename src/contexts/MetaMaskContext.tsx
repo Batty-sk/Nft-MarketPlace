@@ -51,6 +51,7 @@ useEffect(()=>{
   if(account)
   updateAvatar(blockies.create({ seed: account, size: 16 }).toDataURL())
 },[account])
+
   return (
     <MetaMaskContext.Provider value={{ isConnected, connectWallet:setIsConnected,account:account?account:"",accountAvatar}}>
       {children}

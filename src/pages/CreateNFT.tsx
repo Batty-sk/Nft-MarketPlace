@@ -105,7 +105,7 @@ const CreateNFT: React.FC = () => {
       "image/*": [".png", ".jpg", ".jpeg", ".svg"],
     },
     multiple: false,
-    onDrop: (acceptedFiles) => {
+    onDrop: (acceptedFiles:any) => {
       const uploadedFile = acceptedFiles[0];
       if (uploadedFile) {
         console.log("uploaded file", uploadedFile);
