@@ -6,6 +6,7 @@ interface ImportMetaEnv {
     readonly VITE_PINATA_IPFS_API_SECERET:string,
     readonly VITE_PINATA_IPFS_API_KEY:string,
     readonly VITE_PINATA_CLOUD_SECERET:string
+    readonly VITE_ALCHEMY_KEY:string
   }
   
   interface ImportMeta {

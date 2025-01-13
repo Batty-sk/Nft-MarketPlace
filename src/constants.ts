@@ -1,5 +1,5 @@
-export const RPC_URL = "https://rpc.sepolia.org";
-export const CONTRACT_ADDRESS = "0x2ef4810c26058aecee6ceeaaea2f4dea635c4f2e";
+export const RPC_URL = `https://eth-sepolia.g.alchemy.com/v2/${import.meta.env.VITE_ALCHEMY_KEY}`;
+export const CONTRACT_ADDRESS = "0x80586252Af2071C19F9C468A47f9C5bE342504D9";
 import { ethers } from "ethers";
 import { PinataSDK } from "pinata-web3";
 
