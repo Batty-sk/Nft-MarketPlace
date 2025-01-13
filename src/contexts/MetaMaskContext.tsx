@@ -39,7 +39,7 @@ export const MetaMaskWrapper: React.FC<Props> = ({ children }) => {
           console.error("Error connecting to MetaMask", error);
         }
       } else {
-        console.log("MetaMask is not installed.");
+        alert("No Wallet Found!")        
       }
     };
 
@@ -51,7 +51,7 @@ useEffect(()=>{
   if(account)
   updateAvatar(blockies.create({ seed: account, size: 16 }).toDataURL())
 },[account])
-
+  
   return (
     <MetaMaskContext.Provider value={{ isConnected, connectWallet:setIsConnected,account:account?account:"",accountAvatar}}>
       {children}

@@ -192,6 +192,7 @@ const Home = () => {
                 ))}
           </Masonry>
           {loading?<CustomLoader />:''}
+          {!loading && !searchData?.length && !marketNFTs?.length && <h3 className="font-poppins mt-5">No nfts found.</h3>}
 
         </div>
       </div>

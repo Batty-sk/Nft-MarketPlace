@@ -51,7 +51,7 @@ const CreateNFT: React.FC = () => {
   }: createNftProps) => {
     if(!account){
       updateSnackBar({
-        message:"Metamask is not installed!",
+        message:"No Wallet Detected!",
         open:true,
         type:'error',
         onClose:()=>{},
@@ -78,6 +78,8 @@ const CreateNFT: React.FC = () => {
         onClose:()=>{}
       });
       updateLoading(false)
+      updateFormFields({description:"",price:0.0,title:""})
+      setImage(null)
       return;
     }
     updateSnackBar({
@@ -220,9 +222,10 @@ const CreateNFT: React.FC = () => {
               <Button
                 title="Create"
                 path=""
-                handleOnClickOrChange={() => {
+                handleOnClickOrChange={
+                  async() => {
                   console.log("handling image uploadation...");
-                  handleCreateNFT({
+                 await handleCreateNFT({
                     image,
                     name: formFields.title,
                     description: formFields.description,

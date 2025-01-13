@@ -15,7 +15,6 @@ import { CardNft, CustomLoader } from "../components";
 import { MetaMaskContext } from "../contexts/MetaMaskContext";
 import CustomSnackbar, {
   CustomSnackbarProps,
-  SnackbarType,
 } from "../components/CustomSnackBar";
 
 export type snackBarProp = {
@@ -45,7 +44,7 @@ const DetailsNfts = () => {
 
   console.log("account", account, "0xdF3e18d64BC6A983f673Ab319CCaE4f1a57C7097");
 
-  useEffect(() => {
+  useEffect(() => { 
     if (id) {
       const [tokenId, ownerId] = id.split("_");
       updateAccountAvatar(
@@ -53,6 +52,7 @@ const DetailsNfts = () => {
       );
       (async () => {
         updateLoading(true);
+        console.log("token id and owner id",tokenId,ownerId)
         const data = await getOwnerNFTs(ownerId);
         updateCurrentNFT(data.find((item) => item.tokenId == +tokenId));
         console.log("getting the data as ", data);
@@ -64,7 +64,15 @@ const DetailsNfts = () => {
 
   const handleConfirmPurchase = async () => {
     setIsModalOpen(false);
-
+    if(!account){
+      updateSnackBar({
+        message: "Crypto Wallet Not Found!",
+        open: true,
+        onClose: () => {},
+        type: "error",
+      });
+      return
+    }
     if (currentNFT) {
       updateLoading(true);
       const res = await buyNFT(
@@ -164,7 +172,7 @@ const DetailsNfts = () => {
 
     return (
       <div className="flex justify-center items-center mt-10 mb-10 h-svh">
-        <h1 className="font-poppins dark:text-white text-black">
+        <h1 className="font-poppins dark:text-white text-black text-center">
           Couldn't Find The NFT You're Looking For.
           Check MyNFts Section If You Recently Bought This NFT
         </h1>
@@ -186,7 +194,7 @@ const DetailsNfts = () => {
             className="rounded-tl-3xl"
           />
 
-          <div className="flex flex-col md:pl-10 md:items-start items-center  ">
+          <div className="flex flex-col md:pl-10 md:pt-0 pt-4 md:items-start items-center  ">
             <h1 className="font-poppins text-3xl font-semibold">
               {currentNFT.tokenData.name}
             </h1>
@@ -207,7 +215,7 @@ const DetailsNfts = () => {
               </div>
               {currentNFT.isListed && (
                 <p className="font-poppins font-semibold flex items-center md:mt-0 mt-5  dark:text-white text-black">
-                  <Tooltip title={"Ethereum"}>
+                  <Tooltip title={"Etherium"}>
                     <img src={etherim} alt="" height={30} width={30} />
                   </Tooltip>
                   {currentNFT.price}
@@ -250,7 +258,7 @@ const DetailsNfts = () => {
 
         {isModalOpen && (
           <div className="fixed inset-0 z-50 flex justify-center items-center bg-black bg-opacity-50">
-            <div className="bg-white rounded-lg shadow-lg p-8 w-5/12">
+            <div className="bg-white rounded-lg shadow-lg p-8 md:w-5/12 w-9/12">
               <h2 className="text-2xl font-semibold text-center mb-4 font-poppins">
                 {currentNFT.isListed ? "Confirm Purchase" : "Resell NFT"}
               </h2>

@@ -18,8 +18,8 @@ const MenuItems = ({setIsMenuOpen,isConnected}:{setIsMenuOpen:React.Dispatch<Rea
     
     <>
       {[
-        { item: "Listed-NFTs", path: isConnected?"/listed-nfts":'/' },
-        { item: "My-NFTs", path: isConnected?"/my-nfts":'/' },
+        { item: "Listed-NFTs", path:"/listed-nfts"},
+        { item: "My-NFTs", path:"/my-nfts" },
       ].map((item, i) => (
         <Link to={item?.path} key={item?.item} className="no-underline p-2 " onClick={()=>{setIsMenuOpen(prev=>prev?false:false)}}>
           {" "}

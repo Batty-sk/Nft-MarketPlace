@@ -37,7 +37,7 @@ const Footer = () => {
     <footer className="dark:bg-zinc-900 border-t dark:border-zinc-700 border-slate-200  py-8 px-2">
       <div className="flex md:flex-row flex-col justify-evenly items-center">
         <div className="flex flex-col ">
-          <h5 className="font-poppins dark:text-white text-black">Logo</h5>
+          <h5 className="font-poppins dark:text-white text-black">Subscribe</h5>
           <div className="flex justify-evenly items-center">
             <input
               type="email"

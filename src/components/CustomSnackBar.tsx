@@ -47,10 +47,10 @@ const CustomSnackbar: React.FC<CustomSnackbarProps> = ({
     >
       <Alert
         onClose={onClose}
-        severity={type}
+         severity={type}
         icon={false} // We'll add our own icon
         sx={{ display: "flex", alignItems: "center" ,fontFamily:'poppins'}}
-      >
+      > 
         {getIcon(type)}
         {message}
         <IconButton

@@ -10,10 +10,12 @@ import { Pagination, CardNft } from "../components";
 import { ThemeContext } from "../contexts/ThemeContext";
 import { Link } from "react-router-dom";
 import { MetaMaskContext } from "../contexts/MetaMaskContext";
+import MyNfts from "./MyNfts";
 
 const ListedNfts = () => {
   const { getMyListedNFTS } = useContext(ContractContext);
-  const { account } = useContext(MetaMaskContext);
+  const { account,isConnected } = useContext(MetaMaskContext);
+  const [error,updateError] = useState<string>("")
   const { animateCreateButton } = useContext(ThemeContext);
   const [loading, updateLoading] = useState();
   const [myNFTs, setMyNFTs] = useState<filterednftsData[] | null>(null);
@@ -22,9 +24,15 @@ const ListedNfts = () => {
       try {
         const data = await getMyListedNFTS();
         setMyNFTs(data);
+        console.log("we getting my nfts...",data)
       } catch (e) {
         console.log("some errror while fetching the mY nfts");
       }
+    }
+
+    if(!account){
+      updateError("No wallet found!")
+      return
     }
     fetchMyNfts();
   }, [account]);
@@ -50,18 +58,20 @@ const ListedNfts = () => {
         {!loading && !myNFTs?.length && (
           <div className="mt-32 mb-32 w-full flex flex-col justify-center items-center">
             {" "}
-            <h3 className="font-poppins md:text-3xl text-2xl text-center font-bold dark:text-white">
-              You've Not Created Any NFTs Yet.
+            <h3 className="font-poppins md:text-3xl text-2xl text-center font-bold dark:text-white
+            ">
+              { "You've Not Created Any NFTs Yet."}
             </h3>
             <Link
               to={"/create-nft"}
               className="font-poppins mt-5 underline cursor-pointer dark:text-white"
             >
-              create one?
+          {"create one?"}
             </Link>{" "}
           </div>
         )}
       </div>
+      {myNFTs?.length?
       <div className="flex mt-5 w-3/4  flex-wrap mb-10 justify-center">
         {myNFTs?.map((item, i) => (
           <div key={i} className="max-h-fit max-w-fit w-3/4">
@@ -75,6 +85,7 @@ const ListedNfts = () => {
           </div>
         ))}
       </div>
+:null}
       {/*       <Pagination />
        */}{" "}
     </div>

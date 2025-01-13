@@ -35,7 +35,6 @@ type ContextProps = {
   removeNftFromMarket: (arg: number) => Promise<boolean>;
   resellNFT: (arg: number, newPrice: number) => Promise<boolean>;
   topSellers:topSellersProps[];
-  error:string
 };
 
 export const ContractContext = createContext<ContextProps>({
@@ -49,7 +48,6 @@ export const ContractContext = createContext<ContextProps>({
   removeNftFromMarket: async () => true,
   resellNFT: async () => true,
   topSellers:[],
-  error:"",
 });
 
 type Props = {
@@ -58,9 +56,7 @@ type Props = {
 
 export const ContractContextWrapper = ({ children }: Props) => {
 
-  const[error,updateError] = useState<string>("")
 
-  console.log("pinata jwt", import.meta.env.VITE_PINATA_IPFS_JWT);
 
   async function uploadImageToIPFS(file: File) {
   
@@ -70,7 +66,6 @@ export const ContractContextWrapper = ({ children }: Props) => {
       return response.IpfsHash
     } catch (error: any) {
       console.error("Error uploading file to IPFS:", error);
-      updateError("Something went wrong...")
             //@ts-ignore
       throw new Error(error)
     }
@@ -94,7 +89,6 @@ export const ContractContextWrapper = ({ children }: Props) => {
       return result.IpfsHash;
     } catch (error) {
       console.error("Error uploading metadata to IPFS:", error);
-      updateError("Something went wrong...")
       //@ts-ignore
       throw new Error("error occureed in Pinning metadata to ipfs server !");
     }
@@ -119,7 +113,6 @@ export const ContractContextWrapper = ({ children }: Props) => {
       return await createNFT(price, metaHash); // send the request to the smartcontract regarding creation of the nft.
     } catch (error) {
       console.log("Something went wrong", error)
-      updateError("Something went wrong...")
       ;
       return false;
     }
@@ -144,14 +137,12 @@ export const ContractContextWrapper = ({ children }: Props) => {
       return data;
     } catch (error) {
       console.log("errror has been occured fetching the marketLISTING......");
-      updateError("Something went wrong...")
       return [];
     }
   };
 
   const getMyNFTs = async () => {
     if (!window.ethereum || !window.ethereum.request) {
-      updateError("No Wallet Not Found!")
       console.log("mynfts getting error");
       return [];
     }
@@ -175,14 +166,12 @@ export const ContractContextWrapper = ({ children }: Props) => {
       return data;
     } catch (error) {
       console.log("errror has been occured fetching the mynfts......", error);
-      updateError("Something went wrong...")
       return [];
     }
   };
   const getMyListedNFTS = async () => {
     if (!window.ethereum || !window.ethereum.request) {
       alert("MetaMask is not installed or the provider is unavailable!");
-      updateError("Something went wrong...")
       console.log("mynfts getting error");
       return [];
     }
@@ -206,14 +195,12 @@ export const ContractContextWrapper = ({ children }: Props) => {
       return data;
     } catch (error) {
       console.log("errror has been occured fetching the mynfts......", error);
-      updateError("Something went wrong...")
 
       return [];
     }
   };
   const removeNftFromMarket = async (tokenId: number) => {
     if (!window.ethereum || !window.ethereum.request) {
-      updateError("Something went wrong...")
       console.log("removing nfts getting error");
       return false;
     }
@@ -236,27 +223,17 @@ export const ContractContextWrapper = ({ children }: Props) => {
       return true;
     } catch (error) {
       console.log("errror has been occured while removing the nfts", error);
-      updateError("Something went wrong...")
       return false;
     }
   };
   const getOwnerNFTs = async (onwerId: string) => {
 
-    if (!window.ethereum || !window.ethereum.request) {
-      alert("MetaMask is not installed or the provider is unavailable!");
-      updateError("Something went wrong...")
-      return [];
-    }
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    await provider.send("eth_requestAccounts", []);
-
-    const signer = provider.getSigner();
     const { abi } = contractAbi;
-
+    const provider = new ethers.providers.JsonRpcProvider(RPC_URL);
     const nftMarketplaceContract = new ethers.Contract(
       CONTRACT_ADDRESS,
       abi,
-      signer
+      provider
     );
     try {
       const ownerNFTS = await nftMarketplaceContract.getOwnerNFTS(onwerId);
@@ -269,7 +246,6 @@ export const ContractContextWrapper = ({ children }: Props) => {
         "errror has been occured fetching the ownerNfts......",
         error
       );
-      updateError("Something went wrong...")
 
       return [];
     }
@@ -295,7 +271,6 @@ export const ContractContextWrapper = ({ children }: Props) => {
 
   const openMetaMask = async () => {
     if (!window.ethereum || !window.ethereum.request) {
-      updateError("Something went wrong...")
       return -1;
     }
 
@@ -349,7 +324,6 @@ export const ContractContextWrapper = ({ children }: Props) => {
       console.log("Transaction mined in block:", receipt.blockNumber);
       return true;
     } catch (error) {
-      updateError("Something went wrong...")
       return false;
     }
   };
@@ -374,7 +348,6 @@ export const ContractContextWrapper = ({ children }: Props) => {
       console.log("Transaction mined in block:", receipt.blockNumber);
       return true;
     } catch (error) {
-      updateError("Something went wrong...")
       return false;
     }
   };
@@ -488,7 +461,6 @@ export const ContractContextWrapper = ({ children }: Props) => {
         removeNftFromMarket,
         resellNFT,
         topSellers,
-        error,
       }}
     >
       {children}
