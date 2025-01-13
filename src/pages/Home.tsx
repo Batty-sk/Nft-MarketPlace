@@ -49,8 +49,9 @@ const Home = () => {
 
   useEffect(() => {
     const fetchMarketNFTs = async () => {
+      setLoading(true)
+
       try {
-        setLoading(true)
         const marketList = await getMarketNFTs();
         console.log("Getting the market NFTs", marketList);
         if (marketNFTs) {
@@ -59,7 +60,7 @@ const Home = () => {
           setMarketNFTs(marketList);
         }
       } catch (error) {
-        console.error("Error fetching market NFTs:", error);
+        console.error(" Error fetching market NFTs:", error);
       }
       setLoading(false)
     };
@@ -192,7 +193,7 @@ const Home = () => {
                 ))}
           </Masonry>
           {loading?<CustomLoader />:''}
-          {!loading && !searchData?.length && !marketNFTs?.length && <h3 className="font-poppins mt-5">No nfts found.</h3>}
+          {!loading && !searchData?.length && !marketNFTs?.length && <h3 className="font-poppins mt-5 dark:text-white ">No nfts found.</h3>}
 
         </div>
       </div>

@@ -6,9 +6,10 @@ import {
   CONTRACT_ADDRESS,
   cleanNftsData,
 } from "../constants";
-import contractAbi from "../../artifacts/contracts/NFT_marketPlace.sol/NFT_marketPlace.json";
+import contractAbi from "../abi/NFT_marketPlace.json";
 import { filterednftsData } from "../constants";
 import { Error } from "@mui/icons-material";
+
 
 const pinata = new PinataSDK({
   pinataJwt:import.meta.env.VITE_PINATA_IPFS_JWT,

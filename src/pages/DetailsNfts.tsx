@@ -341,7 +341,12 @@ const DetailsNfts = () => {
               More From This Owner
             </h1>
             <div className="flex flex-wrap gap-3 justify-center">
-              {moreOwnerNFTs.map((item) => ((currentNFT.tokenId != item.tokenId) &&
+              {moreOwnerNFTs.length == 1?
+              <div className="flex flex-col items-center justify-center mt-3">
+              <Link className="underline" to={'/'}>{"< Go Back"}</Link>
+              </div>
+              :
+              moreOwnerNFTs.map((item) => ((currentNFT.tokenId != item.tokenId) &&
                 <CardNft
                   tokenId={item.tokenId}
                   name={item.tokenData.name}
@@ -350,7 +355,8 @@ const DetailsNfts = () => {
                   ethAmount={+item.price}
                   image={item.tokenData.imgURI}
                 />
-              ))}
+              ))
+            }
             </div>
           </div>
         )}
