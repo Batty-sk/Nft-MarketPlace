@@ -6,9 +6,7 @@ const path = require("path");
 async function deployContract() {
   try {
     // Define your private key and Alchemy RPC URL
-    const PRIVATE_KEY = "4835850b61b54c1486c0dcb2475dab5ca54689aa4a608a3f14963d7d857c7b57"; // Replace with your actual private key
-    const RPC_URL = "https://eth-sepolia.g.alchemy.com/v2/p-ymwiv5GI7dxVA-J1TMKsOsTpGvYoJm"; // Alchemy Sepolia RPC URL
-
+  
     // Create a provider using Alchemy RPC
     const provider = new ethers.providers.JsonRpcProvider(RPC_URL);
 
