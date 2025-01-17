@@ -1,3 +1,2 @@
-## Application Screenshot
-
-![App Screenshot](src/assets/screenshot.png)
+An Etherium blockchain based NFT marketplace.
+Buy and sell nfts!
