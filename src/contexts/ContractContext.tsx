@@ -172,7 +172,7 @@ export const ContractContextWrapper = ({ children }: Props) => {
   };
   const getMyListedNFTS = async () => {
     if (!window.ethereum || !window.ethereum.request) {
-      alert("MetaMask is not installed or the provider is unavailable!");
+      alert("No crypto wallet detected!");
       console.log("mynfts getting error");
       return [];
     }
@@ -241,7 +241,7 @@ export const ContractContextWrapper = ({ children }: Props) => {
     }
     else{
     if (!window.ethereum || !window.ethereum.request) {
-      alert("MetaMask is not installed or the provider is unavailable!");
+      alert("No crypto wallet detected!");
       return [];
     }
     provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -292,7 +292,7 @@ export const ContractContextWrapper = ({ children }: Props) => {
     if (!window.ethereum || !window.ethereum.request) {
       return -1;
     }
-
+    console.log("opening the metamask...")
     const accounts = await window.ethereum.request({ method: "eth_accounts" });
     if (accounts.length === 0) {
       await window.ethereum.request({ method: "eth_requestAccounts" });
@@ -372,6 +372,7 @@ export const ContractContextWrapper = ({ children }: Props) => {
   };
   const createNFT = async (price: number, metahash: string) => {
     try {
+      console.log("opening metamask")
       const data = await openMetaMask();
       if (data == -1)
             //@ts-ignore

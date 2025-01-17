@@ -67,7 +67,7 @@ const DetailsNfts = () => {
     setIsModalOpen(false);
     if(!account){
       updateSnackBar({
-        message: "Crypto Wallet Not Found!",
+        message: "No crypto wallet detected!",
         open: true,
         onClose: () => {},
         type: "error",
@@ -297,7 +297,7 @@ const DetailsNfts = () => {
               <hr className="bg-gray-300 h-1" />
               <p className="text-lg font-bold text-center mb-6 font-poppins mt-3">
                 {currentNFT.isListed
-                  ? `New Price: ${+currentNFT.price + 0.0025} ETH`
+                  ? `Total: ${+currentNFT.price + 0.0025} ETH`
                   : `New Price: ${newPrice} ETH`}
               </p>
               <div className="flex justify-center gap-4">
@@ -350,7 +350,7 @@ const DetailsNfts = () => {
                 <CardNft
                   tokenId={item.tokenId}
                   name={item.tokenData.name}
-                  key={item.owner}
+                  key={item.tokenId.toString()}
                   account={item.owner}
                   ethAmount={+item.price}
                   image={item.tokenData.imgURI}

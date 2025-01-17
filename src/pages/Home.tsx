@@ -22,7 +22,7 @@ const Home = () => {
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const [loading,setLoading]=useState<boolean>(false)
   const breakpointColumnsObj = {
-    default: 2,
+    default: 3,
     1100: 3,
     700: 2,
     500: 1,

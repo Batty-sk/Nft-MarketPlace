@@ -45,7 +45,7 @@ const NavBar = () => {
     if(!account)
     {
       updateSnackBar(
-        {message:'MetaMask is Not Installed!',open:true,type:'error',onClose:()=>{}}
+        {message:'No crypto wallet detected!',open:true,type:'error',onClose:()=>{}}
       )
     }
   }
